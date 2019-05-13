@@ -5,26 +5,90 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="include">
+      <UniqueIdentifier>{30de50b7-b307-48fe-a18c-3b2e962d4f98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src">
+      <UniqueIdentifier>{19ec906b-6327-4a8d-ae19-094dcf95440d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AntTweakBar.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CMatrix.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Color3D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CPoint3d.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gl2ps.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OctVoxel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGLDraw.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGLWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RunOpenGL.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AntTweakBar.h">
+      <Filter>include</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PPRolling.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="include\BaseObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CMatrix.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Color3D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CPoint3d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl_screenshot.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl2ps.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Linear3d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OctVoxel.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGL.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGLprimitive.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGLWindow.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TimeTool.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
