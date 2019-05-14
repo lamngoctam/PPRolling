@@ -193,5 +193,5 @@ void RunOpenGL(int argc, char *argv[]) {
 	glutInit(&argc, argv);
 	OpenGLCallBack0();
 
-	glutMainLoop();					//from freeglut_std.h library
+	glutMainLoop();	//from freeglut_std.h library
 }

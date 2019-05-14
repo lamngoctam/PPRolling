@@ -7,12 +7,8 @@
 #include <gl\glut.h>
 #include <gl\freeglut.h>
 
-#include "..\Dependencies\freeglut\include\GL\freeglut_ext.h"
-#include "..\Dependencies\freeglut\include\GL\freeglut_std.h"
-
 
 using namespace std;
-
 
 
 //[AntTweakBar]//
@@ -153,5 +149,22 @@ void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID) {
 	glEnd();
 }
 
+/*=================================================*/
+/*              Draw Grid		                   */
+/*=================================================*/
 
+void DrawGrid() {
+	glColor3d(0.0, 0.0, 0.0);
+	glLineWidth(0.8f);
+	glBegin(GL_LINES);
+	for (int x(0); x <= 20; x++) {
+		glVertex2i(x, 0);
+		glVertex2i(x, 15);
+	}
+	for (int y(0); y <= 15; y++) {
+		glVertex2i(0, y);
+		glVertex2i(20, y);
+	}
+	glEnd();
+}
 

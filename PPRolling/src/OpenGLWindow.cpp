@@ -1,8 +1,9 @@
 //#include "..\include\OpenGLWindow.h"
 
 //############################################################################
-
+//
 //############################################################################
+
 #include "stdafx.h"
 #include "OpenGL.h"
 #include "OpenGLprimitive.h"
@@ -12,7 +13,7 @@ using namespace std;
 extern int WinID[2];
 OpenGL GLSettings0;
 
-//[AntTweakBar]//
+//AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor[] = { 0.275f, 0.51f, 0.706f };
 
@@ -46,48 +47,12 @@ void PickUpPostprocessor(void);
 int SelectHits(GLuint hits, GLuint* buf, int hit_name[2]);
 double ReturnDepth(int x, int y);
 
-//[AntTweakBar]//
+//AntTweakBar
 void TwCallBack(void);
 void GradientBackGround(float *tcolor, float *bcolor);
 
 //draw Axis
 void ConclusiveAxis(void);
-
-// Voxel
-void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
-
-
-/***************************************************/
-//			OpenGL
-/***************************************************/
-void OpenGLDisplay0(void) {
-	DisplayInit();	//
-
-	//AntTweakBar//
-	GradientBackGround(BackTopColor, BackBotColor);		//from OpenGLDraw.cpp
-
-	GLSettings0.SetEyePosition();
-	/********************************/
-	glGetString(GL_VERSION);
-
-	if (ShowAxisFlag)
-		ConclusiveAxis();
-
-	CVector3d MaxPt, MinPt;
-	MaxPt.Set(10.0, 10.0, 10.0);
-	MinPt.Set(0.0, 0.0, 0.0);
-
-	if (ShowBB)
-		DrawBoundingbox(MaxPt, MinPt, 8);
-
-
-	//AntTweakBar//
-	TwDraw();
-
-	
-	DisplayPostprocessor();
-}
-
 
 
 /***************************************************/
@@ -289,7 +254,7 @@ void PickObject0(int x, int y, int Button) {
 /***************************************************/
 /*			  */
 /***************************************************/
-//[AntTweakBar]//
+//AntTweakBar
 void OpenGLMouse0(int Button, int State, int x, int y) {
 
 	if (State == GLUT_DOWN)
@@ -316,26 +281,17 @@ void OpenGLMouse0(int Button, int State, int x, int y) {
 	glutPostRedisplay();
 }
 
-/***************************************************/
-/*			*/
-/***************************************************/
 void OpenGLMotion0(int x, int y) {
 	GLSettings0.MovingMouse(x, y);
 }
-
-/***************************************************/
-/*					 */
-/***************************************************/
 
 void OpenGLMouseWheel0(int wheel_number, int direction, int x, int y) {
 	GLSettings0.DoMouseWheel(direction);
 };
 
-/***************************************************/
-/*			  */
-/***************************************************/
 //gluPerspective
 //
+
 void OpenGLReshape0(int width, int height) {
 	GLSettings0.m_Aspect = static_cast<double>(width) / static_cast<double>(height);
 	GLSettings0.m_WindowWidth = width;
@@ -353,7 +309,7 @@ void OpenGLReshape0(int width, int height) {
 
 
 /****************************************************/
-/*				AntTweakBar					*/
+/*				AntTweakBar					        */
 /****************************************************/
 void OnMouseMotion(int mouseX, int mouseY)  // your callback function called by GLUT when mouse has moved
 {
@@ -410,7 +366,56 @@ void SpecialKey(int glutKey, int x, int y) {
 
 
 
+// Voxel
+void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
+void DrawGrid();
 
+/***************************************************/
+//			OpenGLDisplay0
+/***************************************************/
+void OpenGLDisplay0(void) {
+	DisplayInit();	
+	GLSettings0.SetEyePosition();
+
+	//AntTweakBar
+	GradientBackGround(BackTopColor, BackBotColor);		//from OpenGLDraw.cpp
+	//TwDraw();
+
+	/********************************/
+	glGetString(GL_VERSION);
+
+	if (ShowAxisFlag)
+		ConclusiveAxis();
+	DrawGrid();
+
+	CVector3d MaxPt, MinPt;
+
+	MaxPt.Set(1.0, 1.0, 1.0);
+	MinPt.Set(0.0, 0.0, 0.0);
+	DrawBoundingbox(MaxPt, MinPt, 8);
+	CVector3d center;
+	center.Set(0.5, 0.5, 0.5);
+	DrawSphere(center, 0.1);
+
+
+	MaxPt.Set(19.0, 14.0, 1.0);
+	MinPt.Set(20.0, 15.0, 0.0);
+	DrawBoundingbox(MaxPt, MinPt, 8);
+
+
+	center.Set(0.5, 0.5, 0.5);
+	DrawSphere(center, 0.1);
+	center.Set(19.5, 14.5, 0.5);
+	DrawSphere(center, 0.1);
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3d(0.5, 0.5, 0.5);//1
+	glVertex3d(19.5, 14.5, 0.5);//2
+	glEnd();
+
+	   
+	DisplayPostprocessor();
+}
 /***************************************************/
 //
 /***************************************************/
@@ -421,10 +426,9 @@ void OpenGLCallBack0(void) {
 	OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
 
 	glutDisplayFunc(OpenGLDisplay0);
+	
+	TwCallBack(); //AntTweakBar
 
-
-	//[AntTweakBar]//
-	TwCallBack();
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(OnMouseMotion);
 	glutPassiveMotionFunc(PassiveMotion);
