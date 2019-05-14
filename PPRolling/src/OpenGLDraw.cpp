@@ -304,7 +304,7 @@ double distancePointLine(CVector3d sPoint, CVector3d ePoint,
 	}
 
 	return distance;
-	cout << "distance: " <<distance << endl;	
+	cout << "distance: " << distance << endl;
 
 
 }
@@ -337,30 +337,51 @@ void checkPoint() {
 	double dist2 = 0.0;
 
 	CVector3d nextPoint;
-	nextPoint.Set(s_point.x + 1.0, s_point.y, s_point.z);
-	double a = distancePointLine(s_point, e_point, nextPoint, dist1);
+	CVector3d newMovePoint;
+	vector<CVector3d> savePoint;
 
-	cout << nextPoint.x <<" "<< nextPoint.y << " " << nextPoint.z << endl;
+	//
+	double xx, yy, zz;
+	xx = s_point.x;
+	yy = s_point.y;
+	zz = s_point.x;
 
-	nextPoint.Set(s_point.x, s_point.y + 1.0, s_point.z);
-	double b = distancePointLine(s_point, e_point, nextPoint, dist2);
-	cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
+	//for (int i(0); i < 50; i++) {
 
-	cout << "double a= " <<a << " ---- double b= " << b << endl;
-	if (a < b) {
-		dist = a;
+	while ((xx != e_point.x) || (yy != e_point.y) || (zz != e_point.z)) {
+
+		//CVector3d comparedPoint;
+
+
+		nextPoint.Set(xx + 1.0, yy, zz);
+		double distance1 = distancePointLine(s_point, e_point, nextPoint, dist1);
+
+		cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
+
+		newMovePoint = nextPoint;
+
+		nextPoint.Set(xx, yy + 1.0, zz);
+		double distance2 = distancePointLine(s_point, e_point, nextPoint, dist2);
+		cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
+
+		cout << "distance1 = " << distance1 << " ---- distance2= " << distance2 << endl;
+		if (distance1 > distance2) {
+			newMovePoint = nextPoint;
+		}
+		else
+			cout << newMovePoint.x << " " << newMovePoint.y << " " << newMovePoint.z << endl;
+
+		DrawSphere(newMovePoint, 0.1);
+		xx = newMovePoint.x;
+		yy = newMovePoint.y;
+		zz = newMovePoint.z;
+
 	}
-	else
-		dist = b;
-	cout << "distance = " << dist << endl;
-
-
-	
-	//m_Point.push_back();
-	
-
-
+	savePoint.push_back(newMovePoint);
 
 }
 
 
+void savingMovingPoint() {
+
+}

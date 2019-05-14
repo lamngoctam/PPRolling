@@ -372,7 +372,7 @@ void OpenGLDisplay0(void) {
 
 	//14/5/2019
 	DrawGrid();
-	//DrawStartEndPoint();
+	DrawStartEndPoint();
 	//	PathPlanning();
 	//	PathPlanning2();
 	checkPoint();
