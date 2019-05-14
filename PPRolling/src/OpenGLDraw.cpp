@@ -36,6 +36,7 @@ void GradientBackGround(float *tcolor, float *bcolor) {
 	glMatrixMode(GL_MODELVIEW);  // ModelView?s
 	glPopMatrix();
 }
+
 //#################################################
 //	From OpenGLprimitive.h
 //#################################################
@@ -78,8 +79,6 @@ void ConclusiveAxis(void) {
 	DrawString("Z", (Z + Zs), GLUT_BITMAP_TIMES_ROMAN_24, GL2PS_TEXT_BR);
 }
 
-//############################################
-//         draw bounding box
 void DrawWireOctree(OctVoxel box, int colorID) {
 	int line[12][2] = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 },
 						{ 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 },
@@ -100,9 +99,66 @@ void DrawWireOctree(OctVoxel box, int colorID) {
 
 }
 
-/*                                                 */
+void DrawFaceCube(CVector3d* vertexW)
+{
+
+	int face[6][4] = {
+		{ 0, 3, 2, 1 },		//Z
+		{ 1, 2, 6, 5 },		//XÅ
+		{ 2, 3, 6, 7 },		//Y
+		{ 3, 0, 4, 7 },		//XÅ
+		{ 0, 1, 5, 4 },		//YÅ
+		{ 4, 5, 6, 7 }			//
+	};
+
+	GLdouble normal[6][3] = {
+		{ 0.0, 0.0, -1.0 },		//ZÅ
+		{ 1.0, 0.0, 0.0 },	        //XÅ
+		{ 0.0, 1.0, 0.0 },		//Y
+		{ -1.0, 0.0, 0.0 },		//X
+		{ 0.0, -1.0, 0.0 },		//YÅ
+		{ 0.0, 0.0, 1.0 }		//Z
+	};
+
+	glBegin(GL_QUADS);
+	for (int i(0); i < 6; ++i)
+	{
+		glNormal3dv(normal[i]);
+		for (int k(0); k < 4; ++k)
+			glVertex3d(vertexW[face[i][k]].x, vertexW[face[i][k]].y, vertexW[face[i][k]].z);
+	}
+	glEnd();
+
+}
+
+void DrawFaceOctree(OctVoxel &box, int colorID)
+{
+	int line[6][4] =
+	{ { 0, 1, 2, 3 },
+	{ 4, 5, 6, 7 },
+	{ 0, 4, 7, 3 },
+	{ 1, 5, 4, 0 },
+	{ 2, 6, 5, 1 },
+	{ 3, 7, 6, 2 } };
+
+	glColor3dv(GetColor(colorID)); // err
+	//glColor3d(1.0, 0.0, 0.5);
+	CVector3d vertexW[8];
+	box.SetVertexWorld(vertexW);
+	//box.SetVertexWorld_Rotated(Angle_.Orientation_Angle, vertexW);
+	glBegin(GL_QUADS);
+	for (int i(0); i < 6; ++i)
+	{
+		for (int k(0); k < 4; ++k)
+		{
+			glVertex3d(vertexW[line[i][k]].x, vertexW[line[i][k]].y, vertexW[line[i][k]].z);
+		}
+	}
+	glEnd();
+}
+/*=================================================*/
 /*              Draw Bounding Box                  */
-/*                                                 */
+/*=================================================*/
 
 void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID) {
 
@@ -167,4 +223,144 @@ void DrawGrid() {
 	}
 	glEnd();
 }
+
+void DrawCube(CVector3d originPoint, int colorID) {
+	CVector3d MinPt, MaxPt;
+
+	MinPt.Set(originPoint.x, originPoint.y, 0.0);
+	MaxPt.Set(originPoint.x + 1.0, originPoint.y + 1.0, 1.0);
+
+	DrawBoundingbox(MaxPt, MinPt, colorID);
+}
+
+void PathPlanning() {
+
+	CVector3d MinPt, MaxPt;
+	for (int x(0); x <= 20; x++) {
+		for (int y(0); y <= 15; y++) {
+			MinPt.Set(x*1.0, y*1.0, 0.0);
+			MaxPt.Set(x*1.0 + 1.0, y*1.0 + 1.0, 1.0);
+
+			DrawCube(MinPt, y * 5);
+		}
+
+	}
+}
+
+void DrawStartEndPoint() {
+	CVector3d MaxPt, MinPt;
+
+	MaxPt.Set(1.0, 1.0, 1.0);
+	MinPt.Set(0.0, 0.0, 0.0);
+	//DrawBoundingbox(MaxPt, MinPt, 8);
+	DrawCube(MinPt, 17);
+
+	CVector3d center;
+	center.Set(0.5, 0.5, 0.5);
+	DrawSphere(center, 0.1);
+
+
+	MaxPt.Set(19.0, 14.0, 1.0);
+	MinPt.Set(20.0, 15.0, 0.0);
+	//DrawBoundingbox(MaxPt, MinPt, 8);
+	DrawCube(MaxPt, 35);
+
+	center.Set(19.5, 14.5, 0.5);
+	DrawSphere(center, 0.1);
+
+	glBegin(GL_LINE_LOOP);
+	glColor3d(0.1, 0.0, 1.0);
+	glVertex3d(0.5, 0.5, 0.5);//1
+	glVertex3d(19.5, 14.5, 0.5);//2
+	glEnd();
+}
+
+//14/5/19 Not yet
+void PathPlanning2() {
+
+	CVector3d vertex[8];
+	DrawFaceCube(vertex);
+
+}
+
+double distancePointLine(CVector3d sPoint, CVector3d ePoint,
+	CVector3d newPoint, double& distance) {
+
+	double numerator, denominator;
+
+	numerator = ((sPoint.y - ePoint.y)*newPoint.x
+		+ (ePoint.x - sPoint.x)*newPoint.y
+		+ (sPoint.x * ePoint.y - ePoint.x * sPoint.y));
+
+	denominator = sqrt((ePoint.x - sPoint.x)*(ePoint.x - sPoint.x)
+		+ (ePoint.y - sPoint.y)*(ePoint.y - sPoint.y));
+	distance = numerator / denominator;
+
+	if (distance < 0) {
+		distance = -distance;
+	}
+	else if (distance == 0) {
+		cout << "error in distance" << endl;
+	}
+
+	return distance;
+	cout << "distance: " <<distance << endl;	
+
+
+}
+
+void checkPoint() {
+	//moving point
+	vector<CVector3d> m_Point;
+
+	//CVector3d movePoint;
+
+	CVector3d s_point, e_point;
+	s_point.Set(0.5, 0.5, 0.5);
+	DrawSphere(s_point, 0.1);
+
+	//movePoint = s_point;
+
+	e_point.Set(19.5, 14.5, 0.5);
+	DrawSphere(e_point, 0.1);
+
+
+	//	while ((movePoint.x != E_point.x) || (movePoint.y != E_point.y)
+	//		|| (movePoint.z != E_point.z)){
+	//		cout << " i love u" << endl;
+	//	}
+
+
+	//create a line from starting point to ending point
+	double dist = 0.0;
+	double dist1 = 0.0;
+	double dist2 = 0.0;
+
+	CVector3d nextPoint;
+	nextPoint.Set(s_point.x + 1.0, s_point.y, s_point.z);
+	double a = distancePointLine(s_point, e_point, nextPoint, dist1);
+
+	cout << nextPoint.x <<" "<< nextPoint.y << " " << nextPoint.z << endl;
+
+	nextPoint.Set(s_point.x, s_point.y + 1.0, s_point.z);
+	double b = distancePointLine(s_point, e_point, nextPoint, dist2);
+	cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
+
+	cout << "double a= " <<a << " ---- double b= " << b << endl;
+	if (a < b) {
+		dist = a;
+	}
+	else
+		dist = b;
+	cout << "distance = " << dist << endl;
+
+
+	
+	//m_Point.push_back();
+	
+
+
+
+}
+
 

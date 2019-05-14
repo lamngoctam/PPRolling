@@ -24,18 +24,13 @@ bool z_key_0 = 1;   // Axis
 
 
 //Flag link to AntweakBar
-
 extern int ShowAxisFlag;		//Axis
 extern int ShowBB;				// Bounding Box
 
 void DisplayInit();
 void DisplayPostprocessor();
 
-void writefile(int format, int sort, int options, int nbcol, 
-				char *filename, char *extension, int winid, OpenGL GLSettings);
-void writebmpfile(char *filename, char *extension, int winid);
-void writebmpfile(char * filename, char * extension, int winid);
-void OpenGLReshape(int width, int height);
+void OpenGLReshape0(int width, int height);
 
 void OpenGLIdle();
 
@@ -144,10 +139,6 @@ void OpenGLKeyboard0(unsigned char Key, int x, int y) {
 	glutPostRedisplay();
 }
 
-
-/***************************************************/
-/*													*/
-/***************************************************/
 //
 //	http://opengl.jp/glut/section07-09.html
 void OpenGLSpecial0(int Key, int x, int y) {
@@ -172,11 +163,6 @@ void OpenGLSpecial0(int Key, int x, int y) {
 	glutPostRedisplay();
 }
 
-
-
-/***************************************************/
-/*													*/
-/***************************************************/
 int PickUp0(int x, int y, int hit_name[2], int Button) {
 	GLint hits;
 	GLuint selectBuf[BUFSIZE];
@@ -210,9 +196,6 @@ int PickUp0(int x, int y, int hit_name[2], int Button) {
 	return SelectHits(hits, selectBuf, hit_name);
 }
 
-
-/***************************************************/
-/***************************************************/
 void PickObject0(int x, int y, int Button) {
 	int hit_name[2];
 	//hit_name[0]	
@@ -251,9 +234,7 @@ void PickObject0(int x, int y, int Button) {
 
 
 
-/***************************************************/
-/*			  */
-/***************************************************/
+
 //AntTweakBar
 void OpenGLMouse0(int Button, int State, int x, int y) {
 
@@ -288,9 +269,6 @@ void OpenGLMotion0(int x, int y) {
 void OpenGLMouseWheel0(int wheel_number, int direction, int x, int y) {
 	GLSettings0.DoMouseWheel(direction);
 };
-
-//gluPerspective
-//
 
 void OpenGLReshape0(int width, int height) {
 	GLSettings0.m_Aspect = static_cast<double>(width) / static_cast<double>(height);
@@ -369,10 +347,15 @@ void SpecialKey(int glutKey, int x, int y) {
 // Voxel
 void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
 void DrawGrid();
+void DrawStartEndPoint();
+void checkPoint();
 
+void PathPlanning();
+void PathPlanning2();
 /***************************************************/
 //			OpenGLDisplay0
 /***************************************************/
+
 void OpenGLDisplay0(void) {
 	DisplayInit();	
 	GLSettings0.SetEyePosition();
@@ -386,39 +369,20 @@ void OpenGLDisplay0(void) {
 
 	if (ShowAxisFlag)
 		ConclusiveAxis();
+
+	//14/5/2019
 	DrawGrid();
+	//DrawStartEndPoint();
+	//	PathPlanning();
+	//	PathPlanning2();
+	checkPoint();
 
-	CVector3d MaxPt, MinPt;
-
-	MaxPt.Set(1.0, 1.0, 1.0);
-	MinPt.Set(0.0, 0.0, 0.0);
-	DrawBoundingbox(MaxPt, MinPt, 8);
-	CVector3d center;
-	center.Set(0.5, 0.5, 0.5);
-	DrawSphere(center, 0.1);
-
-
-	MaxPt.Set(19.0, 14.0, 1.0);
-	MinPt.Set(20.0, 15.0, 0.0);
-	DrawBoundingbox(MaxPt, MinPt, 8);
-
-
-	center.Set(0.5, 0.5, 0.5);
-	DrawSphere(center, 0.1);
-	center.Set(19.5, 14.5, 0.5);
-	DrawSphere(center, 0.1);
-
-	glBegin(GL_LINE_LOOP);
-	glVertex3d(0.5, 0.5, 0.5);//1
-	glVertex3d(19.5, 14.5, 0.5);//2
-	glEnd();
-
-	   
 	DisplayPostprocessor();
 }
-/***************************************************/
-//
-/***************************************************/
+
+/*=================================================*/
+//				OpenGlCallBack0
+/*=================================================*/
 
 void OpenGLCallBack0(void) {
 	
@@ -427,7 +391,7 @@ void OpenGLCallBack0(void) {
 
 	glutDisplayFunc(OpenGLDisplay0);
 	
-	TwCallBack(); //AntTweakBar
+	//TwCallBack(); //AntTweakBar
 
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(OnMouseMotion);
