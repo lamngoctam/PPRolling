@@ -176,6 +176,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="src\AntTweakBar.cpp" />
     <ClCompile Include="src\BaseObject.cpp" />
     <ClCompile Include="src\CMatrix.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="include\OpenGLprimitive.h" />
     <ClInclude Include="include\OpenGLWindow.h" />
     <ClInclude Include="include\TimeTool.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

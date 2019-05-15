@@ -18,6 +18,19 @@ public:
 	void SetOrigin(CVector3d ori);
 	void SetVertexWorld(CVector3d* vertW);
 
+	vector<CVector3d> cubeCenter;
+	CVector3d startPoint, goalPoint;
+
+};
+
+class Model {
+
+public:
+	vector<CVector3d> cubeCenter;
+
+
+	Model();
+	~Model();
 };
 
 #endif 

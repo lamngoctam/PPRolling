@@ -1,7 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
-
 /*****************************************************************
 glColor3dv(GetColor(CColor::magenta));
 glColor3dv(GetColor(37));

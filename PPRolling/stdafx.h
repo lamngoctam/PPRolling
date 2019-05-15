@@ -27,7 +27,7 @@
 #include "gl_screenshot.h"
 #include "OpenGL.h"
 #include "OpenGLWindow.h"
-#include "OpenGLprimitive.h"
+//#include "OpenGLprimitive.h"
 
 
 #include "Color3D.h"

@@ -7,10 +7,12 @@
 #include <gl\glut.h>
 #include <gl\freeglut.h>
 
+#include "OpenGL.h"
+#include "OpenGLprimitive.h"
 
 using namespace std;
-
-
+extern OctVoxel cube;
+extern OpenGL GLSettings0;
 //[AntTweakBar]//
 void GradientBackGround(float *tcolor, float *bcolor) {
 	// 
@@ -247,7 +249,7 @@ void PathPlanning() {
 	}
 }
 
-void DrawStartEndPoint() {
+void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint) {
 	CVector3d MaxPt, MinPt;
 
 	MaxPt.Set(1.0, 1.0, 1.0);
@@ -283,14 +285,17 @@ void PathPlanning2() {
 
 }
 
-double distancePointLine(CVector3d sPoint, CVector3d ePoint,
-	CVector3d newPoint, double& distance) {
 
+double distancePointLine(CVector3d sPoint, CVector3d ePoint,
+	CVector3d newPoint, double& distance)
+	//create a line from starting point to ending point
+	//then calculate the distance
+{
 	double numerator, denominator;
 
 	numerator = ((sPoint.y - ePoint.y)*newPoint.x
 		+ (ePoint.x - sPoint.x)*newPoint.y
-		+ (sPoint.x * ePoint.y - ePoint.x * sPoint.y));
+		+ ((sPoint.x * ePoint.y) - (ePoint.x * sPoint.y)));
 
 	denominator = sqrt((ePoint.x - sPoint.x)*(ePoint.x - sPoint.x)
 		+ (ePoint.y - sPoint.y)*(ePoint.y - sPoint.y));
@@ -298,87 +303,100 @@ double distancePointLine(CVector3d sPoint, CVector3d ePoint,
 
 	if (distance < 0) {
 		distance = -distance;
+		return distance;
 	}
-	else if (distance == 0) {
-		cout << "error in distance" << endl;
+	else if (distance >= 0) {
+		//exit(1);
+		//cout << "error in distance: " << distance << endl;
+		return distance;
 	}
 
-	return distance;
-	cout << "distance: " << distance << endl;
+	//return distance;
+	//cout << "distance!!!!!!!!!: " << distance << endl;
 
 
 }
 
-void checkPoint() {
-	//moving point
-	vector<CVector3d> m_Point;
+void checkPoint(int colorID) {
+	GLfloat white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat black[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat blue[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+	GLfloat yellow[4] = { 0.8f, 0.8f, 0.0f, 1.0f };
+	GLfloat shininess = 50;
+	GLfloat light0_position[4] = { (float)GLSettings0.m_Eye.x, (float)GLSettings0.m_Eye.y, (float)GLSettings0.m_Eye.z, 1.0f };
 
-	//CVector3d movePoint;
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
-	CVector3d s_point, e_point;
-	s_point.Set(0.5, 0.5, 0.5);
-	DrawSphere(s_point, 0.1);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, white);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
 
-	//movePoint = s_point;
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
-	e_point.Set(19.5, 14.5, 0.5);
-	DrawSphere(e_point, 0.1);
+	CColor temp(GetColor(colorID));
+	GLfloat color[4] = { (float)temp.r, (float)temp.g, (float)temp.b, 0.5f };
+	GLfloat color_[4] = { 1.0f, 0.2f, 0.2f, 0.5f };
 
+	//==============================
 
-	//	while ((movePoint.x != E_point.x) || (movePoint.y != E_point.y)
-	//		|| (movePoint.z != E_point.z)){
-	//		cout << " i love u" << endl;
-	//	}
+	DrawSphere(cube.startPoint, 0.1);
+	DrawSphere(cube.goalPoint, 0.1);
 
+	cube.cubeCenter.push_back(cube.startPoint);
 
-	//create a line from starting point to ending point
-	double dist = 0.0;
 	double dist1 = 0.0;
 	double dist2 = 0.0;
 
-	CVector3d nextPoint;
+	CVector3d nextPoint1, nextPoint2;
 	CVector3d newMovePoint;
-	vector<CVector3d> savePoint;
 
-	//
-	double xx, yy, zz;
-	xx = s_point.x;
-	yy = s_point.y;
-	zz = s_point.x;
+	CVector3d tempPoint;
+	tempPoint.Set(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
 
-	//for (int i(0); i < 50; i++) {
+	while ((tempPoint.x != (cube.goalPoint.x - 1.0)) || 
+			(tempPoint.y != cube.goalPoint.y) || (tempPoint.z != cube.goalPoint.z)) 
 
-	while ((xx != e_point.x) || (yy != e_point.y) || (zz != e_point.z)) {
+	//if((tempPoint.x != cube.goalPoint.x) && (tempPoint.y != cube.goalPoint.y))
+	//do
+	{
+		nextPoint1.Set(tempPoint.x + 1.0, tempPoint.y, tempPoint.z);
+		distancePointLine(cube.startPoint, cube.goalPoint, nextPoint1, dist1);
+		double distance1 = dist1;
 
-		//CVector3d comparedPoint;
+		nextPoint2.Set(tempPoint.x, tempPoint.y + 1.0, tempPoint.z);
+		distancePointLine(cube.startPoint, cube.goalPoint, nextPoint2, dist2);
+		double distance2 = dist2;
 
-
-		nextPoint.Set(xx + 1.0, yy, zz);
-		double distance1 = distancePointLine(s_point, e_point, nextPoint, dist1);
-
-		cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
-
-		newMovePoint = nextPoint;
-
-		nextPoint.Set(xx, yy + 1.0, zz);
-		double distance2 = distancePointLine(s_point, e_point, nextPoint, dist2);
-		cout << nextPoint.x << " " << nextPoint.y << " " << nextPoint.z << endl;
-
-		cout << "distance1 = " << distance1 << " ---- distance2= " << distance2 << endl;
 		if (distance1 > distance2) {
-			newMovePoint = nextPoint;
+			newMovePoint = nextPoint2;
 		}
-		else
-			cout << newMovePoint.x << " " << newMovePoint.y << " " << newMovePoint.z << endl;
+		else {
+			newMovePoint = nextPoint1;
+		}
 
+		glMaterialfv(GL_FRONT, GL_SPECULAR, color);
 		DrawSphere(newMovePoint, 0.1);
-		xx = newMovePoint.x;
-		yy = newMovePoint.y;
-		zz = newMovePoint.z;
 
+		tempPoint = newMovePoint;
+
+		cube.cubeCenter.push_back(newMovePoint);
+
+	} //while((tempPoint.x < cube.goalPoint.x - 1.0) && (tempPoint.y < cube.goalPoint.y));
+
+	cube.cubeCenter.push_back(cube.goalPoint);
+
+	for (int i(0); i < cube.cubeCenter.size(); i++) {
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+		WireCuboid(cube.cubeCenter[i], 1.0);
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
+		//SolidCuboid(cube.cubeCenter[i], 1.0);
 	}
-	savePoint.push_back(newMovePoint);
 
+	glDisable(GL_LIGHTING);
 }
 
 

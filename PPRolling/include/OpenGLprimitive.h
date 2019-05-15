@@ -1,14 +1,12 @@
-#pragma once
+﻿#pragma once
 
-
-//############################################################################
-//############################################################################
 
 #ifndef _OPENGLLIGHT_H
 #define _OPENGLLIGHT_H
 
 #include "stdafx.h"
-//#include "OpenGL.h"
+
+
 using namespace std;
 
 //EnableLight
@@ -284,6 +282,86 @@ inline void DrawArrow(CVector3d V, CVector3d T, double h, double radius) {
 	DrawArrowOpt(V, T, h, radius, 2.5, 1.618*2.0, 12);
 	//1.618
 }
+
+
+
+//                                                                   
+//　　　　　　　　 LEGO　　　　　　　　　　 
+//                                                                   
+inline void SolidCuboid(CVector3d center, double leng)
+{
+	glPushMatrix();
+	//glRotatef(50, 0.0, 0.0, 1.0);
+	glTranslated(center.x, center.y, center.z);
+	glScaled(1.0, 1.0, 1.0);
+	glutSolidCube(leng);
+	glPopMatrix();
+}
+//                                                                                                     
+//                    LEGO　                              
+//                                                                                                     
+inline void WireCuboid(CVector3d& center, double leng)
+{
+	glPushMatrix();
+	glTranslated(center.x, center.y, center.z);
+	//glRotatef(50, 0.0, 0.0, 1.0);
+	glScaled(1.0, 1.0, 1.0);
+	glutWireCube(leng);
+	glPopMatrix();
+}
+
+////                                                                                             
+inline void SolidCuboid(CVector3d& center, double leng, CColor& Vcolor)
+{
+	//Voxel material setting
+	GLfloat color[4] = { (float)Vcolor.r, (float)Vcolor.g, (float)Vcolor.b, 0.9f };
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+
+
+	glPushMatrix();
+	glTranslated(center.x, center.y, center.z);
+	glScaled(1.0, 1.0, 1.0);
+	glutSolidCube(leng);
+	glPopMatrix();
+}
+//                                                                                                     
+//                                           
+//                                                                                                     
+inline void WireCuboid(CVector3d& center, double leng, CColor& Vcolor)
+{
+	GLfloat color[4] = { (float)Vcolor.r, (float)Vcolor.g, (float)Vcolor.b, 1.0 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
+
+	glPushMatrix();
+	glTranslated(center.x, center.y, center.z);   //Move the voxel as it is at the origin at the beginning
+	glScaled(1.0, 1.0, 1.0);			//Scale of cube in x, y, z axis direction
+	glutWireCube(leng);				//Draw a wire cube
+	glPopMatrix();					//Without this the voxel, it will not go to its original position
+}
+
+//                                                                                             
+//　                LEGO 　　　　　　　
+//                                                                                             
+inline void  SolidBlock(CVector3d center, CVector3d scale)
+{
+	glPushMatrix();
+	glTranslated(center.x, center.y, center.z);
+	glScaled(scale.x, scale.y, scale.z);
+	glutSolidCube(1.0);
+	glPopMatrix();
+}
+//                                                                                                     
+//                   For rectangular parallelepiped voxel drawing (LEGO)                             
+//                                                                                                     
+inline void WireBlock(CVector3d center, CVector3d scale)
+{
+	glPushMatrix();
+	glTranslated(center.x, center.y, center.z);
+	glScaled(scale.x, scale.y, scale.z);
+	glutWireCube(1.0);
+	glPopMatrix();
+}
+
 
 
 #endif

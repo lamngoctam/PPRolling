@@ -49,6 +49,9 @@
     <ClCompile Include="src\RunOpenGL.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AntTweakBar.h">
@@ -89,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="include\TimeTool.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

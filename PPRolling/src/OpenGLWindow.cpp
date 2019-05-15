@@ -13,6 +13,7 @@ using namespace std;
 extern int WinID[2];
 OpenGL GLSettings0;
 
+extern OctVoxel cube;
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor[] = { 0.275f, 0.51f, 0.706f };
@@ -347,8 +348,8 @@ void SpecialKey(int glutKey, int x, int y) {
 // Voxel
 void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
 void DrawGrid();
-void DrawStartEndPoint();
-void checkPoint();
+void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint);
+void checkPoint(int colorID);
 
 void PathPlanning();
 void PathPlanning2();
@@ -372,10 +373,10 @@ void OpenGLDisplay0(void) {
 
 	//14/5/2019
 	DrawGrid();
-	DrawStartEndPoint();
+	//DrawStartEndPoint();
 	//	PathPlanning();
 	//	PathPlanning2();
-	checkPoint();
+	checkPoint(5);
 
 	DisplayPostprocessor();
 }
