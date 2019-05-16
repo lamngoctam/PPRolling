@@ -349,10 +349,15 @@ void SpecialKey(int glutKey, int x, int y) {
 void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
 void DrawGrid();
 void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint);
+void DrawCube_originPoint(CVector3d originPoint, int colorID);
+void DrawCube_centerPoint(CVector3d centerPoint, int colorID);
 void checkPoint(int colorID);
 
 void PathPlanning();
 void PathPlanning2();
+
+void cubeRotation();
+
 /***************************************************/
 //			OpenGLDisplay0
 /***************************************************/
@@ -373,10 +378,17 @@ void OpenGLDisplay0(void) {
 
 	//14/5/2019
 	DrawGrid();
-	//DrawStartEndPoint();
-	//	PathPlanning();
-	//	PathPlanning2();
+	//DrawStartEndPoint(cube.startPoint, cube.goalPoint);
+
+	//15/5/2019
 	checkPoint(5);
+	//16/5/19
+	DrawCube_centerPoint(cube.startPoint, 15);
+	DrawCube_centerPoint(cube.goalPoint, 72);
+	
+
+	
+	cubeRotation();
 
 	DisplayPostprocessor();
 }

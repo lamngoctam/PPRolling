@@ -2,6 +2,8 @@
 
 
 #define _USE_MATH_DEFINES
+#define M_PI
+
 
 #include <iostream>
 #include <math.h>
@@ -488,4 +490,13 @@ CVector3d CVector3d::RotateZ(double rad)
 	tmp.y = (x*sin(rad)) + (y*cos(rad));
 	tmp.z = z;
 	return (tmp);
+}
+
+//16/05/2019
+bool CVector3d::operator == (const CVector3d& other) const {
+	return x == other.x && y == other.y &&z == other.z;
+}
+
+bool CVector3d::operator != (const CVector3d& other) const {
+	return !(*this == other);
 }

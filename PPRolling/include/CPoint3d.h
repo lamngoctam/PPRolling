@@ -109,4 +109,8 @@ public:
 	CVector3d RotateX(double rad);
 	CVector3d RotateY(double rad);
 	CVector3d RotateZ(double rad);
+
+	//16/05/2019
+	bool operator == (const CVector3d& other) const; //compare two vector
+	bool operator != (const CVector3d& other) const; //compare two vector
 };

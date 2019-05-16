@@ -175,6 +175,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CubePathPlanning\CubePath.cpp" />
+    <ClCompile Include="CubePathPlanning\CubePathPlanning.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="src\AntTweakBar.cpp" />
@@ -188,8 +190,10 @@
     <ClCompile Include="src\OpenGLDraw.cpp" />
     <ClCompile Include="src\OpenGLWindow.cpp" />
     <ClCompile Include="src\RunOpenGL.cpp" />
+    <ClCompile Include="TetrahedronPathPlanning\TetrahedronPathPlanning.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="func.h" />
     <ClInclude Include="include\AntTweakBar.h" />
     <ClInclude Include="include\BaseObject.h" />
     <ClInclude Include="include\CMatrix.h" />

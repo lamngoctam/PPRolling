@@ -13,6 +13,13 @@
 using namespace std;
 extern OctVoxel cube;
 extern OpenGL GLSettings0;
+
+
+void findingCubeCenter();
+
+
+
+
 //[AntTweakBar]//
 void GradientBackGround(float *tcolor, float *bcolor) {
 	// 
@@ -226,7 +233,15 @@ void DrawGrid() {
 	glEnd();
 }
 
-void DrawCube(CVector3d originPoint, int colorID) {
+void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint) {
+	glBegin(GL_LINE_LOOP);
+	glColor3d(0.1, 0.0, 1.0);
+	glVertex3d(startPoint.x, startPoint.y, startPoint.z);//1
+	glVertex3d(endPoint.x, endPoint.y, endPoint.z);//2
+	glEnd();
+}
+
+void DrawCube_originPoint(CVector3d originPoint, int colorID) {
 	CVector3d MinPt, MaxPt;
 
 	MinPt.Set(originPoint.x, originPoint.y, 0.0);
@@ -234,6 +249,16 @@ void DrawCube(CVector3d originPoint, int colorID) {
 
 	DrawBoundingbox(MaxPt, MinPt, colorID);
 }
+
+void DrawCube_centerPoint(CVector3d centerPoint, int colorID) {
+	CVector3d MinPt, MaxPt;
+
+	MinPt.Set(centerPoint.x-0.5, centerPoint.y-0.5, 0.0);
+	MaxPt.Set(centerPoint.x + 0.5, centerPoint.y + 0.5, 1.0);
+
+	DrawBoundingbox(MaxPt, MinPt, colorID);
+}
+
 
 void PathPlanning() {
 
@@ -243,40 +268,11 @@ void PathPlanning() {
 			MinPt.Set(x*1.0, y*1.0, 0.0);
 			MaxPt.Set(x*1.0 + 1.0, y*1.0 + 1.0, 1.0);
 
-			DrawCube(MinPt, y * 5);
+			DrawCube_originPoint(MinPt, y * 5);
 		}
 
 	}
 }
-
-void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint) {
-	CVector3d MaxPt, MinPt;
-
-	MaxPt.Set(1.0, 1.0, 1.0);
-	MinPt.Set(0.0, 0.0, 0.0);
-	//DrawBoundingbox(MaxPt, MinPt, 8);
-	DrawCube(MinPt, 17);
-
-	CVector3d center;
-	center.Set(0.5, 0.5, 0.5);
-	DrawSphere(center, 0.1);
-
-
-	MaxPt.Set(19.0, 14.0, 1.0);
-	MinPt.Set(20.0, 15.0, 0.0);
-	//DrawBoundingbox(MaxPt, MinPt, 8);
-	DrawCube(MaxPt, 35);
-
-	center.Set(19.5, 14.5, 0.5);
-	DrawSphere(center, 0.1);
-
-	glBegin(GL_LINE_LOOP);
-	glColor3d(0.1, 0.0, 1.0);
-	glVertex3d(0.5, 0.5, 0.5);//1
-	glVertex3d(19.5, 14.5, 0.5);//2
-	glEnd();
-}
-
 //14/5/19 Not yet
 void PathPlanning2() {
 
@@ -285,11 +281,10 @@ void PathPlanning2() {
 
 }
 
-
-double distancePointLine(CVector3d sPoint, CVector3d ePoint,
-	CVector3d newPoint, double& distance)
-	//create a line from starting point to ending point
-	//then calculate the distance
+//-------------------------------------------------------------
+//create a line from starting point to ending point
+//then calculate the distance
+double distancePointLine(CVector3d sPoint, CVector3d ePoint, CVector3d newPoint, double& distance)
 {
 	double numerator, denominator;
 
@@ -310,11 +305,8 @@ double distancePointLine(CVector3d sPoint, CVector3d ePoint,
 		//cout << "error in distance: " << distance << endl;
 		return distance;
 	}
-
 	//return distance;
 	//cout << "distance!!!!!!!!!: " << distance << endl;
-
-
 }
 
 void checkPoint(int colorID) {
@@ -342,11 +334,11 @@ void checkPoint(int colorID) {
 	GLfloat color_[4] = { 1.0f, 0.2f, 0.2f, 0.5f };
 
 	//==============================
+	//DrawSphere(cube.startPoint, 0.1);
+	//DrawSphere(cube.goalPoint, 0.1);
+	
 
-	DrawSphere(cube.startPoint, 0.1);
-	DrawSphere(cube.goalPoint, 0.1);
-
-	cube.cubeCenter.push_back(cube.startPoint);
+	/*cube.cubeCenter.push_back(cube.startPoint);
 
 	double dist1 = 0.0;
 	double dist2 = 0.0;
@@ -357,24 +349,16 @@ void checkPoint(int colorID) {
 	CVector3d tempPoint;
 	tempPoint.Set(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
 
-	while ((tempPoint.x != (cube.goalPoint.x - 1.0)) || 
-			(tempPoint.y != cube.goalPoint.y) || (tempPoint.z != cube.goalPoint.z)) 
-
-	//if((tempPoint.x != cube.goalPoint.x) && (tempPoint.y != cube.goalPoint.y))
-	//do
+	while (tempPoint != cube.goalPoint)
 	{
 		nextPoint1.Set(tempPoint.x + 1.0, tempPoint.y, tempPoint.z);
-		distancePointLine(cube.startPoint, cube.goalPoint, nextPoint1, dist1);
-		double distance1 = dist1;
-
+		double distance1 = nextPoint1.PointLineDistance(cube.startPoint, cube.goalPoint);
 		nextPoint2.Set(tempPoint.x, tempPoint.y + 1.0, tempPoint.z);
-		distancePointLine(cube.startPoint, cube.goalPoint, nextPoint2, dist2);
-		double distance2 = dist2;
+		double distance2 = nextPoint2.PointLineDistance(cube.startPoint, cube.goalPoint);
 
 		if (distance1 > distance2) {
 			newMovePoint = nextPoint2;
-		}
-		else {
+		}else {
 			newMovePoint = nextPoint1;
 		}
 
@@ -384,22 +368,19 @@ void checkPoint(int colorID) {
 		tempPoint = newMovePoint;
 
 		cube.cubeCenter.push_back(newMovePoint);
+	} 
 
-	} //while((tempPoint.x < cube.goalPoint.x - 1.0) && (tempPoint.y < cube.goalPoint.y));
-
-	cube.cubeCenter.push_back(cube.goalPoint);
+	cube.cubeCenter.push_back(cube.goalPoint);*/
 
 	for (int i(0); i < cube.cubeCenter.size(); i++) {
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 		WireCuboid(cube.cubeCenter[i], 1.0);
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
-		//SolidCuboid(cube.cubeCenter[i], 1.0);
+		SolidCuboid(cube.cubeCenter[i], 1.0);
+
+		DrawSphere(cube.cubeCenter[i], 0.1);
 	}
 
 	glDisable(GL_LIGHTING);
 }
 
-
-void savingMovingPoint() {
-
-}

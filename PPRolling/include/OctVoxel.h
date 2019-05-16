@@ -19,6 +19,7 @@ public:
 	void SetVertexWorld(CVector3d* vertW);
 
 	vector<CVector3d> cubeCenter;
+	vector<CVector3d> cubeOrigin;
 	CVector3d startPoint, goalPoint;
 
 };
