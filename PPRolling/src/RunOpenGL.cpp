@@ -14,9 +14,11 @@ extern OpenGL GLSettings0;
 
 int WinID[2]; //EID
 
+
+
 //void OpenGLDisplay0(void);
 void OpenGLCallBack0(void);
-
+void OpenGLCallBackAnimation(void);
 //void OpenGLDisplay1(void);
 //void OpenGLCallBack1(void);
 
@@ -152,6 +154,7 @@ void OpenGLIdle(void) {
 	glutPostRedisplay();
 }
 
+
 /***************************************************/
 /*			           OpenGL					   */
 /***************************************************/
@@ -191,7 +194,8 @@ void OpenGLPostprocessor(OpenGL GLSettings) {
 void RunOpenGL(int argc, char *argv[]) {
 
 	glutInit(&argc, argv);
-	OpenGLCallBack0();
+	//OpenGLCallBack0();
+	OpenGLCallBackAnimation();
 
 	glutMainLoop();	//from freeglut_std.h library
 }
