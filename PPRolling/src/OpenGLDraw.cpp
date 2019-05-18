@@ -371,9 +371,9 @@ void checkPoint(int colorID) {
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 		WireCuboid(cube.cubeCenter[i], 1.0);
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
-		//SolidCuboid(cube.cubeCenter[i], 1.0);
+		SolidCuboid(cube.cubeCenter[i], 1.0);
 
-		DrawSphere(cube.cubeCenter[i], 0.1);
+		//DrawSphere(cube.cubeCenter[i], 0.1);
 	}
 
 

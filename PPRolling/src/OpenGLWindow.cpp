@@ -36,8 +36,8 @@ void OpenGLReshape0(int width, int height);
 void OpenGLIdle();
 void onIdle(void); //16/05/2019
 
-void OpenGLInitialize(int WindowID, OpenGL GLSettings, int InitPosiX, int InitPosiY, 
-					int WindowWidth, int WindowHeight, const char* WindowName);
+void OpenGLInitialize(int WindowID, OpenGL GLSettings, int InitPosiX, int InitPosiY,
+	int WindowWidth, int WindowHeight, const char* WindowName);
 void OpenGLPostprocessor(OpenGL GLSettings);
 void PickUpInit(int x, int y);
 void PickUpPostprocessor(void);
@@ -360,7 +360,7 @@ void SpecialKeyRolling(int key, int x, int y) {
 		cout << x << endl;
 		glutPostRedisplay();
 		break;
-	
+
 	}
 }
 
@@ -382,7 +382,7 @@ void cubeRotation(CVector3d axisRotation);
 //			OpenGLDisplay0
 /***************************************************/
 void OpenGLDisplay0(void) {
-	DisplayInit();	
+	DisplayInit();
 	GLSettings0.SetEyePosition();
 
 	//AntTweakBar
@@ -404,15 +404,15 @@ void OpenGLDisplay0(void) {
 	//draw center of starting & endingPoint
 	//DrawSphere(cube.startPoint, 0.1);
 	//DrawSphere(cube.goalPoint, 0.1);
-	
+
 	//draw starting & ending cube
 	DrawCube(cube.startPoint, 15);
 	DrawCube(cube.goalPoint, 72);
-		
+
 	//cubeRotation();
 
 	DisplayPostprocessor();
-	
+
 }
 
 
@@ -420,12 +420,12 @@ void OpenGLDisplay0(void) {
 //				OpenGlCallBack0
 /*=================================================*/
 void OpenGLCallBack0(void) {
-	
+
 	GLSettings0.PickObject = PickObject0;
 	OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
-	
+
 	glutDisplayFunc(OpenGLDisplay0);		//display call back function
-	
+
 	//TwCallBack(); //AntTweakBar
 
 	glutMouseFunc(MouseButton);
@@ -443,10 +443,6 @@ void OpenGLCallBack0(void) {
 	OpenGLPostprocessor(GLSettings0);
 }
 
-
-
-
-
 /*=================================================*/
 //				For Animation
 /*=================================================*/
@@ -457,26 +453,18 @@ void onIdle(void) {
 	glutPostRedisplay();
 }
 
-void DisplayAnimation(void) {
+void DisplayAnimation_(void) {
 	DisplayInit();
+
 	GLSettings0.SetEyePosition();
 
 	//AntTweakBar
 	GradientBackGround(BackTopColor, BackBotColor);
 	ConclusiveAxis();
-	/**********************************/
-	///* a cube ratates around world coordinate*/
-	//glPushMatrix();
-	//glRotatef(30, 0, 0, 1);
-	//glRotatef(rot, 0, 0, 1);
-	//glutWireCube(1);
-	//glPopMatrix();
-	//glFlush();
-
 	DrawGrid();
 
 	glColor3f(0.0, 1.0, 1.0);
-//	glutWireCube(1.0);
+	//glutWireCube(1.0);
 	glFlush();
 
 	//DrawCube_originPoint(cube.origin, 9);
@@ -486,24 +474,109 @@ void DisplayAnimation(void) {
 	//
 	//DrawCube(cube.newOrigin, 9);
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		
-		DrawCube(cube.cubeCenter[i], 58);
+
+		//DrawCube(cube.cubeCenter[i], 58);
 	}
 
 	for (int i = 0; i < cube.edgeContactUpLeft.size(); i++) {
-		DrawCube_originPoint(cube.edgeContactUpLeft[i], 9);
+		//DrawCube_originPoint(cube.edgeContactUpLeft[i], 9);
 	}
 
+	checkPoint(5);
 	///********************************/
 
 	DisplayPostprocessor();
+}
+
+float angle = 0;
+void DisplayAnimation(void) {
+
+	for (int i(0); i < cube.cubeCenter.size(); i++) {
+		angle = 0;
+		while (angle < 90) {
+
+			DisplayInit();
+
+			GLSettings0.SetEyePosition();
+
+			//AntTweakBar
+			GradientBackGround(BackTopColor, BackBotColor);
+			ConclusiveAxis();
+			/**********************************/
+			GLfloat white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+			GLfloat blue[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+			GLfloat shininess = 50;
+			GLfloat light0_position[4] = { (float)GLSettings0.m_Eye.x, (float)GLSettings0.m_Eye.y, (float)GLSettings0.m_Eye.z, 1.0f };
+
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_NORMALIZE);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_LIGHT0);
+
+			glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+			glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, white);
+			glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+
+			glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+			glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+					   
+
+			//glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer
+			//glMatrixMode(GL_MODELVIEW);     // To operate on Model-View matrix
+			//glLoadIdentity();
+
+			glPushMatrix();
+			//	glRotatef(30, 0, 0, 1);
+			glRotatef(angle, 0, 0, 1);
+			glutWireCube(1);
+			glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, blue);
+			SolidCuboid(cube.cubeCenter[i], 1.0);
+			glPopMatrix();
+			glFlush();
+					   			 
+			
+
+			//DrawGrid();
+			//
+			//glColor3f(0.0, 1.0, 1.0);
+		//	//glutWireCube(1.0);
+			//glFlush();
+			//
+			////DrawCube_originPoint(cube.origin, 9);
+			//
+			//DrawCube(cube.startPoint, 37);
+			//DrawCube(cube.goalPoint, 11);
+			////
+			////DrawCube(cube.newOrigin, 9);
+			//for (int i = 0; i < cube.cubeCenter.size(); i++) {
+			//	
+			//	//DrawCube(cube.cubeCenter[i], 58);
+			//}
+			//
+			//for (int i = 0; i < cube.edgeContactUpLeft.size(); i++) {
+			//	//DrawCube_originPoint(cube.edgeContactUpLeft[i], 9);
+			//}
+			//
+			//checkPoint(5);
+			///********************************/
+
+			DisplayPostprocessor();
+
+
+			angle += 0.5;
+		}
+
+	}
+
 }
 
 void OpenGLCallBackAnimation(void) {
 	GLSettings0.PickObject = PickObject0;
 	OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
 
-	glutDisplayFunc(DisplayAnimation);		//display call back function
+	//glutDisplayFunc(DisplayAnimation_);		//17/05
+	glutDisplayFunc(DisplayAnimation);		//18/05
 
 	//TwCallBack(); //AntTweakBar
 
@@ -518,12 +591,8 @@ void OpenGLCallBackAnimation(void) {
 
 	glutIdleFunc(onIdle);
 
-	TwGLUTModifiersFunc(glutGetModifiers);
+	//TwGLUTModifiersFunc(glutGetModifiers);
 	glutReshapeFunc(OpenGLReshape0);
 
 	OpenGLPostprocessor(GLSettings0);
-
-	//glutTimerFunc(unsigned int timeout, void(*callback)(int data), int data);
-	//timeSpent = timeout * invocations
-	//	and as soon as timeSpent >= 5000 you don’t call glutTimerFunc anymore.
 }

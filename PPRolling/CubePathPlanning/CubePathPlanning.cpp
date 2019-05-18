@@ -26,7 +26,7 @@ int CubePathPlanning(int argc, char* argv[]) {
 	cube.rotAxis.Set(0.0, 1.0, 0.0);
 	cubeRotation(cube.rotAxis);
 
-	getchar();
+	//getchar();
 	RunOpenGL(argc, argv);
 
 	return 0;

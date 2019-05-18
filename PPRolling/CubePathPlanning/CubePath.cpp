@@ -122,5 +122,5 @@ void cubeRotation(CVector3d axisRotation) {
 	cube.startPoint.Print();
 	cube.newOrigin.Print();
 
-	getchar();
+	//getchar();
 }
