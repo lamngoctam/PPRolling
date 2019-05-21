@@ -246,7 +246,7 @@ void DrawCube_originPoint(CVector3d originPoint, int colorID) {
 
 	MinPt.Set(originPoint.x, originPoint.y, originPoint.z);
 	MaxPt.Set(originPoint.x + 1.0, originPoint.y + 1.0, originPoint.z+1.0);
-
+		
 	DrawBoundingbox(MaxPt, MinPt, colorID);
 }
 
@@ -255,7 +255,7 @@ void DrawCube(CVector3d centerPoint, int colorID) {
 
 	MinPt.Set(centerPoint.x - 0.5, centerPoint.y - 0.5, centerPoint.z - 0.5);
 	MaxPt.Set(centerPoint.x + 0.5, centerPoint.y + 0.5, centerPoint.z +  0.5);
-
+	
 	DrawBoundingbox(MaxPt, MinPt, colorID);
 }
 

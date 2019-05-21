@@ -81,8 +81,13 @@ void cubeRotation(CVector3d axisRotation) {
 
 	//rotation   	  
 	CVector3d W_(0.0, 0.0, 0.0);
+	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	W_.Set(0.0, 1.0, 0.0);
 
-	W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	CVector3d tempOldPoint(0.0, 0.0, 0.0);
+	tempOldPoint.Set(-0.5, cube.goalPoint.y, cube.goalPoint.z);
+
+	cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << endl;
 
 	CMatrix Rod1(3, 3);
 	Rod1.SetZero();
@@ -90,14 +95,26 @@ void cubeRotation(CVector3d axisRotation) {
 	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
 	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
 	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-
+	
 	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
 	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
 	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-
+	
 	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
 	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
 	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+
+	//Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	//Rod1.At(1, 0) = -W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	//Rod1.At(2, 0) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	//
+	//Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) + W_.z*sin(Theta);
+	//Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	//Rod1.At(2, 1) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	//
+	//Rod1.At(0, 2) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	//Rod1.At(1, 2) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	//Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
 	//--------------------------------------------------------------------
 
 	cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << endl;
@@ -105,10 +122,13 @@ void cubeRotation(CVector3d axisRotation) {
 	cout << Rod1.At(0, 2) <<"-"<< Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << endl;
 
 	CVector3d temp_(0.0, 0.0, 0.0);
-	temp_.x = Rod1.At(0, 0)*cube.startPoint.x + Rod1.At(0, 1)*cube.startPoint.y + Rod1.At(0, 2)*cube.startPoint.z;
-	temp_.y = Rod1.At(1, 0)*cube.startPoint.x + Rod1.At(1, 1)*cube.startPoint.y + Rod1.At(1, 2)*cube.startPoint.z;
-	temp_.z = Rod1.At(2, 0)*cube.startPoint.x + Rod1.At(2, 1)*cube.startPoint.y + Rod1.At(2, 2)*cube.startPoint.z;
-	cube.newOrigin.Set(temp_.x, temp_.y, temp_.z);
+	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
+	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
+	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
+	
+		
+	cout << "temp"<<temp_.x << " " << temp_.y << "  " << temp_.z << endl;
+	cube.newOrigin.Set(temp_.x + temp_.x + 0.5, temp_.y, temp_.z);
 
 	
 	//move backward
