@@ -17,6 +17,15 @@ public:
 	CVector3d rotAxis;
 	CVector3d newOrigin;
 
+	int lableNum;
+	vector<int> label;
+	
+	vector<int> rotUpCount;
+	vector<int> rotRightCount;
+
+	vector<bool> rotRightFlag;
+	vector<bool> rotUpFlag;
+
 	//edges contact for cube
 	vector<CVector3d> edgeContactRightLow;
 	vector<CVector3d> edgeContactRightHigh;

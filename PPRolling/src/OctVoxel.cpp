@@ -6,6 +6,7 @@ OctVoxel::OctVoxel() {
 	this->count_y = 0;
 	this->angle = 90.0;
 	this->length = 1.0;
+	this->lableNum = 0;
 }
 
 void OctVoxel::SetOrigin(CVector3d ori) {

@@ -18,6 +18,10 @@ void findingCubeCenter() {
 	CVector3d tempPointContact1, tempPointContact2;
 
 	int count = 0;
+	//21/05
+	int tempUpCount(0);
+	int tempRightCount(0);
+
 	while (tempPoint != cube.goalPoint)
 	{
 		nextRight.Set(tempPoint.x + 1.0, tempPoint.y, tempPoint.z);
@@ -29,20 +33,27 @@ void findingCubeCenter() {
 			//choose Up
 			newMovePoint = nextUp;
 			tempPoint = newMovePoint;
+			cube.cubeCenter.push_back(newMovePoint);
 
 			tempPointContact1.Set(nextUp.x - 0.5, nextUp.y - 0.5, nextUp.z - 0.5);
 			tempPointContact2.Set(nextUp.x + 0.5, nextUp.y - 0.5, nextUp.z - 0.5);
-			
+
 			cube.edgeContactUpLeft.push_back(tempPointContact1);
 			cube.edgeContactUpRight.push_back(tempPointContact2);
 
 			tempPointContact1.Set(0.0, 0.0, 0.0);
 			tempPointContact2.Set(0.0, 0.0, 0.0);
+
+			tempUpCount++;
+			cube.rotUpCount.push_back(tempUpCount);
+			cube.rotUpFlag.push_back(1);//wrong
+
 		}
 		else {
 			//choose Right
 			newMovePoint = nextRight;
 			tempPoint = newMovePoint;
+			cube.cubeCenter.push_back(newMovePoint);
 
 			tempPointContact1.Set(nextRight.x - 0.5, nextRight.y - 0.5, nextRight.z - 0.5);
 			tempPointContact2.Set(nextRight.x - 0.5, nextRight.y + 0.5, nextRight.z - 0.5);
@@ -52,26 +63,32 @@ void findingCubeCenter() {
 
 			tempPointContact1.Set(0.0, 0.0, 0.0);
 			tempPointContact2.Set(0.0, 0.0, 0.0);
+
+			tempRightCount++;
+			cube.rotRightCount.push_back(tempRightCount);
+			cube.rotRightFlag.push_back(1);//maybe wrong
+
 		}
 
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, color);
 		//DrawSphere(newMovePoint, 0.1);		
 
-		cube.cubeCenter.push_back(newMovePoint);
+		//cube.cubeCenter.push_back(newMovePoint);
 		count++;
 	}
 
 	// cube.cubeCenter.push_back(cube.goalPoint);
 
 	cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
+	cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
 
 
 	cout << "size of Center" << cube.cubeCenter.size() << endl;
-	cout << "size of RightLow" << cube.edgeContactRightLow.size() << endl;
-	cout << "size of RightHigh" << cube.edgeContactRightHigh.size() << endl;
-	cout << "size of UpLeft" << cube.edgeContactUpLeft.size() << endl;
-	cout << "size of UpRight" << cube.edgeContactUpRight.size() << endl;
-	
+	// cout << "size of RightLow" << cube.edgeContactRightLow.size() << endl;
+	// cout << "size of RightHigh" << cube.edgeContactRightHigh.size() << endl;
+	// cout << "size of UpLeft" << cube.edgeContactUpLeft.size() << endl;
+	// cout << "size of UpRight" << cube.edgeContactUpRight.size() << endl;
+
 }
 
 void cubeRotation(CVector3d axisRotation) {
@@ -95,11 +112,11 @@ void cubeRotation(CVector3d axisRotation) {
 	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
 	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
 	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-	
+
 	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
 	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
 	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-	
+
 	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
 	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
 	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
@@ -119,28 +136,39 @@ void cubeRotation(CVector3d axisRotation) {
 
 	cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << endl;
 	cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << endl;
-	cout << Rod1.At(0, 2) <<"-"<< Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << endl;
+	cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << endl;
 
 	CVector3d temp_(0.0, 0.0, 0.0);
 	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
 	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
 	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
-	
-		
-	cout << "temp"<<temp_.x << " " << temp_.y << "  " << temp_.z << endl;
+
+
+	cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << endl;
 	cube.newOrigin.Set(temp_.x + temp_.x + 0.5, temp_.y, temp_.z);
 
-	
+
 	//move backward
 
 
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		//cube.cubeCenter[i].Print();
-
+		cout << "point[" << i << "] ";cube.cubeCenter[i].Print(); cout << endl;
+		cube.label.push_back(i);
+		cout << "cube.label" << cube.label[i] << endl;
+		if (cube.rotRightFlag[i] == 1) {
+			cout << "RightFlag[" << i << "] " << endl;
+		}
+		else if (cube.rotUpFlag[i] == 1) {
+			cout << "UpFlag[" << i << "] " << endl;
+		}
 	}
-	cube.origin.Print();
-	cube.startPoint.Print();
-	cube.newOrigin.Print();
+	cout << "cube.origin";	cube.origin.Print(); cout << endl;
+	cout << "cube.startPoint";	cube.startPoint.Print(); cout << endl;
+	cout << "cube.goalPoint";	cube.goalPoint.Print();	 cout << endl;
+	cout << "cube.newOrigin";	cube.newOrigin.Print();	 cout << endl;
+	cout << "cube.rotUpCount" << cube.rotUpCount.size() << endl;
+	cout << "cube.rotRightCount" << cube.rotRightCount.size() << endl;
 
-	//getchar();
+
+	getchar();
 }
