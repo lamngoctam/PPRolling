@@ -18,13 +18,20 @@ public:
 	CVector3d newOrigin;
 
 	int lableNum;
-	vector<int> label;
+	vector<int> rotlabel;
 	
 	vector<int> rotUpCount;
 	vector<int> rotRightCount;
 
-	vector<bool> rotRightFlag;
-	vector<bool> rotUpFlag;
+	bool rotRightFlag;
+	bool rotUpFlag;
+
+	void SetRotationRight(bool);
+	void SetRotationUp(bool);
+
+	bool SetRotationRight(void);
+	bool SetRotationUp(void);
+
 
 	//edges contact for cube
 	vector<CVector3d> edgeContactRightLow;
@@ -45,6 +52,10 @@ public:
 	vector<CVector3d> cubeOrigin;
 	CVector3d startPoint, goalPoint;
 
+
+
+	//
+	
 };
 
 class Model {
@@ -56,5 +67,9 @@ public:
 	Model();
 	~Model();
 };
+
+
+
+
 
 #endif 

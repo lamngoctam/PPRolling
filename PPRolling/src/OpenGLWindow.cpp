@@ -8,12 +8,15 @@
 #include "OpenGL.h"
 #include "OpenGLprimitive.h"
 
+#include "OctVoxel.h"
 using namespace std;
 
 extern int WinID[2];
 OpenGL GLSettings0;
 
 extern OctVoxel cube;
+extern OctVoxel* label;
+
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor[] = { 0.275f, 0.51f, 0.706f };
@@ -354,9 +357,11 @@ int angle = 0;		//17/05/2019
 int angleRight = 0;		//21/05/2019
 int angleUp = 0;		//21/05/2019
 
-bool sDirection(true);
+bool sDirection = true;
 int rotCountRight(0);
 int rotCountUp(0);
+
+
 
 void SpecialKeyRolling(unsigned char key, int x, int y) {
 
@@ -366,8 +371,10 @@ void SpecialKeyRolling(unsigned char key, int x, int y) {
 		{
 			//angleRight = (angleRight - 1) % 90;
 			angleRight++;
-			glutPostRedisplay();
 			rotCountRight++;
+			glutPostRedisplay();
+
+			cout << angleRight << "rotCountRight" << rotCountRight << endl;
 		}
 		else if (sDirection == false)
 		{
@@ -376,16 +383,15 @@ void SpecialKeyRolling(unsigned char key, int x, int y) {
 			glutPostRedisplay();
 			rotCountUp++;
 		}
-
 		break;
 	case 't':
-		sDirection = false;
-		{
-			//angleUp = (angleUp - 1) % 90;
-			angleUp++;
-			//glutPostRedisplay();
-			rotCountUp++;
-		}
+		//	sDirection = false;
+		//	{
+		//		//angleUp = (angleUp - 1) % 90;
+		//		angleUp++;
+		//		//glutPostRedisplay();
+		//		rotCountUp++;
+		//	}
 		break;
 
 	case GLUT_KEY_UP:
@@ -398,8 +404,23 @@ void SpecialKeyRolling(unsigned char key, int x, int y) {
 		cout << x << endl;
 		glutPostRedisplay();
 		break;
-
+		//case GLUT_KEY_F1:    // F1: Toggle between full-screen and windowed mode
+		//	fullScreenMode = !fullScreenMode;         // Toggle state
+		//	if (fullScreenMode) {                     // Full-screen mode
+		//		windowPosX = glutGet(GLUT_WINDOW_X); // Save parameters for restoring later
+		//		windowPosY = glutGet(GLUT_WINDOW_Y);
+		//		windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+		//		windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+		//		glutFullScreen();                      // Switch into full screen
+		//	}
+		//	else {                                         // Windowed mode
+		//		glutReshapeWindow(windowWidth, windowHeight); // Switch into windowed mode
+		//		glutPositionWindow(windowPosX, windowPosX);   // Position top-left corner
+		//	}
+		//	break;
+			// from http://www3.ntu.edu.sg/home/ehchua/programming/opengl/cg_introduction.html#zz-6.7
 	}
+
 }
 
 //-----------------------------------------------------------------------
@@ -485,6 +506,63 @@ void OpenGLCallBack0(void) {
 /*=================================================*/
 //				For Animation
 /*=================================================*/
+
+//--------------------------------------------------
+//----------- test for cube appear -----------------
+//--------------------------------------------------
+int countcube(0);
+bool presskey = true;
+
+void drawBox(int i) {
+
+	glTranslatef(i + 0.5, 0.5, 0.5);
+	glColor3f(0.5, 0.0, 1.5);
+
+	glPushMatrix();
+
+	glutWireCube(1);
+	glPopMatrix();
+
+}
+void displayCube(void) {
+	DisplayInit();
+	GLSettings0.SetEyePosition();
+	GradientBackGround(BackTopColor, BackBotColor);
+	ConclusiveAxis();
+	DrawGrid();
+
+	//for (int ii(0); ii < 5; ii++ ) {
+	drawBox(countcube);
+	//}
+	cout << "countcube " << countcube << endl;
+
+
+	DisplayPostprocessor();
+}
+void keyCube(unsigned char key, int x, int y) {
+
+	switch (key) {
+	case 'e':
+		if (presskey == true)
+		{
+			countcube++;
+			glutPostRedisplay();
+
+			cout << "countcube " << countcube << endl;
+
+			if (countcube == 5) {
+				countcube = 0;
+			}
+		}
+		break;
+	case '1':
+		GLSettings0.m_EyeDis = 30;
+		GLSettings0.m_Center = CVector3d(0.0, 0.0, 0.0);
+		GLSettings0.m_Front = CVector3d(0.0, 0.0, -1.0);
+		GLSettings0.m_Upper = CVector3d(0.0, 1.0, 0.0);
+		break;
+	}
+}
 
 //16/05/2019
 void onIdle(void) {
@@ -605,7 +683,6 @@ void DisplayAnimation2(void) {
 
 }
 
-
 //21/05/2019
 void DisplayAnimation_deletecube(void) {
 
@@ -708,7 +785,273 @@ void DisplayAnimation_deletecube(void) {
 
 }
 
+void drawAnimation_cubeFinalV012() {
+	if ((sDirection == true)) {
+		//right 0; cube 0-1	
+		if (rotCountRight <= 90) {
+			glPushMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+
+			cout << "1st " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90) {
+				angleRight = 0;
+				sDirection = false;
+				rotCountUp = 0;
+			}
+		}
+		//right 1; cube 1-2
+		else if ((rotCountRight > 90) && (rotCountRight <= 90 * 2)) {
+			glPushMatrix();
+			glTranslatef(2.0, 1.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "2nd " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 2) {
+				angleRight = 0;
+			}
+		}
+		//// right 2; cube 2-3
+		else if ((rotCountRight > 90 * 2) && (rotCountRight <= 90 * 3)) {
+			glPushMatrix();
+			glTranslatef(3.0, 1.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "3rd " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 3) {
+				angleRight = 0;
+				sDirection = false;
+				rotCountUp = 91;
+			}
+		}
+		//right 3; cube 3-4
+		else if ((rotCountRight > 90 * 3) && (rotCountRight <= 90 * 4)) {
+			glPushMatrix();
+			glTranslatef(4.0, 2.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "4th " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 4) {
+				angleRight = 0;
+				sDirection = false;
+				rotCountUp = 90*2+1;
+
+			}
+		}
+		//right 4; cube 4-5
+		else if ((rotCountRight > 90 * 4) && (rotCountRight <= 90 * 5)) {
+			glPushMatrix();
+			glTranslatef(5.0, 3.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "5th " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 5) {
+				angleRight = 0;
+				rotCountUp = 90*3+1;
+				sDirection = false;
+			}
+		}
+		else if (rotCountRight > 90 * 5) {
+			angleUp = 0;
+			rotCountUp = 0;
+			sDirection = false;
+
+		}
+	}
+	else if ((sDirection == false))
+	{
+		//up0 from right 0-1
+		if (rotCountUp <= 90) {
+			glPushMatrix();
+			glTranslatef(0.0, 1.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90) {
+				angleUp = 0;
+				sDirection = true;
+				rotCountRight = 91;
+			}
+		}//up 1 from right 2-3
+		else if ((rotCountUp > 90) && (rotCountUp <= 90 * 2)) {
+			glPushMatrix();
+			glTranslatef(2.0, 2.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90 * 2) {
+				angleUp = 0;
+				sDirection = true;
+				rotCountRight = 90*3+1;
+			}
+		}//up2 from 3-4
+		else if ((rotCountUp > 90 * 2) && (rotCountUp <= 90 * 3)) {
+			glPushMatrix();
+			glTranslatef(3.0, 3.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5);  //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90 * 3) {
+				angleUp = 0;
+				sDirection = true;
+				rotCountRight = 90 * 4 + 1;
+			}
+		}
+		else if (rotCountUp > 90 * 3) {
+			angleRight = 0;
+			rotCountRight = 0;
+			sDirection = true;
+		}
+	}
+}
 //21/05/2019
+void drawAnimation_cubeFinalV01() {
+	if ((sDirection == true)) {
+		//right 0; cube 0-1	
+		if (rotCountRight <= 90) {
+			glPushMatrix();
+			glTranslatef(1.0, 0.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+
+			cout << "1st " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90) {
+				angleRight = 0;
+			}
+		}
+		//right 1; cube 1-2
+		else if ((rotCountRight > 90) && (rotCountRight <= 90 * 2)) {
+			glPushMatrix();
+			glTranslatef(2.0, 1.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "2nd " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 2) {
+				angleRight = 0;
+			}
+		}
+		//// right 2; cube 2-3
+		else if ((rotCountRight > 90 * 2) && (rotCountRight <= 90 * 3)) {
+			glPushMatrix();
+			glTranslatef(3.0, 1.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "3rd " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 3) {
+				angleRight = 0;
+			}
+		}
+		//right 3; cube 3-4
+		else if ((rotCountRight > 90 * 3) && (rotCountRight <= 90 * 4)) {
+			glPushMatrix();
+			glTranslatef(4.0, 2.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "4th " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 4) {
+				angleRight = 0;
+			}
+		}
+		//right 4; cube 4-5
+		else if ((rotCountRight > 90 * 4) && (rotCountRight <= 90 * 5)) {
+			glPushMatrix();
+			glTranslatef(5.0, 3.0, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			cout << "5th " << angleRight << " " << rotCountRight << endl;
+			if (rotCountRight == 90 * 5) {
+				angleRight = 0;
+			}
+		}
+		else if (rotCountRight > 90 * 5) {
+			angleUp = 0;
+			rotCountUp = 0;
+			sDirection = false;
+		}
+	}
+	else if ((sDirection == false))
+	{
+		//up0 from right 0-1
+		if (rotCountUp <= 90) {
+			glPushMatrix();
+			glTranslatef(0.0, 1.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90) {
+				angleUp = 0;
+			}
+		}//up 1 from right 2-3
+		else if ((rotCountUp > 90) && (rotCountUp <= 90 * 2)) {
+			glPushMatrix();
+			glTranslatef(2.0, 2.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5); //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90 * 2) {
+				angleUp = 0;
+			}
+		}//up2 from 3-4
+		else if ((rotCountUp > 90 * 2) && (rotCountUp <= 90 * 3)) {
+			glPushMatrix();
+			glTranslatef(3.0, 3.0, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5);  //const
+			glColor3f(1.0, 1.0, 1.0);
+			glutWireCube(1);
+			glPopMatrix();
+			if (rotCountUp == 90 * 3) {
+				angleUp = 0;
+			}
+		}
+		else if (rotCountUp > 90 * 3) {
+			angleRight = 0;
+			rotCountRight = 0;
+			sDirection = true;
+		}
+	}
+}
 void DisplayAnimation_finalV01(void) {
 
 	DisplayInit();
@@ -717,148 +1060,21 @@ void DisplayAnimation_finalV01(void) {
 	ConclusiveAxis();
 	DrawGrid();
 
-	//	DrawCube(cube.startPoint, 1);
+	DrawCube(cube.startPoint, 1);
 	DrawCube(cube.goalPoint, 11);
 
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		cout << "temp " << i << endl;
 
-		//DrawCube(cube.cubeCenter[i], 58);
 		glColor3f(0.5, 1.0, 0.5);
 		DrawSphere(cube.cubeCenter[i], 0.1);
 
-		//if((rotDirection == rotRight) && (cube.rotRight[i] == true))
-		//if(cube.rotRight[i] == true)
-			//AnimationRight();
-		//else if ((rotDirection == rotUp) && (cube.rotUp[i] == true))
-		//else if (cube.rotUp[i] == true)
-		//	AnimationUp();
-
-		if ((sDirection == true)) {
-			//right 0; cube 0-1	
-			if (rotCountRight <= 90) {
-				glPushMatrix();
-				glTranslatef(1.0, 0.0, 0.0);
-				glRotatef(angleRight, 0, 1, 0);
-				glTranslatef(-0.5, 0.5, 0.5);//const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-
-				cout << angleRight << " " << rotCountRight << endl;
-				if (rotCountRight == 90) {
-					angleRight = 0;
-				}
-			}
-			//right 1; cube 1-2
-			else if ((rotCountRight > 90) && (rotCountRight <= 90 * 2)) {
-				glPushMatrix();
-				glTranslatef(2.0, 1.0, 0.0);
-				glRotatef(angleRight, 0, 1, 0);
-				glTranslatef(-0.5, 0.5, 0.5);//const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				cout << "2nd " << angleRight << " " << rotCountRight << endl;
-				if (rotCountRight == 90 * 2) {
-					angleRight = 0;
-				}
-			}
-			//// right 2; cube 2-3
-			else if ((rotCountRight > 90 * 2) && (rotCountRight <= 90 * 3)) {
-				glPushMatrix();
-				glTranslatef(3.0, 1.0, 0.0);
-				glRotatef(angleRight, 0, 1, 0);
-				glTranslatef(-0.5, 0.5, 0.5);//const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				cout << "2nd " << angleRight << " " << rotCountRight << endl;
-				if (rotCountRight == 90 * 3) {
-					angleRight = 0;
-				}
-			}
-			//right 3; cube 3-4
-			else if ((rotCountRight > 90 * 3) && (rotCountRight <= 90 * 4)) {
-				glPushMatrix();
-				glTranslatef(4.0, 2.0, 0.0);
-				glRotatef(angleRight, 0, 1, 0);
-				glTranslatef(-0.5, 0.5, 0.5); //const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				cout << "2nd " << angleRight << " " << rotCountRight << endl;
-				if (rotCountRight == 90 * 4) {
-					angleRight = 0;
-				}
-			}
-			//right 4; cube 4-5
-			else if ((rotCountRight > 90 * 4) && (rotCountRight <= 90 * 5)) {
-				glPushMatrix();
-				glTranslatef(5.0, 3.0, 0.0);
-				glRotatef(angleRight, 0, 1, 0);
-				glTranslatef(-0.5, 0.5, 0.5); //const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				cout << "2nd " << angleRight << " " << rotCountRight << endl;
-				if (rotCountRight == 90 * 5) {
-					angleRight = 0;
-				}
-			}
-			else if (rotCountRight > 90 * 5) {
-				angleUp = 0;
-				rotCountUp = 0;
-				sDirection = false;
-			}
-		}
-		else if ((sDirection == false))
-		{
-			//up0 from right 0-1
-			if (rotCountUp <= 90) {
-				glPushMatrix();
-				glTranslatef(0.0, 1.0, 0.0);
-				glRotatef(-angleUp, 1, 0, 0);
-				glTranslatef(1.5, -0.5, 0.5); //const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				if (rotCountUp == 90) {
-					angleUp = 0;
-				}
-			}//up 1 from right 2-3
-			else if ((rotCountUp > 90) && (rotCountUp <= 90 * 2)) {
-				glPushMatrix();
-				glTranslatef(2.0, 2.0, 0.0);
-				glRotatef(-angleUp, 1, 0, 0);
-				glTranslatef(1.5, -0.5, 0.5); //const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				if (rotCountUp == 90 * 2) {
-					angleUp = 0;
-				}
-			}//up2 from 3-4
-			else if ((rotCountUp > 90 * 2) && (rotCountUp <= 90 * 3)) {
-				glPushMatrix();
-				glTranslatef(3.0, 3.0, 0.0);
-				glRotatef(-angleUp, 1, 0, 0);
-				glTranslatef(1.5, -0.5, 0.5);  //const
-				glColor3f(1.0, 1.0, 1.0);
-				glutWireCube(1);
-				glPopMatrix();
-				if (rotCountUp == 90 * 3) {
-					angleUp = 0;
-				}
-			}
-			else if (rotCountUp > 90 * 3) {
-				angleRight = 0;
-				rotCountRight = 0;
-				sDirection = true;
-			}
-		}
+		drawAnimation_cubeFinalV012();
+		cout << "Finish to roll cube 90 !!!" << endl;
 	}
+	cout << "out of for loop" << endl;
+	//getchar();
 	DisplayPostprocessor();
-
 }
 
 //21/05/2019 midnight 
@@ -873,98 +1089,131 @@ void DisplayAnimation_finalV01(void) {
 // glTranslatef(xx, yy, zz);
 // glRotatef(-angleUp, 1, 0, 0);
 // glTranslatef(1.5, -0.5, 0.5); //const
+
+
+int xx(0);
+int yy(0);
+
+void drawAnimateCubes(int refCube) {
+	//right rolling
+	if ((cube.rotlabel[refCube] == 1)) {
+		cout << "-----------------------------------RIGHT---" << endl;
+		sDirection = true;
+		if (rotCountRight <= 90) {
+			glPushMatrix();
+			glTranslatef(xx, yy, 0.0);
+			glRotatef(angleRight, 0, 1, 0);
+			glTranslatef(-0.5, 0.5, 0.5);//const
+			glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+			glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+			glPopMatrix();
+			cout << "right rolling " << refCube << endl;
+		}//when stop>???????????????????????
+		else if (rotCountRight > 90) {
+			angleRight = 0;
+			rotCountRight = 0;
+			sDirection = false;
+		}
+	}
+	else if (cube.rotlabel[refCube] == 0) {
+		cout << "-----------------------------------up---" << endl;
+		sDirection = false;
+		if (rotCountUp <= 90) {
+			glPushMatrix();
+			glTranslatef(cube.cubeCenter[refCube].x - 1.5, cube.cubeCenter[refCube].y - 0.5, 0.0);
+			glRotatef(-angleUp, 1, 0, 0);
+			glTranslatef(1.5, -0.5, 0.5); //const
+			glColor3f(0.0, 0.5, 1.0); glutSolidCube(1);
+			glColor3f(1.0, 0.5, 1.5); glutWireCube(1);
+			glPopMatrix();
+		}//when stop>??????????????????????? 
+		else if (rotCountUp > 90) {
+			angleUp = 0;
+			rotCountUp = 0;
+			sDirection = true;
+		}
+	}
+	else {
+	}
+}
+
 void DisplayAnimation_finalV02(void) {
 
 	DisplayInit();
+
 	GLSettings0.SetEyePosition();
 	GradientBackGround(BackTopColor, BackBotColor);
 	ConclusiveAxis();
 	DrawGrid();
 
 	DrawCube(cube.goalPoint, 11);
-	int temp_(1);
-	for (int i = 0; i < cube.cubeCenter.size(); i++) {
 
+	for (int temp = 0; temp < cube.cubeCenter.size(); temp++) {
+		cout << "temp" << temp << endl;
 		glColor3f(0.5, 1.0, 0.5);
-		DrawSphere(cube.cubeCenter[i], 0.1);
+		DrawSphere(cube.cubeCenter[temp], 0.1);
 
-		//if((rotDirection == rotRight) && (cube.rotRight[i] == true))
-		//if(cube.rotRight[i] == true)
-			//AnimationRight();
-		//else if ((rotDirection == rotUp) && (cube.rotUp[i] == true))
-		//else if (cube.rotUp[i] == true)
-		//	AnimationUp();
+		drawAnimateCubes(temp);
+		cout << "Finish to roll cube 90 !!!" << endl;
 
-		if ((rotCountRight <= 90 ) && (cube.rotRightFlag[i] == true)) {
-			glPushMatrix();
-			glTranslatef(cube.cubeCenter[i].x - 0.5, cube.cubeCenter[i].y - 0.5, 0.0);
-			glRotatef(angleRight, 0, 1, 0);
-			glTranslatef(-0.5, 0.5, 0.5);//const
-			glColor3f(1.0, 1.0, 1.0);
-			glutWireCube(1);
-			glPopMatrix();
-			cout << angleRight << " " << rotCountRight << endl;
 
-			if (rotCountRight == 90 ) {
-				angleRight = 0;
-			}
-			//temp_++;
-		}
-		else if ((rotCountUp <= 90 ) && (cube.rotUpFlag[i] == true)) {
-			glPushMatrix();
-			glTranslatef(cube.cubeCenter[i].x - 1.5, cube.cubeCenter[i].y - 0.5, 0.0);
-			glRotatef(-angleUp, 1, 0, 0);
-			glTranslatef(1.5, -0.5, 0.5); //const
-			glColor3f(1.0, 1.0, 1.0);
-			glutWireCube(1);
-			glPopMatrix();
-			if (rotCountUp == 90) {
-				angleUp = 0;
-			}
-		}
-		else {
-
-		}
-			
 	}
+	cout << "out of for loop" << endl;
+
 	DisplayPostprocessor();
+	getchar();
 
 }
 
 void time_callback(int) {
 	glutPostRedisplay();
-	glutTimerFunc(1, time_callback, 0);
-
+	glutTimerFunc(10, time_callback, 0);
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		if (cube.rotlabel[i] == 1) {
+			xx = cube.cubeCenter[i].x - 0.5;
+			yy = cube.cubeCenter[i].y - 0.5;
+		}
+	}
 	if (sDirection == true)
 	{
-		//angleRight = (angleRight - 1) % 90;
 		angleRight++;
 		glutPostRedisplay();
 		rotCountRight++;
+		cout << "angle " << angleRight << " count " << rotCountRight << endl;
+
+		//if ((rotCountRight > 90*tn) && (rotCountRight <= 90 * (tn+1))) {
+		//
+		//}
+
 	}
 	else if (sDirection == false)
 	{
-		//angleUp = (angleUp - 1) % 90;
 		angleUp++;
 		glutPostRedisplay();
 		rotCountUp++;
 	}
+
 }
 
 void OpenGLCallBackAnimation(void) {
 	GLSettings0.PickObject = PickObject0;
-	OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
+	//OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
+	OpenGLInitialize(0, GLSettings0, 300, 150, 1000, 650, "window");
 
 	//glutDisplayFunc(DisplayAnimation1);		//17/05
 	//glutDisplayFunc(DisplayAnimation2);		//21/05
 	//glutDisplayFunc(DisplayAnimation_deletecube);		//21/05
 	//glutDisplayFunc(DisplayAnimation_finalV01);		//21/05
-	glutDisplayFunc(DisplayAnimation_finalV02);		    //21/05 might night
+	//glutDisplayFunc(displayCube);
+
+	glutDisplayFunc(DisplayAnimation_finalV01);		    //21/05 might night
 
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(OnMouseMotion);
 	glutPassiveMotionFunc(PassiveMotion);
-	glutKeyboardFunc(SpecialKeyRolling);			//keyboard call
+
+	//glutKeyboardFunc(SpecialKeyRolling);			//keyboard call
+	//glutKeyboardFunc(keyCube);
 	glutSpecialFunc(SpecialKey);
 	glutMouseWheelFunc(OpenGLMouseWheel0);
 	glutReshapeFunc(OpenGLReshape0);

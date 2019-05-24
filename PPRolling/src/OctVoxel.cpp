@@ -7,7 +7,27 @@ OctVoxel::OctVoxel() {
 	this->angle = 90.0;
 	this->length = 1.0;
 	this->lableNum = 0;
+
+	this->rotRightFlag = false;
+	this->rotUpFlag = false;
 }
+
+void OctVoxel::SetRotationRight(bool num) {
+	this->rotRightFlag = num;
+}
+	
+void OctVoxel::SetRotationUp(bool num) {
+	this->rotUpFlag = num;
+}
+
+bool OctVoxel::SetRotationRight(void) {
+	return(this->rotRightFlag);
+}
+bool OctVoxel::SetRotationUp(void) {
+	return(this->rotUpFlag);
+}
+
+
 
 void OctVoxel::SetOrigin(CVector3d ori) {
 	this->origin = ori;
@@ -31,3 +51,4 @@ void OctVoxel::SetVertexWorld(CVector3d* vertW)
 	vertW[7] = this->origin + z + y;
 
 }
+

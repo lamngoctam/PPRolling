@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 extern OctVoxel cube;
+extern OctVoxel* label;
 
 void findingCubeCenter() {
 
@@ -22,6 +23,11 @@ void findingCubeCenter() {
 	int tempUpCount(0);
 	int tempRightCount(0);
 
+	//22/05
+	int  tempLableCount= 0;
+	int uppp = 0;
+	int righttt = 1;
+
 	while (tempPoint != cube.goalPoint)
 	{
 		nextRight.Set(tempPoint.x + 1.0, tempPoint.y, tempPoint.z);
@@ -33,6 +39,7 @@ void findingCubeCenter() {
 			//choose Up
 			newMovePoint = nextUp;
 			tempPoint = newMovePoint;
+			
 			cube.cubeCenter.push_back(newMovePoint);
 
 			tempPointContact1.Set(nextUp.x - 0.5, nextUp.y - 0.5, nextUp.z - 0.5);
@@ -44,10 +51,8 @@ void findingCubeCenter() {
 			tempPointContact1.Set(0.0, 0.0, 0.0);
 			tempPointContact2.Set(0.0, 0.0, 0.0);
 
-			tempUpCount++;
-			cube.rotUpCount.push_back(tempUpCount);
-			cube.rotUpFlag.push_back(1);//wrong
-
+			cube.rotlabel.push_back(uppp);
+			//tempLableCount++;
 		}
 		else {
 			//choose Right
@@ -64,31 +69,31 @@ void findingCubeCenter() {
 			tempPointContact1.Set(0.0, 0.0, 0.0);
 			tempPointContact2.Set(0.0, 0.0, 0.0);
 
-			tempRightCount++;
-			cube.rotRightCount.push_back(tempRightCount);
-			cube.rotRightFlag.push_back(1);//maybe wrong
+			cube.rotlabel.push_back(righttt);
+
+			//tempLableCount++;
 
 		}
 
 		//glMaterialfv(GL_FRONT, GL_SPECULAR, color);
 		//DrawSphere(newMovePoint, 0.1);		
-
+		//
 		//cube.cubeCenter.push_back(newMovePoint);
 		count++;
 	}
 
 	// cube.cubeCenter.push_back(cube.goalPoint);
 
-	cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
+	//cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
 	cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
 
 
 	cout << "size of Center" << cube.cubeCenter.size() << endl;
-	// cout << "size of RightLow" << cube.edgeContactRightLow.size() << endl;
-	// cout << "size of RightHigh" << cube.edgeContactRightHigh.size() << endl;
-	// cout << "size of UpLeft" << cube.edgeContactUpLeft.size() << endl;
-	// cout << "size of UpRight" << cube.edgeContactUpRight.size() << endl;
 
+	for (int i = 0; i < cube.rotlabel.size(); i++) {
+		//cout << "rotlabel " << cube.rotlabel[i] << endl;
+	}
+	//getchar();
 }
 
 void cubeRotation(CVector3d axisRotation) {
@@ -104,7 +109,7 @@ void cubeRotation(CVector3d axisRotation) {
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
 	tempOldPoint.Set(-0.5, cube.goalPoint.y, cube.goalPoint.z);
 
-	cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << endl;
+	//cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << endl;
 
 	CMatrix Rod1(3, 3);
 	Rod1.SetZero();
@@ -146,29 +151,31 @@ void cubeRotation(CVector3d axisRotation) {
 
 	cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << endl;
 	cube.newOrigin.Set(temp_.x + temp_.x + 0.5, temp_.y, temp_.z);
-
+	cout << endl;
 
 	//move backward
 
 
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		cout << "point[" << i << "] ";cube.cubeCenter[i].Print(); cout << endl;
-		cube.label.push_back(i);
-		cout << "cube.label" << cube.label[i] << endl;
-		if (cube.rotRightFlag[i] == 1) {
-			cout << "RightFlag[" << i << "] " << endl;
-		}
-		else if (cube.rotUpFlag[i] == 1) {
-			cout << "UpFlag[" << i << "] " << endl;
-		}
+		cout << "point[" << i << "] ";cube.cubeCenter[i].Print();
+		//cube.rotlabel.push_back(i);
+
+		//if (cube.rotRightFlag == true) {
+		//	cout << "RightFlag[" << i << "] " << endl;
+		//}
+		//else {
+		//	cout << "UpFlag[" << i << "] " << endl;
+		//}
+		cout << endl;
 	}
-	cout << "cube.origin";	cube.origin.Print(); cout << endl;
-	cout << "cube.startPoint";	cube.startPoint.Print(); cout << endl;
-	cout << "cube.goalPoint";	cube.goalPoint.Print();	 cout << endl;
-	cout << "cube.newOrigin";	cube.newOrigin.Print();	 cout << endl;
-	cout << "cube.rotUpCount" << cube.rotUpCount.size() << endl;
-	cout << "cube.rotRightCount" << cube.rotRightCount.size() << endl;
+	//cout << "cube.origin";	cube.origin.Print(); cout << endl;
+	//cout << "cube.startPoint";	cube.startPoint.Print(); cout << endl;
+	//cout << "cube.goalPoint";	cube.goalPoint.Print();	 cout << endl;
+	//cout << "cube.newOrigin";	cube.newOrigin.Print();	 cout << endl;
+	//cout << "cube.rotUpCount" << cube.rotUpCount.size() << endl;
+	//cout << "cube.rotRightCount" << cube.rotRightCount.size() << endl;
 
+	cout << endl;
 
-	getchar();
+	//getchar();
 }

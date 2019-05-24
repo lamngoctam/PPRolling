@@ -3,6 +3,7 @@
 using namespace std;
 
 extern OctVoxel cube;
+extern OctVoxel* label;
 
 //function
 void DrawCube(CVector3d centerPoint, int colorID);
@@ -21,11 +22,11 @@ int CubePathPlanning(int argc, char* argv[]) {
 	//cube.origin.Set(0.0, 0.0, 0.0);
 	//
 	findingCubeCenter();
-	//cout << cube.cubeCenter.size();
+	cout << cube.cubeCenter.size();
 
 	cube.rotAxis.Set(0.0, 1.0, 0.0);
 	cubeRotation(cube.rotAxis);
-
+	//cout << "WTF" << endl;
 	//getchar();
 	RunOpenGL(argc, argv);
 
