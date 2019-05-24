@@ -2,6 +2,7 @@
 
 extern OctVoxel cube;
 extern OctVoxel* label;
+extern UnitCube newCube;
 
 void findingCubeCenter() {
 
@@ -83,16 +84,19 @@ void findingCubeCenter() {
 	}
 
 	// cube.cubeCenter.push_back(cube.goalPoint);
-
+	//
 	//cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
-	cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
-
-
+	//cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
+	
 	cout << "size of Center" << cube.cubeCenter.size() << endl;
 
-	for (int i = 0; i < cube.rotlabel.size(); i++) {
-		//cout << "rotlabel " << cube.rotlabel[i] << endl;
+	newCube.totalCube = cube.cubeCenter.size();
+
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		newCube.UniCube
 	}
+
+
 	//getchar();
 }
 

@@ -69,7 +69,34 @@ public:
 };
 
 
+class UnitCube
+{
+private:
+	
+	double coordX;
+	double coordY;
+	double coordZ;
+
+	double directionX;
+	double directionY;
+	double directionZ;
+	bool selected;
+
+public:
+	int totalCube;
+	UnitCube(double cX, double cY, double cZ, double dX, double dY, double dZ);
+	UnitCube();
+
+	double getCoordX();
+	double getCoordY();
+	double getCoordZ();
+	double getDirectionX();
+	double getDirectionY();
+	double getDirectionZ();
+	bool getSelected();
+	void setSelected(bool what);
 
 
+};
 
 #endif 

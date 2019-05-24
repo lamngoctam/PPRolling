@@ -5,6 +5,8 @@
 //global variables
 OctVoxel cube;
 OctVoxel* label;
+UnitCube newCube;
+
 
 //all main function
 int CubePathPlanning(int argc, char* argv[]);
