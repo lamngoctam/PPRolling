@@ -5,7 +5,7 @@
 //global variables
 OctVoxel cube;
 OctVoxel* label;
-UnitCube newCube;
+//UnitCube newCube;
 
 
 //all main function

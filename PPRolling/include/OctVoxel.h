@@ -72,7 +72,7 @@ public:
 class UnitCube
 {
 private:
-	
+public:
 	double coordX;
 	double coordY;
 	double coordZ;
@@ -82,8 +82,10 @@ private:
 	double directionZ;
 	bool selected;
 
-public:
+	bool rightRolling;
+
 	int totalCube;
+
 	UnitCube(double cX, double cY, double cZ, double dX, double dY, double dZ);
 	UnitCube();
 
@@ -96,6 +98,8 @@ public:
 	bool getSelected();
 	void setSelected(bool what);
 
+	bool getRightRolling();
+	void setRightRolling(bool what);
 
 };
 

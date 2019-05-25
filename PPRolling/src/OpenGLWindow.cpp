@@ -1278,78 +1278,117 @@ void time_callback(int) {
 
 
 
-int Cuberotation(0);
-int numberCube(3);
+extern int cubeNum;
+extern UnitCube *cubeNew;
 
-extern CubeNew cubes[3];
+int angleRotation(0);
+int numberCube(0);
 
 void drawModel()
 {
-	CubeNew cb = cubes[numberCube];
+	UnitCube cb = cubeNew[numberCube];
 
-	glEnable(GL_LIGHTING);
-
-	for (int a = 0; a < sizeof(cubes) / sizeof(CubeNew); a++)
+	
+	for (int a = 0; a < cubeNum; a++)
 	{
-		if (cubes[a].getSelected())
+		if (cubeNew[a].getSelected())
 		{
-			glPushMatrix();
-			glTranslatef(cb.getCoordX() + cb.getDirectionX() * (Cuberotation / 100),
-				cb.getCoordY() + cb.getDirectionY() * (Cuberotation / 100),
-				cb.getCoordZ() + cb.getDirectionZ() * (Cuberotation / 100));
-			glRotatef(-Cuberotation, -cb.getDirectionZ(), cb.getDirectionY(), cb.getDirectionX());
-			glutWireCube(1);
-			glPopMatrix();
+			if (cubeNew[a].getRightRolling()) {//right
+				glPushMatrix();
+
+				//glTranslatef(cubeNew[a].getCoordX()- 0.5, cubeNew[a].getCoordY() - 0.5, 0.0);
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+				//glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				glRotatef(angleRotation, 0.0, 1.0, 0.0);
+				glTranslatef(-0.5, 0.5, 0.5);//const
+
+				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+				glPopMatrix();
+
+				cout << "+++++++++++++++++++++++right " <<  endl;
+				goto next;
+			}
+			else {//up
+				glPushMatrix();
+
+				//glTranslatef(cubeNew[a].getCoordX() - 1.5, cubeNew[a].getCoordY() - 0.5, 0.0);
+				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
+				//glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				glRotatef(-angleRotation, 1.0, 0.0, 0.0);
+				glTranslatef(1.5, -0.5, 0.5); //const
+
+				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+				glPopMatrix();
+				cout << "----------------------------------up " << endl;
+
+				goto next;
+			}
+
 		}
+	next: {}
 
-		cout << " ddd" << endl;
 	}
-	if (Cuberotation >= 90)
+
+	if (angleRotation >= 90)
 	{
-		cubes[numberCube].setSelected(false);
+		cubeNew[numberCube].setSelected(false);
 		numberCube += 1;
-		numberCube %= 3;
-		cubes[numberCube].setSelected(true);
-		Cuberotation = 0;
-
-		cout << " Cuberotation >= 90" << endl;
+		numberCube %= cubeNum;
+		cubeNew[numberCube].setSelected(true);
+		angleRotation = 0;
 	}
-
+	///getchar();
 }
 
 void DisplayAnimation_Korea(void) {
+	DisplayInit();GLSettings0.SetEyePosition();	GradientBackGround(BackTopColor, BackBotColor);	ConclusiveAxis();
+	DrawGrid();	DrawCube(cube.goalPoint, 11);
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		glColor3f(0.5, 1.0, 0.5);
+		DrawSphere(cube.cubeCenter[i], 0.1);
+	}
 
-	DisplayInit();
 
-	GLSettings0.SetEyePosition();
-	GradientBackGround(BackTopColor, BackBotColor);
-	ConclusiveAxis();
+
 	drawModel();
 
 	DisplayPostprocessor();
 }
+
+void OpenGLIdle_Korea(void) {
+	angleRotation += 1;
+	glutPostRedisplay();
+}
+
 void SpecialKeyKorea(unsigned char key, int x, int y) {
 
 	switch (key) {
 	case 'r':
-		Cuberotation += 1;
+		angleRotation += 1;
 		glutPostRedisplay();
 
-		cout << "cuberotation " << Cuberotation << endl;
+		cout << "cuberotation " << angleRotation << endl;
 
 		break;
 
 	case 't':
-		cubes[0].setSelected(true);
+		//cubeNew[0].setSelected(true);
 		break;
 	}
 }
-void time_callback_Korea(int) {
-	Cuberotation += 1;
-	glutPostRedisplay();
 
-	cout << "cuberotation " << Cuberotation << endl;
+void time_callback_Korea(int) {
+	glutPostRedisplay();
+	glutTimerFunc(10, time_callback_Korea, 0);
+
+	angleRotation += 1;
+
+	cout << "cuberotation in timeCallback(): " << angleRotation << endl;
 }
+
+
 void OpenGLCallBackAnimation(void) {
 	GLSettings0.PickObject = PickObject0;
 	//OpenGLInitialize(0, GLSettings0, 0, 0, 1024, 768, "window");
@@ -1367,8 +1406,10 @@ void OpenGLCallBackAnimation(void) {
 	glutMotionFunc(OnMouseMotion);
 	glutPassiveMotionFunc(PassiveMotion);
 
+	//glutIdleFunc(OpenGLIdle_Korea);
+
 	//glutKeyboardFunc(SpecialKeyRolling);			//keyboard call
-	glutKeyboardFunc(SpecialKeyKorea);
+	//glutKeyboardFunc(SpecialKeyKorea);
 	glutSpecialFunc(SpecialKey);
 	glutMouseWheelFunc(OpenGLMouseWheel0);
 	glutReshapeFunc(OpenGLReshape0);

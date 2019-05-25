@@ -13,6 +13,7 @@ UnitCube::UnitCube(double cX, double cY, double cZ, double dX, double dY, double
 	directionZ = dZ;
 
 	selected = false;
+	rightRolling = false;
 }
 
 double UnitCube::getCoordX()
@@ -46,4 +47,13 @@ bool UnitCube::getSelected()
 void UnitCube::setSelected(bool what)
 {
 	selected = what;
+}
+//
+bool UnitCube::getRightRolling()
+{
+	return rightRolling;
+}
+void UnitCube::setRightRolling(bool what)
+{
+	rightRolling = what;
 }

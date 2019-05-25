@@ -2,9 +2,10 @@
 
 extern OctVoxel cube;
 extern OctVoxel* label;
-extern UnitCube newCube;
+extern UnitCube *cubeNew;
 
-void findingCubeCenter() {
+
+void findingCubeCenter(int &cubeNum) {
 
 	//cube.cubeCenter.push_back(cube.startPoint);
 
@@ -25,7 +26,7 @@ void findingCubeCenter() {
 	int tempRightCount(0);
 
 	//22/05
-	int  tempLableCount= 0;
+	int  tempLableCount = 0;
 	int uppp = 0;
 	int righttt = 1;
 
@@ -40,17 +41,8 @@ void findingCubeCenter() {
 			//choose Up
 			newMovePoint = nextUp;
 			tempPoint = newMovePoint;
-			
-			cube.cubeCenter.push_back(newMovePoint);
 
-			tempPointContact1.Set(nextUp.x - 0.5, nextUp.y - 0.5, nextUp.z - 0.5);
-			tempPointContact2.Set(nextUp.x + 0.5, nextUp.y - 0.5, nextUp.z - 0.5);
-
-			cube.edgeContactUpLeft.push_back(tempPointContact1);
-			cube.edgeContactUpRight.push_back(tempPointContact2);
-
-			tempPointContact1.Set(0.0, 0.0, 0.0);
-			tempPointContact2.Set(0.0, 0.0, 0.0);
+			cube.cubeCenter.push_back(newMovePoint); // saving cubeCenter
 
 			cube.rotlabel.push_back(uppp);
 			//tempLableCount++;
@@ -59,16 +51,7 @@ void findingCubeCenter() {
 			//choose Right
 			newMovePoint = nextRight;
 			tempPoint = newMovePoint;
-			cube.cubeCenter.push_back(newMovePoint);
-
-			tempPointContact1.Set(nextRight.x - 0.5, nextRight.y - 0.5, nextRight.z - 0.5);
-			tempPointContact2.Set(nextRight.x - 0.5, nextRight.y + 0.5, nextRight.z - 0.5);
-
-			cube.edgeContactRightLow.push_back(tempPointContact1);
-			cube.edgeContactRightHigh.push_back(tempPointContact2);
-
-			tempPointContact1.Set(0.0, 0.0, 0.0);
-			tempPointContact2.Set(0.0, 0.0, 0.0);
+			cube.cubeCenter.push_back(newMovePoint);  // saving cubeCenter
 
 			cube.rotlabel.push_back(righttt);
 
@@ -87,17 +70,41 @@ void findingCubeCenter() {
 	//
 	//cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
 	//cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
-	
-	cout << "size of Center" << cube.cubeCenter.size() << endl;
 
-	newCube.totalCube = cube.cubeCenter.size();
+	//cout << "size of Center" << cube.cubeCenter.size() << endl;
+	cubeNum = cube.cubeCenter.size();
+	cubeNew = new UnitCube[cubeNum];
 
+	int rightNum(0);
+	int UpNum(0);
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		newCube.UniCube
+		cubeNew[i].coordX = cube.cubeCenter[i].x;
+		cubeNew[i].coordY = cube.cubeCenter[i].y;
+		cubeNew[i].coordZ = cube.cubeCenter[i].z;
+
+	}
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		if (cube.rotlabel[i] == 1) { //right
+			cubeNew[i].setRightRolling(true);
+
+			cubeNew[i].directionX = 0.0;
+			cubeNew[i].directionY = 1.0;
+			cubeNew[i].directionZ = 0.0;
+
+			rightNum++;
+		}
+		else if (cube.rotlabel[i] == 0) {//up
+			cubeNew[i].setRightRolling(false);
+
+			cubeNew[i].directionX = 1.0;
+			cubeNew[i].directionY = 0.0;
+			cubeNew[i].directionZ = 0.0;
+
+			UpNum++;
+		}
 	}
 
 
-	//getchar();
 }
 
 void cubeRotation(CVector3d axisRotation) {
