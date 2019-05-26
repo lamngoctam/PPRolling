@@ -1400,8 +1400,6 @@ void DisplayAnimation_Korea(void) {
 		DrawSphere(cube.cubeCenter[i], 0.1);
 	}
 
-
-
 	drawModel2();
 
 	DisplayPostprocessor();
@@ -1433,7 +1431,7 @@ void time_callback_Korea(int) {
 	glutPostRedisplay();
 	glutTimerFunc(10, time_callback_Korea, 0);
 
-	angleRotation += 5;
+	angleRotation += 3;
 
 	cout << "cuberotation in timeCallback(): " << angleRotation << endl;
 }
