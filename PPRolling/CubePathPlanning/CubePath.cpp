@@ -3,7 +3,7 @@
 extern OctVoxel cube;
 extern OctVoxel* label;
 extern UnitCube *cubeNew;
-
+extern OctVoxel *newCube;
 
 void findingCubeCenter(int &cubeNum) {
 
@@ -37,74 +37,91 @@ void findingCubeCenter(int &cubeNum) {
 		nextUp.Set(tempPoint.x, tempPoint.y + 1.0, tempPoint.z);
 		double distanceUp = nextUp.PointLineDistance(cube.startPoint, cube.goalPoint);
 
-		if (distanceRight > distanceUp) {
-			//choose Up
-			newMovePoint = nextUp;
-			tempPoint = newMovePoint;
-
-			cube.cubeCenter.push_back(newMovePoint); // saving cubeCenter
+		if (distanceRight > distanceUp) { //choose Up
+			tempPoint = nextUp;
+			cube.cubeCenter.push_back(nextUp); // saving cubeCenter			
 
 			cube.rotlabel.push_back(uppp);
-			//tempLableCount++;
-		}
-		else {
-			//choose Right
-			newMovePoint = nextRight;
-			tempPoint = newMovePoint;
-			cube.cubeCenter.push_back(newMovePoint);  // saving cubeCenter
-
+		}			
+		else { //choose Right
+			tempPoint = nextRight;
+			cube.cubeCenter.push_back(nextRight); // saving cubeCenter
+			
 			cube.rotlabel.push_back(righttt);
-
-			//tempLableCount++;
-
 		}
-
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, color);
-		//DrawSphere(newMovePoint, 0.1);		
-		//
-		//cube.cubeCenter.push_back(newMovePoint);
 		count++;
 	}
 
+	cout << "start" << endl;
+	cubeNum = cube.cubeCenter.size();
+	newCube = new OctVoxel[cubeNum];
+
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		newCube[i].coordX = cube.cubeCenter[i].x;
+		newCube[i].coordY = cube.cubeCenter[i].y;
+		newCube[i].coordZ = cube.cubeCenter[i].z;
+		if (cube.rotlabel[i] == 1) { //right
+			newCube[i].setRightRolling(true);
+			newCube[i].directionX = 0.0;
+			newCube[i].directionY = 1.0;
+			newCube[i].directionZ = 0.0;
+
+			cout << "right " << i << endl;
+		}
+		else {
+			newCube[i].setRightRolling(false);
+			newCube[i].directionX = 1.0;
+			newCube[i].directionY = 0.0;
+			newCube[i].directionZ = 0.0;
+
+			cout << "up " << i << endl;
+
+		}
+	}
+
+	cout << "endl" << endl;
+	//getchar();
+
 	// cube.cubeCenter.push_back(cube.goalPoint);
-	//
 	//cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
 	//cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
 
-	//cout << "size of Center" << cube.cubeCenter.size() << endl;
-	cubeNum = cube.cubeCenter.size();
-	cubeNew = new UnitCube[cubeNum];
+	//cubeNum = cube.cubeCenter.size();
+	//cubeNew = new UnitCube[cubeNum];
 
-	int rightNum(0);
-	int UpNum(0);
-	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		cubeNew[i].coordX = cube.cubeCenter[i].x;
-		cubeNew[i].coordY = cube.cubeCenter[i].y;
-		cubeNew[i].coordZ = cube.cubeCenter[i].z;
+	//
+	//
+	//int rightNum(0);
+	//int UpNum(0);
+	//for (int i = 0; i < cube.cubeCenter.size(); i++) {
+	//	cubeNew[i].coordX = cube.cubeCenter[i].x;
+	//	cubeNew[i].coordY = cube.cubeCenter[i].y;
+	//	cubeNew[i].coordZ = cube.cubeCenter[i].z;
 
-	}
-	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		if (cube.rotlabel[i] == 1) { //right
-			cubeNew[i].setRightRolling(true);
+	//}
+	//for (int i = 0; i < cube.cubeCenter.size(); i++) {
+	//	if (cube.rotlabel[i] == 1) { //right
+	//		cubeNew[i].setRightRolling(true);
 
-			cubeNew[i].directionX = 0.0;
-			cubeNew[i].directionY = 1.0;
-			cubeNew[i].directionZ = 0.0;
+	//		cubeNew[i].directionX = 0.0;
+	//		cubeNew[i].directionY = 1.0;
+	//		cubeNew[i].directionZ = 0.0;
 
-			rightNum++;
-		}
-		else if (cube.rotlabel[i] == 0) {//up
-			cubeNew[i].setRightRolling(false);
+	//		rightNum++;
+	//	}
+	//	else if (cube.rotlabel[i] == 0) {//up
+	//		cubeNew[i].setRightRolling(false);
 
-			cubeNew[i].directionX = 1.0;
-			cubeNew[i].directionY = 0.0;
-			cubeNew[i].directionZ = 0.0;
+	//		cubeNew[i].directionX = 1.0;
+	//		cubeNew[i].directionY = 0.0;
+	//		cubeNew[i].directionZ = 0.0;
 
-			UpNum++;
-		}
-	}
+	//		UpNum++;
+	//	}
+	//}
+	
 
-
+	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
 }
 
 void cubeRotation(CVector3d axisRotation) {

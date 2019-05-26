@@ -16,7 +16,7 @@ OpenGL GLSettings0;
 
 extern OctVoxel cube;
 extern OctVoxel* label;
-extern UnitCube newCube;
+
 
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
@@ -1280,6 +1280,7 @@ void time_callback(int) {
 
 extern int cubeNum;
 extern UnitCube *cubeNew;
+extern OctVoxel *newCube;
 
 int angleRotation(0);
 int numberCube(0);
@@ -1288,7 +1289,7 @@ void drawModel()
 {
 	UnitCube cb = cubeNew[numberCube];
 
-	
+
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (cubeNew[a].getSelected())
@@ -1306,7 +1307,7 @@ void drawModel()
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
 				glPopMatrix();
 
-				cout << "+++++++++++++++++++++++right " <<  endl;
+				cout << "+++++++++++++++++++++++right " << endl;
 				goto next;
 			}
 			else {//up
@@ -1342,6 +1343,55 @@ void drawModel()
 	///getchar();
 }
 
+void drawModel2()
+{
+	OctVoxel cb = newCube[numberCube];
+
+
+	for (int a = 0; a < cubeNum; a++)
+	{
+		if (newCube[a].getSelected())
+		{
+			if (newCube[a].getRightRolling()) {//right
+				glPushMatrix();
+
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				//glRotatef(angleRotation, 0.0, 1.0, 0.0);
+				glTranslatef(-0.5, 0.5, 0.5);//const
+
+				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+				glPopMatrix();
+
+				cout << "+++++++++++++++++++++++right " << endl;
+			}
+			else {//up
+				glPushMatrix();
+
+				//glTranslatef(cubeNew[a].getCoordX() - 1.5, cubeNew[a].getCoordY() - 0.5, 0.0);
+				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
+				glTranslatef(1.5, -0.5, 0.5); //const
+
+				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+				glPopMatrix();
+				cout << "----------------------------------up " << endl;
+			}
+		}
+	}
+	if (angleRotation >= 90)
+	{
+		newCube[numberCube].setSelected(false);
+		numberCube += 1;
+		numberCube %= cubeNum;
+		newCube[numberCube].setSelected(true);
+		angleRotation = 0;
+	}
+	///getchar();
+}
 void DisplayAnimation_Korea(void) {
 	DisplayInit();GLSettings0.SetEyePosition();	GradientBackGround(BackTopColor, BackBotColor);	ConclusiveAxis();
 	DrawGrid();	DrawCube(cube.goalPoint, 11);
@@ -1352,7 +1402,7 @@ void DisplayAnimation_Korea(void) {
 
 
 
-	drawModel();
+	drawModel2();
 
 	DisplayPostprocessor();
 }
@@ -1383,7 +1433,7 @@ void time_callback_Korea(int) {
 	glutPostRedisplay();
 	glutTimerFunc(10, time_callback_Korea, 0);
 
-	angleRotation += 1;
+	angleRotation += 5;
 
 	cout << "cuberotation in timeCallback(): " << angleRotation << endl;
 }

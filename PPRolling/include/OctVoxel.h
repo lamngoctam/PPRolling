@@ -32,6 +32,30 @@ public:
 	bool SetRotationRight(void);
 	bool SetRotationUp(void);
 
+	//26/05/2019
+	double coordX;
+	double coordY;
+	double coordZ;
+
+	double directionX;
+	double directionY;
+	double directionZ;
+	double getCoordX();
+	double getCoordY();
+	double getCoordZ();
+	double getDirectionX();
+	double getDirectionY();
+	double getDirectionZ();
+
+	bool selected;
+	bool rightRolling;
+	int totalCube;
+	vector<CVector3d> cubeCoord;
+	bool getSelected();
+	void setSelected(bool what);
+
+	bool getRightRolling();
+	void setRightRolling(bool what);
 
 	//edges contact for cube
 	vector<CVector3d> edgeContactRightLow;
@@ -72,6 +96,7 @@ public:
 class UnitCube
 {
 private:
+
 public:
 	double coordX;
 	double coordY;
@@ -95,6 +120,7 @@ public:
 	double getDirectionX();
 	double getDirectionY();
 	double getDirectionZ();
+
 	bool getSelected();
 	void setSelected(bool what);
 
