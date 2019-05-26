@@ -6,7 +6,32 @@ OctVoxel::OctVoxel() {
 	this->count_y = 0;
 	this->angle = 90.0;
 	this->length = 1.0;
+	this->lableNum = 0;
+
+	this->rotRightFlag = false;
+	this->rotUpFlag = false;
+
+	this->selected = false;;
+	this->rightRolling = false;
+	this->totalCube = 0;
 }
+
+void OctVoxel::SetRotationRight(bool num) {
+	this->rotRightFlag = num;
+}
+	
+void OctVoxel::SetRotationUp(bool num) {
+	this->rotUpFlag = num;
+}
+
+bool OctVoxel::SetRotationRight(void) {
+	return(this->rotRightFlag);
+}
+bool OctVoxel::SetRotationUp(void) {
+	return(this->rotUpFlag);
+}
+
+
 
 void OctVoxel::SetOrigin(CVector3d ori) {
 	this->origin = ori;
@@ -29,4 +54,43 @@ void OctVoxel::SetVertexWorld(CVector3d* vertW)
 	vertW[6] = this->origin + z + x + y;
 	vertW[7] = this->origin + z + y;
 
+}
+
+
+double OctVoxel::getCoordX()
+{
+	return coordX;
+}
+double OctVoxel::getCoordY()
+{
+	return coordY;
+}
+double OctVoxel::getCoordZ()
+{
+	return coordZ;
+}
+double OctVoxel::getDirectionX()
+{
+	return directionX;
+}
+double OctVoxel::getDirectionY()
+{
+	return directionY;
+}
+double OctVoxel::getDirectionZ()
+{
+	return directionZ;
+}
+bool OctVoxel::getSelected() {
+	return selected;
+}
+void OctVoxel::setSelected(bool what) {
+	this->selected = what;
+}
+	
+bool OctVoxel::getRightRolling() {
+	return rightRolling;
+}
+void OctVoxel::setRightRolling(bool what) {
+	this->rightRolling = what;
 }

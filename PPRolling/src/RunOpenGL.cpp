@@ -29,6 +29,7 @@ void DisplayInit() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_ONE, GL_ZERO);
+	glMatrixMode(GL_MODELVIEW);
 
 	SetLight();
 
@@ -44,6 +45,8 @@ void DisplayPostprocessor() {
 	glutSwapBuffers();
 }
 
+// Blending (Transparency) http://math.hws.edu/bridgeman/courses/324/s06/doc/opengl.html 
+//
 
 /***************************************************/
 /*			OpenGL								   */
@@ -158,7 +161,7 @@ void OpenGLIdle(void) {
 /***************************************************/
 /*			           OpenGL					   */
 /***************************************************/
-void OpenGLInitialize(int WindowID, OpenGL GLSettings, int InitPosiX, 
+void OpenGLInitialize(int WindowID, OpenGL GLSettings, int InitPosiX,
 	int InitPosiY, int WindowWidth, int WindowHeight, const char* WindowName) {
 
 	GLSettings.m_WindowHeight = WindowHeight;

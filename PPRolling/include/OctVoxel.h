@@ -17,6 +17,46 @@ public:
 	CVector3d rotAxis;
 	CVector3d newOrigin;
 
+	int lableNum;
+	vector<int> rotlabel;
+	
+	vector<int> rotUpCount;
+	vector<int> rotRightCount;
+
+	bool rotRightFlag;
+	bool rotUpFlag;
+
+	void SetRotationRight(bool);
+	void SetRotationUp(bool);
+
+	bool SetRotationRight(void);
+	bool SetRotationUp(void);
+
+	//26/05/2019
+	double coordX;
+	double coordY;
+	double coordZ;
+
+	double directionX;
+	double directionY;
+	double directionZ;
+	double getCoordX();
+	double getCoordY();
+	double getCoordZ();
+	double getDirectionX();
+	double getDirectionY();
+	double getDirectionZ();
+
+	bool selected;
+	bool rightRolling;
+	int totalCube;
+	vector<CVector3d> cubeCoord;
+	bool getSelected();
+	void setSelected(bool what);
+
+	bool getRightRolling();
+	void setRightRolling(bool what);
+
 	//edges contact for cube
 	vector<CVector3d> edgeContactRightLow;
 	vector<CVector3d> edgeContactRightHigh;
@@ -36,6 +76,10 @@ public:
 	vector<CVector3d> cubeOrigin;
 	CVector3d startPoint, goalPoint;
 
+
+
+	//
+	
 };
 
 class Model {
@@ -46,6 +90,43 @@ public:
 
 	Model();
 	~Model();
+};
+
+
+class UnitCube
+{
+private:
+
+public:
+	double coordX;
+	double coordY;
+	double coordZ;
+
+	double directionX;
+	double directionY;
+	double directionZ;
+	bool selected;
+
+	bool rightRolling;
+
+	int totalCube;
+
+	UnitCube(double cX, double cY, double cZ, double dX, double dY, double dZ);
+	UnitCube();
+
+	double getCoordX();
+	double getCoordY();
+	double getCoordZ();
+	double getDirectionX();
+	double getDirectionY();
+	double getDirectionZ();
+
+	bool getSelected();
+	void setSelected(bool what);
+
+	bool getRightRolling();
+	void setRightRolling(bool what);
+
 };
 
 #endif 
