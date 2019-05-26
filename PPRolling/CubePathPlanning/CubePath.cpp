@@ -1,8 +1,7 @@
 #include "stdafx.h"
 
 extern OctVoxel cube;
-extern OctVoxel* label;
-extern UnitCube *cubeNew;
+extern OctVoxel *label;
 extern OctVoxel *newCube;
 
 void findingCubeCenter(int &cubeNum) {
@@ -52,7 +51,6 @@ void findingCubeCenter(int &cubeNum) {
 		count++;
 	}
 
-	cout << "start" << endl;
 	cubeNum = cube.cubeCenter.size();
 	newCube = new OctVoxel[cubeNum];
 
@@ -80,47 +78,6 @@ void findingCubeCenter(int &cubeNum) {
 	}
 
 	cout << "endl" << endl;
-	//getchar();
-
-	// cube.cubeCenter.push_back(cube.goalPoint);
-	//cube.cubeCenter.erase(cube.cubeCenter.end() - 1); //do not include the goalPoint
-	//cube.rotRightCount.erase(cube.rotRightCount.end() - 1); //do not include rolling to the goalPoint
-
-	//cubeNum = cube.cubeCenter.size();
-	//cubeNew = new UnitCube[cubeNum];
-
-	//
-	//
-	//int rightNum(0);
-	//int UpNum(0);
-	//for (int i = 0; i < cube.cubeCenter.size(); i++) {
-	//	cubeNew[i].coordX = cube.cubeCenter[i].x;
-	//	cubeNew[i].coordY = cube.cubeCenter[i].y;
-	//	cubeNew[i].coordZ = cube.cubeCenter[i].z;
-
-	//}
-	//for (int i = 0; i < cube.cubeCenter.size(); i++) {
-	//	if (cube.rotlabel[i] == 1) { //right
-	//		cubeNew[i].setRightRolling(true);
-
-	//		cubeNew[i].directionX = 0.0;
-	//		cubeNew[i].directionY = 1.0;
-	//		cubeNew[i].directionZ = 0.0;
-
-	//		rightNum++;
-	//	}
-	//	else if (cube.rotlabel[i] == 0) {//up
-	//		cubeNew[i].setRightRolling(false);
-
-	//		cubeNew[i].directionX = 1.0;
-	//		cubeNew[i].directionY = 0.0;
-	//		cubeNew[i].directionZ = 0.0;
-
-	//		UpNum++;
-	//	}
-	//}
-	
-
 	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
 }
 

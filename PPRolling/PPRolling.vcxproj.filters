@@ -70,9 +70,6 @@
     <ClCompile Include="CubePathPlanning\CubePathPlanning.cpp">
       <Filter>CubePathPlanning</Filter>
     </ClCompile>
-    <ClCompile Include="src\UnitCube.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AntTweakBar.h">

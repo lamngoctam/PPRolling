@@ -15,11 +15,6 @@ extern OctVoxel cube;
 extern OpenGL GLSettings0;
 
 
-void findingCubeCenter();
-
-
-
-
 //[AntTweakBar]//
 void GradientBackGround(float *tcolor, float *bcolor) {
 	// 
