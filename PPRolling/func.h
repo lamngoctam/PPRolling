@@ -16,3 +16,4 @@ int TetrahedronPathPlanning(int argc, char* argv[]);
 
 //openGl function references
 void RunOpenGL(int argc, char *argv[]);
+void RunOpenGL1(int argc, char *argv[]);

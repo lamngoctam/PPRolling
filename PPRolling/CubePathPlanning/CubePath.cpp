@@ -4,7 +4,7 @@ extern OctVoxel cube;
 extern OctVoxel *label;
 extern OctVoxel *newCube;
 
-void findingCubeCenter(int &cubeNum) {
+void findingCubeCenter_rightUp(int &cubeNum) {
 
 	//cube.cubeCenter.push_back(cube.startPoint);
 
@@ -58,8 +58,10 @@ void findingCubeCenter(int &cubeNum) {
 		newCube[i].coordX = cube.cubeCenter[i].x;
 		newCube[i].coordY = cube.cubeCenter[i].y;
 		newCube[i].coordZ = cube.cubeCenter[i].z;
+
 		if (cube.rotlabel[i] == 1) { //right
 			newCube[i].setRightRolling(true);
+
 			newCube[i].directionX = 0.0;
 			newCube[i].directionY = 1.0;
 			newCube[i].directionZ = 0.0;
@@ -68,6 +70,7 @@ void findingCubeCenter(int &cubeNum) {
 		}
 		else {
 			newCube[i].setRightRolling(false);
+
 			newCube[i].directionX = 1.0;
 			newCube[i].directionY = 0.0;
 			newCube[i].directionZ = 0.0;
@@ -80,6 +83,83 @@ void findingCubeCenter(int &cubeNum) {
 	cout << "endl" << endl;
 	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
 }
+
+
+void findingCubeCenter_leftUp(int &cubeNum) {
+
+	//cube.cubeCenter.push_back(cube.startPoint);
+
+	double dist1 = 0.0;
+	double dist2 = 0.0;
+
+	CVector3d nextLeft, nextUp;
+	CVector3d newMovePoint;
+
+	CVector3d tempPoint;
+	tempPoint.Set(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
+
+	CVector3d tempPointContact1, tempPointContact2;
+
+	//22/05
+	int uppp = 0;
+	int righttt = 1;
+
+	while (tempPoint != cube.goalPoint)
+	{
+		nextLeft.Set(tempPoint.x - 1.0, tempPoint.y, tempPoint.z);
+		double distanceLeft = nextLeft.PointLineDistance(cube.startPoint, cube.goalPoint);
+		nextUp.Set(tempPoint.x, tempPoint.y + 1.0, tempPoint.z);
+		double distanceUp = nextUp.PointLineDistance(cube.startPoint, cube.goalPoint);
+
+		if (distanceLeft > distanceUp) { //choose Up
+			tempPoint = nextUp;
+			cube.cubeCenter.push_back(nextUp); // saving cubeCenter			
+
+			cube.rotlabel.push_back(uppp);
+		}
+		else { //choose Right
+			tempPoint = nextLeft;
+			cube.cubeCenter.push_back(nextLeft); // saving cubeCenter
+
+			cube.rotlabel.push_back(righttt);
+		}
+	}
+
+	cubeNum = cube.cubeCenter.size();
+	newCube = new OctVoxel[cubeNum];
+
+	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+		newCube[i].coordX = cube.cubeCenter[i].x;
+		newCube[i].coordY = cube.cubeCenter[i].y;
+		newCube[i].coordZ = cube.cubeCenter[i].z;
+
+		if (cube.rotlabel[i] == 1) { //right
+			newCube[i].setRightRolling(true);
+
+			newCube[i].directionX = 0.0;
+			newCube[i].directionY = 1.0;
+			newCube[i].directionZ = 0.0;
+
+			cout << "right " << i << endl;
+		}
+		else {
+			newCube[i].setRightRolling(false);
+
+			newCube[i].directionX = 1.0;
+			newCube[i].directionY = 0.0;
+			newCube[i].directionZ = 0.0;
+
+			cout << "up " << i << endl;
+
+		}
+	}
+
+	cout << "endl" << endl;
+	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
+}
+
+
+
 
 void cubeRotation(CVector3d axisRotation) {
 	double Theta = (90 * M_PI / 180);

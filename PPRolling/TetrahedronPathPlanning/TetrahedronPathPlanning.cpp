@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
 using namespace std;
-void RunOpenGL(int argc, char *argv[]);
+void RunOpenGL1(int argc, char *argv[]);
 
 int TetrahedronPathPlanning(int argc, char* argv[]) {
-	RunOpenGL(argc, argv);
+	RunOpenGL1(argc, argv);
 	
 	return 0;
 }

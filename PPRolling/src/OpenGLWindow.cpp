@@ -18,7 +18,7 @@ extern OctVoxel cube;
 extern OctVoxel* label;
 extern int cubeNum;
 extern OctVoxel *newCube;
-
+extern bool dirRolling; //rightUp or leftUp
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor[] = { 0.275f, 0.51f, 0.706f };
@@ -35,12 +35,8 @@ extern int ShowBB;				// Bounding Box
 
 void DisplayInit();
 void DisplayPostprocessor();
-
 void OpenGLReshape0(int width, int height);
-
 void OpenGLIdle();
-
-
 void OpenGLInitialize(int WindowID, OpenGL GLSettings, int InitPosiX, int InitPosiY,
 	int WindowWidth, int WindowHeight, const char* WindowName);
 void OpenGLPostprocessor(OpenGL GLSettings);
@@ -352,6 +348,7 @@ void SpecialKey(int glutKey, int x, int y) {
 
 void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID);
 void DrawGrid();
+void DrawCubeGrid();
 void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint);
 void DrawCube_originPoint(CVector3d originPoint, int colorID);
 void DrawCube(CVector3d centerPoint, int colorID);
@@ -379,6 +376,7 @@ void OpenGLDisplay0(void) {
 
 	//14/5/2019
 	DrawGrid();
+	
 	//DrawStartEndPoint(cube.startPoint, cube.goalPoint);
 
 	//15/5/2019
@@ -439,13 +437,21 @@ void DrawCubeRolling()
 	{
 		if (newCube[a].getSelected())
 		{
+			glLineWidth(1.9f);
 			if (newCube[a].getRightRolling()) {//right
 				glPushMatrix();
 
-				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
-				glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
-				//glRotatef(angleRotation, 0.0, 1.0, 0.0);
-				glTranslatef(-0.5, 0.5, 0.5);//const
+				if (dirRolling == true) { //for Right-Up
+					glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+					glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+					//glRotatef(angleRotation, 0.0, 1.0, 0.0);
+					glTranslatef(-0.5, 0.5, 0.5);//const
+				}
+				else {	//for Left-Up
+					glTranslatef(cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0);
+					glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+					glTranslatef(0.5, 0.5, 0.5);//const
+				}
 
 				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
@@ -471,24 +477,45 @@ void DrawCubeRolling()
 	}
 	if (angleRotation >= 90)
 	{
-		newCube[numberCube].setSelected(false);
-		numberCube += 1;
+		newCube[numberCube].setSelected(false); //cb will stop
+		numberCube += 1;						//move to next cb
+
 		numberCube %= cubeNum;
 		newCube[numberCube].setSelected(true);
 		angleRotation = 0;
+
 	}
+	// or can do: 
+	//if (angleRotation >= 90)
+	//{
+	//	newCube[numberCube].setSelected(false); //cb will stop
+	//	numberCube += 1;						//move to next cb
+	//	//numberCube %= cubeNum;
+	//	if (numberCube != cubeNum) {
+	//		newCube[numberCube].setSelected(true);
+	//		angleRotation = 0;
+	//	}
+	//	else {
+	//		numberCube = 0;
+	//		newCube[numberCube].setSelected(true);
+	//		angleRotation = 0;
+	//	}
+	//}
 	///getchar();
 }
 
 void DisplayAnimation(void) {
-	DisplayInit();GLSettings0.SetEyePosition();	
-	GradientBackGround(BackTopColor, BackBotColor);	
+	DisplayInit();GLSettings0.SetEyePosition();
+	GradientBackGround(BackTopColor, BackBotColor);
 	ConclusiveAxis();
-	DrawGrid();	
+	DrawGrid();
+	DrawCubeGrid();
+
 	DrawCube(cube.startPoint, 05);
 	DrawCube(cube.goalPoint, 11);
+	DrawStartEndPoint(cube.startPoint, cube.goalPoint);
 
-	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+	for (int i = 0; i < cube.cubeCenter.size()-1; i++) {
 		glColor3f(0.5, 1.0, 0.5);
 		DrawSphere(cube.cubeCenter[i], 0.1);
 	}
@@ -516,7 +543,7 @@ void OpenGLCallBackAnimation(void) {
 	GLSettings0.PickObject = PickObject0;
 	OpenGLInitialize(0, GLSettings0, 300, 150, 1000, 650, "window");
 
-	glutDisplayFunc(DisplayAnimation);		    
+	glutDisplayFunc(DisplayAnimation);
 
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(OnMouseMotion);
@@ -528,7 +555,7 @@ void OpenGLCallBackAnimation(void) {
 	glutMouseWheelFunc(OpenGLMouseWheel0);
 	glutReshapeFunc(OpenGLReshape0);
 	glutTimerFunc(0, time_callback_Cube, 0); //the same with SpecialKeyRolling but faster 
-	
+
 	OpenGLPostprocessor(GLSettings0);
 }
 

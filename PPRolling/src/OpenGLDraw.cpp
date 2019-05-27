@@ -215,7 +215,7 @@ void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID) {
 
 void DrawGrid() {
 	glColor3d(0.0, 0.0, 0.0);
-	glLineWidth(0.8f);
+	glLineWidth(0.9f);
 	glBegin(GL_LINES);
 	for (int x(0); x <= 20; x++) {
 		glVertex2i(x, 0);
@@ -224,6 +224,17 @@ void DrawGrid() {
 	for (int y(0); y <= 15; y++) {
 		glVertex2i(0, y);
 		glVertex2i(20, y);
+	}
+	glEnd();
+}
+
+void DrawCubeGrid() {
+	// Draw a white grid "floor" for the tetrahedron to sit on.
+	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_LINES);
+	for (GLfloat i = -2.5; i <= 2.5; i += 0.25) {
+		glVertex3f(i, 2.5, 0); glVertex3f(i, -2.5, 0);
+		glVertex3f(2.5, i, 0); glVertex3f(-2.5, i, 0);
 	}
 	glEnd();
 }

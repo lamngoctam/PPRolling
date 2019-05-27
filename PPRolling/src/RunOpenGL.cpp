@@ -16,11 +16,10 @@ int WinID[2]; //EID
 
 
 
-//void OpenGLDisplay0(void);
 void OpenGLCallBack0(void);
 void OpenGLCallBackAnimation(void);
-//void OpenGLDisplay1(void);
-//void OpenGLCallBack1(void);
+void OpenGLCallBack1(void);
+
 
 /***************************************************/
 /*			OpenGL								   */
@@ -201,4 +200,12 @@ void RunOpenGL(int argc, char *argv[]) {
 	OpenGLCallBackAnimation();
 
 	glutMainLoop();	//from freeglut_std.h library
+}
+
+void RunOpenGL1(int argc, char *argv[]) {
+	glutInit(&argc, argv);
+
+	OpenGLCallBack1();
+
+	glutMainLoop();
 }

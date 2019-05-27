@@ -70,6 +70,15 @@
     <ClCompile Include="CubePathPlanning\CubePathPlanning.cpp">
       <Filter>CubePathPlanning</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenGLWindow1.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="TetrahedronPathPlanning\TetraPath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TetraCheckerBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AntTweakBar.h">
@@ -117,5 +126,6 @@
     <ClInclude Include="func.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\TetraCheckerBoard.h" />
   </ItemGroup>
 </Project>
