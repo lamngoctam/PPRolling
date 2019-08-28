@@ -4587,7 +4587,7 @@ static GL2PSbackend gl2psSVG = {
 		gl2psPrintSVGEndViewport,
 		gl2psPrintSVGPrimitive,
 		"svg",
-		"Scalable Vector Graphics"
+		"Scalable std::vector Graphics"
 };
 
 /*********************************************************************

@@ -66,7 +66,7 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 			newCube[i].directionY = 1.0;
 			newCube[i].directionZ = 0.0;
 
-			cout << "right " << i << endl;
+			std::cout << "right " << i << std::endl;
 		}
 		else {
 			newCube[i].setRightRolling(false);
@@ -75,13 +75,13 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 			newCube[i].directionY = 0.0;
 			newCube[i].directionZ = 0.0;
 
-			cout << "up " << i << endl;
+			std::cout << "up " << i << std::endl;
 
 		}
 	}
 
-	cout << "endl" << endl;
-	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
+	std::cout << "std::endl" << std::endl;
+	std::cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << std::endl;
 }
 
 
@@ -140,7 +140,7 @@ void findingCubeCenter_leftUp(int &cubeNum) {
 			newCube[i].directionY = 1.0;
 			newCube[i].directionZ = 0.0;
 
-			cout << "right " << i << endl;
+			std::cout << "right " << i << std::endl;
 		}
 		else {
 			newCube[i].setRightRolling(false);
@@ -149,13 +149,11 @@ void findingCubeCenter_leftUp(int &cubeNum) {
 			newCube[i].directionY = 0.0;
 			newCube[i].directionZ = 0.0;
 
-			cout << "up " << i << endl;
+			std::cout << "up " << i << std::endl;
 
 		}
 	}
 
-	cout << "endl" << endl;
-	cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << endl;
 }
 
 
@@ -174,7 +172,7 @@ void cubeRotation(CVector3d axisRotation) {
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
 	tempOldPoint.Set(-0.5, cube.goalPoint.y, cube.goalPoint.z);
 
-	//cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << endl;
+	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
 
 	CMatrix Rod1(3, 3);
 	Rod1.SetZero();
@@ -204,9 +202,9 @@ void cubeRotation(CVector3d axisRotation) {
 	//Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
 	//--------------------------------------------------------------------
 
-	cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << endl;
-	cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << endl;
-	cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << endl;
+	std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
+	std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+	std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
 
 	CVector3d temp_(0.0, 0.0, 0.0);
 	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
@@ -214,33 +212,33 @@ void cubeRotation(CVector3d axisRotation) {
 	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
 
 
-	cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << endl;
+	std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 	cube.newOrigin.Set(temp_.x + temp_.x + 0.5, temp_.y, temp_.z);
-	cout << endl;
+	std::cout << std::endl;
 
 	//move backward
 
 
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
-		cout << "point[" << i << "] ";cube.cubeCenter[i].Print();
+		std::cout << "point[" << i << "] ";cube.cubeCenter[i].Print();
 		//cube.rotlabel.push_back(i);
 
 		//if (cube.rotRightFlag == true) {
-		//	cout << "RightFlag[" << i << "] " << endl;
+		//	std::cout << "RightFlag[" << i << "] " << std::endl;
 		//}
 		//else {
-		//	cout << "UpFlag[" << i << "] " << endl;
+		//	std::cout << "UpFlag[" << i << "] " << std::endl;
 		//}
-		cout << endl;
+		std::cout << std::endl;
 	}
-	//cout << "cube.origin";	cube.origin.Print(); cout << endl;
-	//cout << "cube.startPoint";	cube.startPoint.Print(); cout << endl;
-	//cout << "cube.goalPoint";	cube.goalPoint.Print();	 cout << endl;
-	//cout << "cube.newOrigin";	cube.newOrigin.Print();	 cout << endl;
-	//cout << "cube.rotUpCount" << cube.rotUpCount.size() << endl;
-	//cout << "cube.rotRightCount" << cube.rotRightCount.size() << endl;
+	//std::cout << "cube.origin";	cube.origin.Print(); std::cout << std::endl;
+	//std::cout << "cube.startPoint";	cube.startPoint.Print(); std::cout << std::endl;
+	//std::cout << "cube.goalPoint";	cube.goalPoint.Print();	 std::cout << std::endl;
+	//std::cout << "cube.newOrigin";	cube.newOrigin.Print();	 std::cout << std::endl;
+	//std::cout << "cube.rotUpCount" << cube.rotUpCount.size() << std::endl;
+	//std::cout << "cube.rotRightCount" << cube.rotRightCount.size() << std::endl;
 
-	cout << endl;
+	std::cout << std::endl;
 
 	//getchar();
 }

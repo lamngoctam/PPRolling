@@ -2,10 +2,6 @@
 // OpenGl with tracking, moving mouse and eye position
 //############################################################################
 #include "stdafx.h"
-//#include "OpenGL.h"
-
-
-using namespace std;
 
 ////[AntTweakBar]///
 extern float BackTopColor[3];

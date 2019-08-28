@@ -1,15 +1,5 @@
-﻿//#include "..\include\OpenGLWindow.h"
+﻿#include "stdafx.h"
 
-//############################################################################
-//
-//############################################################################
-
-#include "stdafx.h"
-#include "OpenGL.h"
-#include "OpenGLprimitive.h"
-
-#include "OctVoxel.h"
-using namespace std;
 
 extern int WinID[2];
 OpenGL GLSettings0;
@@ -32,6 +22,13 @@ bool z_key_0 = 1;   // Axis
 //Flag link to AntweakBar
 extern int ShowAxisFlag;		//Axis
 extern int ShowBB;				// Bounding Box
+extern int ShowGrid;
+extern int ShowStartPointFlag;
+extern int ShowGoalPointFlag;
+extern int ShowShortestLine;
+extern int ShowCubeCenterFlag;
+extern int ShowAnimationFlag;
+
 
 void DisplayInit();
 void DisplayPostprocessor();
@@ -230,7 +227,7 @@ void PickObject0(int x, int y, int Button) {
 	/************************************/
 	/*			*/
 	/************************************/
-	std::cout << hit_name[1] << "botay" << endl;
+	std::cout << hit_name[1] << "botay" << std::endl;
 
 }
 
@@ -376,7 +373,7 @@ void OpenGLDisplay0(void) {
 
 	//14/5/2019
 	DrawGrid();
-	
+
 	//DrawStartEndPoint(cube.startPoint, cube.goalPoint);
 
 	//15/5/2019
@@ -457,7 +454,7 @@ void DrawCubeRolling()
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
 				glPopMatrix();
 
-				cout << "+++++++++++++++++++++++right " << endl;
+				std::cout << "+++++++++++++++++++++++right " << std::endl;
 			}
 			else {//up
 				glPushMatrix();
@@ -471,7 +468,7 @@ void DrawCubeRolling()
 				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
 				glPopMatrix();
-				cout << "----------------------------------up " << endl;
+				std::cout << "----------------------------------up " << std::endl;
 			}
 		}
 	}
@@ -507,20 +504,41 @@ void DrawCubeRolling()
 void DisplayAnimation(void) {
 	DisplayInit();GLSettings0.SetEyePosition();
 	GradientBackGround(BackTopColor, BackBotColor);
-	ConclusiveAxis();
-	DrawGrid();
-	DrawCubeGrid();
 
-	DrawCube(cube.startPoint, 05);
-	DrawCube(cube.goalPoint, 11);
-	DrawStartEndPoint(cube.startPoint, cube.goalPoint);
+	if (ShowAxisFlag)
+		ConclusiveAxis();
 
-	for (int i = 0; i < cube.cubeCenter.size()-1; i++) {
-		glColor3f(0.5, 1.0, 0.5);
-		DrawSphere(cube.cubeCenter[i], 0.1);
+	if (ShowGrid) {
+		DrawGrid();
+		//DrawCubeGrid();
 	}
 
-	DrawCubeRolling();
+	if (ShowStartPointFlag) {
+		DrawCube(cube.startPoint, 05);
+		DrawSphere(cube.startPoint, 0.1);
+	}
+
+	if (ShowGoalPointFlag) {
+		DrawCube(cube.goalPoint, 70);
+		DrawSphere(cube.goalPoint, 0.1);
+	}
+
+	if (ShowShortestLine)
+		DrawStartEndPoint(cube.startPoint, cube.goalPoint);
+
+
+	if (ShowCubeCenterFlag) {
+		for (int i = 0; i < cube.cubeCenter.size() - 1; i++) {
+			glColor3f(0.5, 1.0, 0.5);
+			DrawSphere(cube.cubeCenter[i], 0.1);
+		}
+	}
+	//rolling cube
+	if (ShowAnimationFlag)
+		DrawCubeRolling();
+
+	//AntTweakBar//
+	TwDraw();
 
 	DisplayPostprocessor();
 }
@@ -536,15 +554,16 @@ void time_callback_Cube(int) {
 
 	angleRotation += 2;
 
-	cout << "cuberotation in timeCallback(): " << angleRotation << endl;
+	std::cout << "cuberotation in timeCallback(): " << angleRotation << std::endl;
 }
 
 void OpenGLCallBackAnimation(void) {
 	GLSettings0.PickObject = PickObject0;
-	OpenGLInitialize(0, GLSettings0, 300, 150, 1000, 650, "window");
+	OpenGLInitialize(0, GLSettings0, 300, 150, 1000, 650, "Path Planning");
 
 	glutDisplayFunc(DisplayAnimation);
 
+	TwCallBack();
 	glutMouseFunc(MouseButton);
 	glutMotionFunc(OnMouseMotion);
 	glutPassiveMotionFunc(PassiveMotion);

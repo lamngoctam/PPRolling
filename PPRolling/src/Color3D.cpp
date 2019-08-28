@@ -1,8 +1,7 @@
-//#include "..\include\Color3D.h"
 
 #define _USE_MATH_DEFINES	
 #include "stdafx.h"
-#include <cmath>
+
 
 //
 CColor::CColor() {

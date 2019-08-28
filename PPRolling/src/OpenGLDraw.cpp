@@ -1,16 +1,6 @@
-#define _USE_MATH_DEFINES	
-
 #include "stdafx.h"
 
-#include <gl\GL.h>
-#include <gl\GLU.h>
-#include <gl\glut.h>
-#include <gl\freeglut.h>
 
-#include "OpenGL.h"
-#include "OpenGLprimitive.h"
-
-using namespace std;
 extern OctVoxel cube;
 extern OpenGL GLSettings0;
 
@@ -210,20 +200,20 @@ void DrawBoundingbox(CVector3d MaxPt, CVector3d MinPt, int colorID) {
 }
 
 /*=================================================*/
-/*              Draw Grid		                   */
+/*            Cube	                   */
 /*=================================================*/
 
 void DrawGrid() {
 	glColor3d(0.0, 0.0, 0.0);
 	glLineWidth(0.9f);
 	glBegin(GL_LINES);
-	for (int x(0); x <= 20; x++) {
+	for (int x(0); x <= 29; x++) {
 		glVertex2i(x, 0);
-		glVertex2i(x, 15);
+		glVertex2i(x, 9);
 	}
-	for (int y(0); y <= 15; y++) {
+	for (int y(0); y <= 9; y++) {
 		glVertex2i(0, y);
-		glVertex2i(20, y);
+		glVertex2i(29, y);
 	}
 	glEnd();
 }
@@ -259,7 +249,7 @@ void DrawCube_originPoint(CVector3d originPoint, int colorID) {
 void DrawCube(CVector3d centerPoint, int colorID) {
 	CVector3d MinPt, MaxPt;
 
-	MinPt.Set(centerPoint.x - 0.5, centerPoint.y - 0.5, centerPoint.z - 0.5);
+	MinPt.Set(centerPoint.x - 0.5, centerPoint.y - 0.5, centerPoint.z - 0.49);
 	MaxPt.Set(centerPoint.x + 0.5, centerPoint.y + 0.5, centerPoint.z +  0.5);
 	
 	DrawBoundingbox(MaxPt, MinPt, colorID);
@@ -308,11 +298,11 @@ double distancePointLine(CVector3d sPoint, CVector3d ePoint, CVector3d newPoint,
 	}
 	else if (distance >= 0) {
 		//exit(1);
-		//cout << "error in distance: " << distance << endl;
+		//std::cout << "error in distance: " << distance << std::endl;
 		return distance;
 	}
 	//return distance;
-	//cout << "distance!!!!!!!!!: " << distance << endl;
+	//std::cout << "distance!!!!!!!!!: " << distance << std::endl;
 }
 
 void checkPoint(int colorID) {
@@ -382,7 +372,29 @@ void checkPoint(int colorID) {
 		//DrawSphere(cube.cubeCenter[i], 0.1);
 	}
 
-
 	glDisable(GL_LIGHTING);
 }
 
+/*=================================================*/
+/*            Tetrahedron		                   */
+/*=================================================*/
+
+void drawTriangleGrid() {
+	int i; 
+
+	for (int i(0); i < 40; i++) {
+		glPushMatrix();
+
+		if (i < 20) { glTranslatef(0, i, 0); }
+		if (i >= 20) { glTranslatef(i-20, 0, 0); glRotatef(-30, 0,0,-1); }
+
+		glBegin(GL_LINES);
+		glColor3f(0,0,0);
+		glLineWidth(1);
+		glVertex3f(0, -0.1, 0);
+		glVertex3f(19, -0.1, 0);
+		glEnd();
+
+		glPopMatrix();
+	}
+}

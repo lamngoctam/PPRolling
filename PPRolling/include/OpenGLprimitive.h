@@ -7,8 +7,6 @@
 #include "stdafx.h"
 
 
-using namespace std;
-
 //EnableLight
 inline void SetLight() {
 	//

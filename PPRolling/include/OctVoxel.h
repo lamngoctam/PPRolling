@@ -3,11 +3,6 @@
 #ifndef _OCTREE_H_
 #define _OCTREE_H_
 
-
-#include "stdafx.h"
-#include "Color3D.h"
-
-
 class OctVoxel {
 public:
 	//for animation
@@ -18,10 +13,10 @@ public:
 	CVector3d newOrigin;
 
 	int lableNum;
-	vector<int> rotlabel;
+	std::vector<int> rotlabel;
 	
-	vector<int> rotUpCount;
-	vector<int> rotRightCount;
+	std::vector<int> rotUpCount;
+	std::vector<int> rotRightCount;
 
 	bool rotRightFlag;
 	bool rotUpFlag;
@@ -51,7 +46,7 @@ public:
 	bool selected;
 	bool rightRolling;
 	int totalCube;
-	vector<CVector3d> cubeCoord; //not using
+	std::vector<CVector3d> cubeCoord; //not using
 	bool getSelected();
 	void setSelected(bool what);
 
@@ -59,10 +54,10 @@ public:
 	void setRightRolling(bool what);
 
 	//edges contact for cube
-	vector<CVector3d> edgeContactRightLow;
-	vector<CVector3d> edgeContactRightHigh;
-	vector<CVector3d> edgeContactUpLeft;
-	vector<CVector3d> edgeContactUpRight;
+	std::vector<CVector3d> edgeContactRightLow;
+	std::vector<CVector3d> edgeContactRightHigh;
+	std::vector<CVector3d> edgeContactUpLeft;
+	std::vector<CVector3d> edgeContactUpRight;
 
 	//for voxel
 	OctVoxel();
@@ -73,8 +68,8 @@ public:
 	void SetOrigin(CVector3d ori);
 	void SetVertexWorld(CVector3d* vertW);
 
-	vector<CVector3d> cubeCenter;
-	vector<CVector3d> cubeOrigin;
+	std::vector<CVector3d> cubeCenter;
+	std::vector<CVector3d> cubeOrigin;
 	CVector3d startPoint, goalPoint;
 	//
 	
@@ -83,7 +78,7 @@ public:
 class Model {
 
 public:
-	vector<CVector3d> cubeCenter;
+	std::vector<CVector3d> cubeCenter;
 
 
 	Model();

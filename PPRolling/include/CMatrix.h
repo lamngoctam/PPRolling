@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-using namespace std;
+
 
 class CVector;
 class CMatrix;
@@ -12,14 +12,14 @@ class CMatrix;
 class CVector
 {
 private:
-	vector<double> v;
+	std::vector<double> v;
 
 public:
 
 	CVector();
 	CVector(int m_size, double m_init = 0);
 	CVector(CVector &m_v);
-	CVector(vector<double> m_v);
+	CVector(std::vector<double> m_v);
 	CVector(int m_size, double *m_v);
 	CVector(CVector m_v, int m_first, int m_end);
 	~CVector();
@@ -35,7 +35,7 @@ public:
 	/*****  *****/
 	double	&operator[](const int &pos);		//y30
 	CVector	&operator=(CVector &m_v);
-	CVector	&operator=(vector<double> &m_v);
+	CVector	&operator=(std::vector<double> &m_v);
 	CVector	operator+(CVector &m_v);
 	CVector	&operator+=(CVector &m_v);
 	CVector	operator-(CVector &m_v);
@@ -58,14 +58,14 @@ public:
 class CMatrix
 {
 private:
-	vector<vector<double> > mt;
+	std::vector<std::vector<double> > mt;
 public:
 	/**********/
 	CMatrix();
 	CMatrix(int m_row, int m_col, double m_init = 0);
 	CMatrix(int m_rank);
 	CMatrix(CMatrix &m_mt);
-	CMatrix(vector<vector<double> > m_mt);
+	CMatrix(std::vector<std::vector<double> > m_mt);
 	CMatrix(int m_row, int m_col, double **m_mt);
 	~CMatrix();
 
@@ -73,7 +73,7 @@ public:
 	void	assign(int m_row, int m_col, double m_init = 0);
 	void	assign(int m_rank);
 	void	assign(CMatrix m_mt);
-	void	assign(vector<vector<double> > m_mt);
+	void	assign(std::vector<std::vector<double> > m_mt);
 	void	assign(int m_row, int m_col, double **m_mt);
 	/***** *****/
 	int		r_size();
@@ -88,9 +88,9 @@ public:
 	void	FPrint(int NameNumber = 0);
 	//cs	ConstractCSMatrix(int m_r, int m_c,int nzmax);
 	/**********/
-	vector<double> &operator[](const int m_r);
+	std::vector<double> &operator[](const int m_r);
 	CMatrix	&operator=(CMatrix m_mt);
-	CMatrix	&operator=(vector<vector<double> > m_mt);
+	CMatrix	&operator=(std::vector<std::vector<double> > m_mt);
 	CMatrix	operator+(CMatrix m_mt);
 	CMatrix &operator+=(CMatrix m_mt);
 	CMatrix	operator-(CMatrix m_mt);

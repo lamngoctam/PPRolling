@@ -3,10 +3,9 @@
 //#########################################################
 
 #include "stdafx.h"
-#include "OpenGL.h"
-#include "OpenGLprimitive.h"
 
-using namespace std;
+
+
 extern OpenGL GLSettings0;
 
 

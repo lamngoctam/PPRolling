@@ -30,14 +30,14 @@
 	a = Point3d(0,0,0);
 	b = Point3d(1,2,3);
 	c = add3d(a,b);
-	cout<<c.r[0]<<","<<c.r[1]<<","<<c.r[2]<<endl;
+	std::cout<<c.r[0]<<","<<c.r[1]<<","<<c.r[2]<<std::endl;
 
 
 	CPoint3d a,b,c;
 	a = Point3d(0,0,0);
 	b = Point3d(1,2,3);
 	c = a + b;
-	cout<<c.x<<","<<c.y<<","<<c.z<<endl;
+	std::cout<<c.x<<","<<c.y<<","<<c.z<<std::endl;
 
 
 //NURBS (x,y,z)

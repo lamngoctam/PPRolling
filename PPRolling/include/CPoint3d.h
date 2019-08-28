@@ -25,7 +25,7 @@ public:
 
 
 	void Set(double X, double Y, double Z, double W = 1.0);
-	void UnitVector(double X, double Y, double Z);
+	void Unitvector(double X, double Y, double Z);
 	void Clear();
 	void Print();
 
@@ -75,7 +75,7 @@ public:
 
 	//
 	void Set(double X, double Y, double Z);
-	void UnitVector(double X, double Y, double Z);
+	void Unitvector(double X, double Y, double Z);
 	void Clear();
 	void Print();
 
@@ -111,6 +111,6 @@ public:
 	CVector3d RotateZ(double rad);
 
 	//16/05/2019
-	bool operator == (const CVector3d& other) const; //compare two vector
-	bool operator != (const CVector3d& other) const; //compare two vector
+	bool operator == (const CVector3d& other) const; //compare two std::vector
+	bool operator != (const CVector3d& other) const; //compare two std::vector
 };

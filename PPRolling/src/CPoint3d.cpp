@@ -1,16 +1,7 @@
-#include "..\include\CPoint3d.h"
+//#define _USE_MATH_DEFINES
+//#define M_PI
 
-
-#define _USE_MATH_DEFINES
-#define M_PI
-
-
-#include <iostream>
-#include <math.h>
-#include <algorithm>
-#include "CPoint3d.h"
-using namespace std;
-
+#include "stdafx.h"
 
 //##########################################//
 CPoint3d::CPoint3d()
@@ -37,7 +28,7 @@ void CPoint3d::Set(double X, double Y, double Z, double W)
 }
 
 
-void CPoint3d::UnitVector(double X, double Y, double Z)
+void CPoint3d::Unitvector(double X, double Y, double Z)
 {
 	double norm = sqrt(X*X + Y * Y + Z * Z);
 	x = X / norm;	y = Y / norm;	z = Z / norm;
@@ -273,7 +264,7 @@ void CVector3d::Set(double X, double Y, double Z)
 	x = X;	y = Y;	z = Z;
 }
 
-void CVector3d::UnitVector(double X, double Y, double Z)
+void CVector3d::Unitvector(double X, double Y, double Z)
 {
 	double norm = sqrt(X*X + Y * Y + Z * Z);
 	x = X / norm;	y = Y / norm;	z = Z / norm;

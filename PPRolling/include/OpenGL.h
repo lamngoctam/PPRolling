@@ -6,11 +6,6 @@
 #define _INCLUDED_OPENGL_H
 
 #include "stdafx.h"
-#include "..\Dependencies\freeglut\include\GL\freeglut.h"
-
-//#include "gl2ps.h"
-//#include "gl_screenshot.h"
-
 
 #pragma warning(disable : 4996)//about scanf
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-using namespace std;
+
 
 extern OctVoxel cube;
 extern OctVoxel* label;
@@ -23,12 +23,12 @@ bool dirRolling = false;
 int CubePathPlanning(int argc, char* argv[]) {
 
 	//initialize the Start and Goal point on grid
-	cube.startPoint.Set(5.5, 3.5, 0.5);
-	cube.goalPoint.Set(13.5, 6.5, 0.5);
+	cube.startPoint.Set(0.5, 0.5, 0.5);
+	cube.goalPoint.Set(20.5, 0.5, 0.5);
 	double s_x = cube.startPoint.x;	double s_y = cube.startPoint.y;
 	double g_x = cube.goalPoint.x;	double g_y = cube.goalPoint.y;
 
-	if ((s_x < g_x) && (s_y < g_y)) {
+	if ((s_x < g_x) && (s_y <= g_y)) {
 		dirRolling = true;
 		findingCubeCenter_rightUp(cubeNum);
 	}
@@ -36,10 +36,12 @@ int CubePathPlanning(int argc, char* argv[]) {
 		dirRolling = false;
 		findingCubeCenter_leftUp(cubeNum);
 	}
+	   	  
 	//newCube[0].setSelected(true);
-
-
+	
+	
 	RunOpenGL(argc, argv);
+
 
 	delete[] newCube;
 

@@ -28,9 +28,6 @@
     <ClCompile Include="src\AntTweakBar.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\BaseObject.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\CMatrix.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -84,9 +81,6 @@
     <ClInclude Include="include\AntTweakBar.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\BaseObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\CMatrix.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -127,5 +121,8 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="include\TetraCheckerBoard.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="freeglut.dll" />
   </ItemGroup>
 </Project>

@@ -1,15 +1,8 @@
 
+#include "stdafx.h"
 
-#include "Linear3d.h"
-
-#include <iostream>
-#include <stdio.h>
-#include <vector>
-#include <math.h>
-#include <fstream>
-#include <string>
-#include <algorithm>
-using namespace std;
+#define MACHINE_ERROR 1.0e-15
+#pragma warning(disable : 4996)//about scanf
 
 //######################################//
 //	CVector//
@@ -32,7 +25,7 @@ CVector::CVector(CVector &m_v)
 }
 
 //y04
-CVector::CVector(vector<double> m_v)
+CVector::CVector(std::vector<double> m_v)
 {
 	v.assign(m_v.begin(), m_v.end());
 }
@@ -93,9 +86,9 @@ void CVector::SetZero()
 
 void CVector::Print()
 {
-	cout << "v[" << v.size() << "]= (";
-	for (int i = 0;i < (int)v.size();i++) cout << v[i] << ", ";
-	cout << ")" << endl;
+	std::cout << "v[" << v.size() << "]= (";
+	for (int i = 0;i < (int)v.size();i++) std::cout << v[i] << ", ";
+	std::cout << ")" << std::endl;
 }
 
 /*****************************/
@@ -115,7 +108,7 @@ CVector& CVector::operator=(CVector &m_v)
 	return *this;
 }
 
-CVector& CVector::operator=(vector<double> &m_v)
+CVector& CVector::operator=(std::vector<double> &m_v)
 {
 	for (int i = 0;i < (int)m_v.size();i++) {
 		v[i] = m_v[i];
@@ -184,7 +177,7 @@ double CVector::operator*(CVector m_v)
 	return (md);
 }
 
-//matrix[][] * vector[]
+//matrix[][] * std::vector[]
 //
 //CVector	CVector::operator*(CMatrix m_mt)
 //{
@@ -222,20 +215,20 @@ CMatrix::CMatrix() {}
 
 CMatrix::CMatrix(int m_row, int m_col, double m_init)
 {
-	vector<double> tmp(m_col, m_init);
+	std::vector<double> tmp(m_col, m_init);
 	mt.assign(m_row, tmp);
 }
 
 
 CMatrix::CMatrix(int m_rank)
 {
-	vector<double> tmp(m_rank, 0);
+	std::vector<double> tmp(m_rank, 0);
 	mt.assign(m_rank, tmp);
 }
 
 CMatrix::CMatrix(CMatrix &m_mt)
 {
-	vector<double> tmp((*m_mt.mt.begin()).size(), 0);
+	std::vector<double> tmp((*m_mt.mt.begin()).size(), 0);
 	mt.assign(m_mt.mt.size(), tmp);
 	int i, j;
 	for (i = 0;i < (int)m_mt.mt.size();i++) {
@@ -244,9 +237,9 @@ CMatrix::CMatrix(CMatrix &m_mt)
 		}
 	}
 }
-CMatrix::CMatrix(vector<vector<double> > m_mt)
+CMatrix::CMatrix(std::vector<std::vector<double> > m_mt)
 {
-	vector<double> tmp((*m_mt.begin()).size(), 0);
+	std::vector<double> tmp((*m_mt.begin()).size(), 0);
 	mt.assign(m_mt.size(), tmp);
 	int i, j;
 	for (i = 0;i < (int)m_mt.size();i++) {
@@ -258,7 +251,7 @@ CMatrix::CMatrix(vector<vector<double> > m_mt)
 
 CMatrix::CMatrix(int m_row, int m_col, double **m_mt)
 {
-	vector<double> tmp(m_col, 0);
+	std::vector<double> tmp(m_col, 0);
 	mt.assign(m_row, tmp);
 	int i, j;
 	for (i = 0; i < m_row; i++) {
@@ -275,21 +268,21 @@ CMatrix::~CMatrix() { mt.clear(); }
 
 void CMatrix::assign(int m_row, int m_col, double m_init)
 {
-	vector<double> tmp(m_col, m_init);
+	std::vector<double> tmp(m_col, m_init);
 	mt.assign(m_row, tmp);
 }
 
 
 void CMatrix::assign(int m_rank)
 {
-	vector<double> tmp(m_rank, 0);
+	std::vector<double> tmp(m_rank, 0);
 	mt.assign(m_rank, tmp);
 }
 
 
 void CMatrix::assign(CMatrix m_mt)
 {
-	vector<double> tmp((*m_mt.mt.begin()).size(), 0);
+	std::vector<double> tmp((*m_mt.mt.begin()).size(), 0);
 	mt.assign(m_mt.mt.size(), tmp);
 	int i, j;
 	for (i = 0;i < (int)m_mt.mt.size();i++) {
@@ -299,9 +292,9 @@ void CMatrix::assign(CMatrix m_mt)
 	}
 }
 
-void CMatrix::assign(vector<vector<double> > m_mt)
+void CMatrix::assign(std::vector<std::vector<double> > m_mt)
 {
-	vector<double> tmp((*m_mt.begin()).size(), 0);
+	std::vector<double> tmp((*m_mt.begin()).size(), 0);
 	mt.assign(m_mt.size(), tmp);
 	int i, j;
 	for (i = 0;i < (int)m_mt.size();i++) {
@@ -314,7 +307,7 @@ void CMatrix::assign(vector<vector<double> > m_mt)
 
 void CMatrix::assign(int m_row, int m_col, double **m_mt)
 {
-	vector<double> tmp(m_col, 0);
+	std::vector<double> tmp(m_col, 0);
 	mt.assign(m_row, tmp);
 	int i, j;
 	for (i = 0; i < m_row; i++) {
@@ -385,9 +378,9 @@ void CMatrix::Print()
 	int i, j;
 	for (i = 0; i < r_size(); i++) {
 		for (j = 0; j < c_size(); j++) {
-			cout << mt[i][j] << " ";
+			std::cout << mt[i][j] << " ";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 
@@ -400,13 +393,13 @@ void CMatrix::FPrint(int NameNumber)
 	char str2[] = ".csv";
 	sprintf(str, "%s%d%s", str1, NameNumber, str2);
 
-	ofstream fout(str);
+	std::ofstream fout(str);
 
 	for (i = 0; i < r_size(); i++) {
 		for (j = 0; j < c_size(); j++) {
 			fout << mt[i][j] << ",";
 		}
-		fout << endl;
+		fout << std::endl;
 	}
 	fout.close();
 }
@@ -439,7 +432,7 @@ void CMatrix::FPrint(int NameNumber)
 /************** ***************/
 
 
-vector<double> &CMatrix::operator[](int m_r)
+std::vector<double> &CMatrix::operator[](int m_r)
 {
 	return (mt[m_r]);
 }
@@ -454,7 +447,7 @@ CMatrix& CMatrix::operator=(CMatrix m_mt)
 }
 
 
-CMatrix& CMatrix::operator=(vector<vector<double> > m_mt)
+CMatrix& CMatrix::operator=(std::vector<std::vector<double> > m_mt)
 {
 	int i, j;
 	for (i = 0;i < (int)mt.size();i++) {
@@ -771,7 +764,7 @@ void CMatrix::ludcmp(int *indx, double *d)
 		}
 
 		if (big == 0.0) {
-			cout << "error" << endl;
+			std::cout << "error" << std::endl;
 			break;
 		}
 

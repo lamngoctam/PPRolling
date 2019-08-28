@@ -1,12 +1,5 @@
 
-//############################################################################
-
-#include "../stdafx.h"
-#include "OpenGL.h"
-#include "OpenGLprimitive.h"
-//#include "OpenGLWindow0.h"
-
-using namespace std;
+#include "stdafx.h"
 
 extern int WinID[2];
 OpenGL GLSettings1;
@@ -30,14 +23,17 @@ void GradientBackGround(float *tcolor, float *bcolor);
 float BackTopColor1[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor1[] = { 0.275f, 0.51f, 0.706f };
 
+void drawTriangleGrid();
 void OpenGLDisplay1(void) {
 	DisplayInit();	
 	GLSettings1.SetEyePosition();
 
 	GradientBackGround(BackTopColor1, BackBotColor1);		//from OpenGLDraw.cpp
 	ConclusiveAxis();
+	drawTriangleGrid();
 
-	glBegin(GL_TRIANGLE_STRIP);
+
+	/*glBegin(GL_TRIANGLE_STRIP);
 	glColor3f(1, 1, 1); glVertex3f(0, 2, 0);
 	glColor3f(1, 0, 0); glVertex3f(-1, 0, 1);
 	glColor3f(0, 1, 0); glVertex3f(1, 0, 1);
@@ -51,7 +47,7 @@ void OpenGLDisplay1(void) {
 	glColor3f(1, 0, 0); glVertex3f(-0.6, -0.75, 0.5);
 	glColor3f(0, 1, 0); glVertex3f(0.6, -0.75, 0);
 	glColor3f(0, 0, 1); glVertex3f(0, 0.75, 0);
-	glEnd();
+	glEnd();*/
 	//-----------------------------------------------------//
 	   	  
 	DisplayPostprocessor();
