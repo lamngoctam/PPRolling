@@ -356,6 +356,11 @@ void PathPlanning2();
 
 void cubeRotation(CVector3d axisRotation);
 
+//18/9/2019
+void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdouble z2, GLdouble D);
+void Draw3DcoordArrow(CVector3d currentCoord, GLdouble D);
+void drawAxes(GLdouble length);
+
 /***************************************************/
 //			OpenGLDisplay0
 /***************************************************/
@@ -455,6 +460,7 @@ void DrawCubeRolling()
 				glPopMatrix();
 
 				std::cout << "+++++++++++++++++++++++right " << std::endl;
+				
 			}
 			else {//up
 				glPushMatrix();
@@ -469,8 +475,11 @@ void DrawCubeRolling()
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
 				glPopMatrix();
 				std::cout << "----------------------------------up " << std::endl;
+				
+				
 			}
 		}
+		
 	}
 	if (angleRotation >= 90)
 	{
@@ -514,32 +523,33 @@ void DisplayAnimation(void) {
 	}
 
 	if (ShowStartPointFlag) {
-		//DrawCube(cube.startPoint, 05);
+		DrawCube(cube.startPoint, 05);
 		//DrawSphere(cube.startPoint, 0.1);
 		
 	}
-	DrawArrow(cube.startPoint, CVector3d(2, 0, 0), 0.5, 0.05);
-	DrawArrow(cube.startPoint, CVector3d(0, 1, 0), 0.5, 0.05);
-	DrawArrow(cube.startPoint, CVector3d(0, 0, 0.5), 1, 0.05);
+
+	Draw3DcoordArrow(cube.startPoint, 0.03);
+
+	
 	if (ShowGoalPointFlag) {
 		DrawCube(cube.goalPoint, 70);
 		DrawSphere(cube.goalPoint, 0.1);
-		DrawArrow(cube.goalPoint, cube.startPoint,  2, 0.05);
+		//DrawArrow(cube.startPoint,cube.temp1, 2, 0.05);
 	}
 
 	if (ShowShortestLine)
 		DrawStartEndPoint(cube.startPoint, cube.goalPoint);
 
-
 	if (ShowCubeCenterFlag) {
 		for (int i = 0; i < cube.cubeCenter.size() - 1; i++) {
 			glColor3f(0.5, 1.0, 0.5);
 			DrawSphere(cube.cubeCenter[i], 0.1);
+			//Draw3DcoordArrow(cube.cubeCenter[i], 0.03);
 		}
 	}
 	//rolling cube
 	if (ShowAnimationFlag)
-		//DrawCubeRolling();
+		DrawCubeRolling();
 
 	//AntTweakBar//
 	TwDraw();

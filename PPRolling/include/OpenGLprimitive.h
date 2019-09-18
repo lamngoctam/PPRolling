@@ -248,7 +248,8 @@ inline void DrawCone(double r, double h, int n) {
 
 
 //
-inline void DrawArrowOpt(CVector3d V, CVector3d T, double h, double radius, double cr, double ch, int n) {
+inline void DrawArrowOpt(CVector3d V, CVector3d T, 
+	double h, double radius, double cr, double ch, int n) {
 	T.Normalize();
 	double coner = cr * radius;
 	double coneh = ch * coner;

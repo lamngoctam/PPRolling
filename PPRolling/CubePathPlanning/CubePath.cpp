@@ -55,6 +55,7 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 	newCube = new OctVoxel[cubeNum];
 	
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
+
 		newCube[i].coordX = cube.cubeCenter[i].x;
 		newCube[i].coordY = cube.cubeCenter[i].y;
 		newCube[i].coordZ = cube.cubeCenter[i].z;
@@ -78,6 +79,8 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 			std::cout << "up " << i << std::endl;
 	
 		}
+
+		
 	}
 
 	std::cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size()=" 

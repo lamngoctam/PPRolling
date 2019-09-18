@@ -77,6 +77,8 @@ public:
 	double XarrowPoint;
 	double YarrowPoint;
 	double ZarrowPoint;
+
+	CVector3d temp1;
 };
 
 class Model {

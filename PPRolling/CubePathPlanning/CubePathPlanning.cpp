@@ -34,6 +34,7 @@ int CubePathPlanning(int argc, char* argv[]) {
 	cube.YarrowPoint = cube.goalPoint.y + 0.5;
 	cube.ZarrowPoint = cube.goalPoint.z + 0.5;
 
+	cube.temp1.Set(1, 0.5, 0.5);
 	//checking direction of rolling
 	if ((s_x < g_x) && (s_y <= g_y)) {
 		dirRolling = true;

@@ -235,6 +235,7 @@ void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint) {
 	glVertex3d(startPoint.x, startPoint.y, startPoint.z);//1
 	glVertex3d(endPoint.x, endPoint.y, endPoint.z);//2
 	glEnd();
+	
 }
 
 void DrawCube_originPoint(CVector3d originPoint, int colorID) {
@@ -375,6 +376,262 @@ void checkPoint(int colorID) {
 	glDisable(GL_LIGHTING);
 }
 
+//18-9-2019
+//link: https://stackoverflow.com/questions/19332668/drawing-the-axis-with-its-arrow-using-opengl-in-visual-studio-2010-and-c
+
+#define RADPERDEG 0.0174533
+
+void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdouble z2, GLdouble D)
+{
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+
+}
+
+void drawAxes(GLdouble length)
+{
+	glPushMatrix();
+	glTranslatef(-length, 0, 0);
+	Arrow(0, 0, 0, 2 * length, 0, 0, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -length, 0);
+	Arrow(0, 0, 0, 0, 2 * length, 0, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -length);
+	Arrow(0, 0, 0, 0, 0, 2 * length, 0.2);
+	glPopMatrix();
+}
+
+void DrawOXarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x + 0.5;
+	GLdouble y2 = currentCoord.y;
+	GLdouble z2 = currentCoord.z;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void DrawOYarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x;
+	GLdouble y2 = currentCoord.y+0.5;
+	GLdouble z2 = currentCoord.z;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void DrawOZarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x;
+	GLdouble y2 = currentCoord.y;
+	GLdouble z2 = currentCoord.z+0.5;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void Draw3DcoordArrow(CVector3d current3DCoord, GLdouble D)
+{
+	DrawOXarrow(current3DCoord, D);
+	DrawOYarrow(current3DCoord, D-0.02);
+	DrawOZarrow(current3DCoord, D+0.02);
+}
 /*=================================================*/
 /*            Tetrahedron		                   */
 /*=================================================*/
