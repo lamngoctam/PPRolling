@@ -279,6 +279,7 @@ inline void DrawArrowOpt(CVector3d V, CVector3d T, double h, double radius, doub
 inline void DrawArrow(CVector3d V, CVector3d T, double h, double radius) {
 	DrawArrowOpt(V, T, h, radius, 2.5, 1.618*2.0, 12);
 	//1.618
+	//h:length???
 }
 
 

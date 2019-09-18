@@ -12,6 +12,7 @@ void DrawCube(CVector3d centerPoint, int colorID);
 void findingCubeCenter_rightUp(int &cubeNum);
 void findingCubeCenter_leftUp(int &cubeNum);
 void cubeRotation(CVector3d axisRotation);
+void CoordSystem(CVector3d &coordPoints);
 
 //openGL
 void RunOpenGL(int argc, char *argv[]);
@@ -28,6 +29,12 @@ int CubePathPlanning(int argc, char* argv[]) {
 	double s_x = cube.startPoint.x;	double s_y = cube.startPoint.y;
 	double g_x = cube.goalPoint.x;	double g_y = cube.goalPoint.y;
 
+	//display Arrow of Start and Goal Point
+	cube.XarrowPoint = cube.goalPoint.x + 0.5;
+	cube.YarrowPoint = cube.goalPoint.y + 0.5;
+	cube.ZarrowPoint = cube.goalPoint.z + 0.5;
+
+	//checking direction of rolling
 	if ((s_x < g_x) && (s_y <= g_y)) {
 		dirRolling = true;
 		findingCubeCenter_rightUp(cubeNum);
@@ -37,11 +44,10 @@ int CubePathPlanning(int argc, char* argv[]) {
 		findingCubeCenter_leftUp(cubeNum);
 	}
 	   	  
-	std::cout << "cubeNum " << cubeNum << std::endl;
 
 	//newCube[0].setSelected(true);
 	
-	//RunOpenGL(argc, argv);
+	RunOpenGL(argc, argv);
 	
 
 	delete[] newCube;

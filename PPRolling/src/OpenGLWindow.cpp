@@ -514,13 +514,17 @@ void DisplayAnimation(void) {
 	}
 
 	if (ShowStartPointFlag) {
-		DrawCube(cube.startPoint, 05);
-		DrawSphere(cube.startPoint, 0.1);
+		//DrawCube(cube.startPoint, 05);
+		//DrawSphere(cube.startPoint, 0.1);
+		
 	}
-
+	DrawArrow(cube.startPoint, CVector3d(2, 0, 0), 0.5, 0.05);
+	DrawArrow(cube.startPoint, CVector3d(0, 1, 0), 0.5, 0.05);
+	DrawArrow(cube.startPoint, CVector3d(0, 0, 0.5), 1, 0.05);
 	if (ShowGoalPointFlag) {
 		DrawCube(cube.goalPoint, 70);
 		DrawSphere(cube.goalPoint, 0.1);
+		DrawArrow(cube.goalPoint, cube.startPoint,  2, 0.05);
 	}
 
 	if (ShowShortestLine)
@@ -535,7 +539,7 @@ void DisplayAnimation(void) {
 	}
 	//rolling cube
 	if (ShowAnimationFlag)
-		DrawCubeRolling();
+		//DrawCubeRolling();
 
 	//AntTweakBar//
 	TwDraw();

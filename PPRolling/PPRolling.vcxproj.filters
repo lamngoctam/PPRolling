@@ -76,6 +76,9 @@
     <ClCompile Include="src\TetraCheckerBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CubePathPlanning\CoordSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AntTweakBar.h">

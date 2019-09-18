@@ -36,6 +36,7 @@ public:
 	double directionX;
 	double directionY;
 	double directionZ;
+
 	double getCoordX();
 	double getCoordY();
 	double getCoordZ();
@@ -71,8 +72,11 @@ public:
 	std::vector<CVector3d> cubeCenter;
 	std::vector<CVector3d> cubeOrigin;
 	CVector3d startPoint, goalPoint;
-	//
 	
+	//18/9/2019
+	double XarrowPoint;
+	double YarrowPoint;
+	double ZarrowPoint;
 };
 
 class Model {

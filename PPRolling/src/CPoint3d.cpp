@@ -264,6 +264,11 @@ void CVector3d::Set(double X, double Y, double Z)
 	x = X;	y = Y;	z = Z;
 }
 
+//void CVector3d::SetcoordSystem()
+//{
+//
+//}
+
 void CVector3d::Unitvector(double X, double Y, double Z)
 {
 	double norm = sqrt(X*X + Y * Y + Z * Z);
