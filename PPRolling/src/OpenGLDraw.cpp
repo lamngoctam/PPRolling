@@ -207,13 +207,13 @@ void DrawGrid() {
 	glColor3d(0.0, 0.0, 0.0);
 	glLineWidth(0.9f);
 	glBegin(GL_LINES);
-	for (int x(0); x <= 29; x++) {
-		glVertex2i(x, 0);
-		glVertex2i(x, 9);
+	for (int x(-1); x <= 7; x++) {
+		glVertex2i(x, -1);
+		glVertex2i(x, 5);
 	}
-	for (int y(0); y <= 9; y++) {
-		glVertex2i(0, y);
-		glVertex2i(29, y);
+	for (int y(-1); y <= 5; y++) {
+		glVertex2i(-1, y);
+		glVertex2i(7, y);
 	}
 	glEnd();
 }

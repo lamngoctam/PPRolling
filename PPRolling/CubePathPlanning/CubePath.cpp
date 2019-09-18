@@ -158,7 +158,7 @@ void findingCubeCenter_leftUp(int &cubeNum) {
 
 
 
-
+//using Rodriguess
 void cubeRotation(CVector3d axisRotation) {
 	double Theta = (90 * M_PI / 180);
 
