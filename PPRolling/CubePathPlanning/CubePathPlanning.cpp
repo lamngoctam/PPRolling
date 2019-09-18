@@ -3,7 +3,7 @@
 
 
 extern OctVoxel cube;
-extern OctVoxel* label;
+//extern OctVoxel *label;
 extern OctVoxel *newCube;
 extern int cubeNum;
 
@@ -37,11 +37,12 @@ int CubePathPlanning(int argc, char* argv[]) {
 		findingCubeCenter_leftUp(cubeNum);
 	}
 	   	  
+	std::cout << "cubeNum " << cubeNum << std::endl;
+
 	//newCube[0].setSelected(true);
 	
+	//RunOpenGL(argc, argv);
 	
-	RunOpenGL(argc, argv);
-
 
 	delete[] newCube;
 

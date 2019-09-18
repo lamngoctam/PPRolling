@@ -541,6 +541,7 @@ void DisplayAnimation(void) {
 	TwDraw();
 
 	DisplayPostprocessor();
+	
 }
 
 void OpenGLIdle_Cube(void) {
@@ -576,6 +577,7 @@ void OpenGLCallBackAnimation(void) {
 	glutTimerFunc(0, time_callback_Cube, 0); //the same with SpecialKeyRolling but faster 
 
 	OpenGLPostprocessor(GLSettings0);
+	
 }
 
 

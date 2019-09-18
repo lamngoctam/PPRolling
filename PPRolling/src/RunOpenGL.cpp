@@ -41,6 +41,7 @@ void DisplayPostprocessor() {
 
 	glPopMatrix();
 	glutSwapBuffers();
+
 }
 
 // Blending (Transparency) http://math.hws.edu/bridgeman/courses/324/s06/doc/opengl.html 
@@ -199,6 +200,7 @@ void RunOpenGL(int argc, char *argv[]) {
 	OpenGLCallBackAnimation();
 
 	glutMainLoop();	//from freeglut_std.h library
+	
 }
 
 void RunOpenGL1(int argc, char *argv[]) {

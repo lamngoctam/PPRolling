@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 extern OctVoxel cube;
-extern OctVoxel *label;
+//extern OctVoxel *label;
 extern OctVoxel *newCube;
 
 void findingCubeCenter_rightUp(int &cubeNum) {
@@ -53,35 +53,35 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 
 	cubeNum = cube.cubeCenter.size();
 	newCube = new OctVoxel[cubeNum];
-
+	
 	for (int i = 0; i < cube.cubeCenter.size(); i++) {
 		newCube[i].coordX = cube.cubeCenter[i].x;
 		newCube[i].coordY = cube.cubeCenter[i].y;
 		newCube[i].coordZ = cube.cubeCenter[i].z;
-
+	
 		if (cube.rotlabel[i] == 1) { //right
 			newCube[i].setRightRolling(true);
-
+	
 			newCube[i].directionX = 0.0;
 			newCube[i].directionY = 1.0;
 			newCube[i].directionZ = 0.0;
-
+	
 			std::cout << "right " << i << std::endl;
 		}
 		else {
 			newCube[i].setRightRolling(false);
-
+	
 			newCube[i].directionX = 1.0;
 			newCube[i].directionY = 0.0;
 			newCube[i].directionZ = 0.0;
-
+	
 			std::cout << "up " << i << std::endl;
-
+	
 		}
 	}
 
-	std::cout << "std::endl" << std::endl;
-	std::cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size() " << cube.cubeCenter.size() << std::endl;
+	std::cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size()=" 
+		<< cube.cubeCenter.size() <<" -in findingCubeCenter"<< std::endl;
 }
 
 
@@ -156,7 +156,12 @@ void findingCubeCenter_leftUp(int &cubeNum) {
 
 }
 
+void findingPathCube(int &cubeNum) {
+	CVector3d currentPoint, upPoint, downPoint, rightPoint, leftPoint;
 
+
+
+}
 
 //using Rodriguess
 void cubeRotation(CVector3d axisRotation) {

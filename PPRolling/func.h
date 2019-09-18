@@ -4,7 +4,7 @@
 
 //global variables
 OctVoxel cube;
-OctVoxel* label;
+//OctVoxel* label;
 
 OctVoxel *newCube;
 int cubeNum(0);
