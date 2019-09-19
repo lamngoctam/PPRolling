@@ -17,7 +17,7 @@ void CoordSystem(CVector3d &coordPoints);
 //openGL
 void RunOpenGL(int argc, char *argv[]);
 
-bool dirRolling = false;
+bool dirRightUpRolling = false;
 
 
 //main function
@@ -38,11 +38,11 @@ int CubePathPlanning(int argc, char* argv[]) {
 
 	//checking direction of rolling
 	if ((s_x < g_x) && (s_y <= g_y)) {
-		dirRolling = true;
+		dirRightUpRolling = true;
 		findingCubeCenter_rightUp(cubeNum);
 	}
 	else {
-		dirRolling = false;
+		dirRightUpRolling = false;
 		findingCubeCenter_leftUp(cubeNum);
 	}
 	   	  

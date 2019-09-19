@@ -10,7 +10,7 @@ extern int cubeNum;
 extern OctVoxel *newCube;
 //extern OctVoxel *newCoord; //19/9/2019
 
-extern bool dirRolling; //rightUp or leftUp
+extern bool dirRightUpRolling; //rightUp or leftUp
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
 float BackBotColor[] = { 0.275f, 0.51f, 0.706f };
@@ -432,11 +432,33 @@ void OpenGLCallBack0(void) {
 int angleRotation(0);
 int numberCube(0);
 
+
+void DrawOXarrow(CVector3d currentCoord, GLdouble D);
+void DrawOYarrow(CVector3d currentCoord, GLdouble D);
+void DrawOZarrow(CVector3d currentCoord, GLdouble D);
+void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoord, 
+	double Xdir, double Ydir, double Zdir, GLdouble D)
+{
+	CVector3d temp;
+	temp.x = Xcoord;
+	temp.y = Ycoord;
+	temp.z = Zcoord;
+
+	glTranslatef(Xcoord, Ycoord, Zcoord);
+	glRotatef(rotAngle, Xdir, Ydir, Zdir);
+	DrawOXarrow(temp, D);
+	DrawOYarrow(temp, D - 0.02);
+	DrawOZarrow(temp, D + 0.02);
+	
+	glTranslatef(-1.5, 0.5, 0.5);//const
+}
+
 void DrawCubeRolling()
 {
+	
 	OctVoxel cb = newCube[numberCube];
-	//only for cube rolling right-up or left-up
 
+	//only for cube rolling right-up or left-up
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
@@ -445,43 +467,32 @@ void DrawCubeRolling()
 			if (newCube[a].getRightRolling()) {
 				glPushMatrix();
 
-				if (dirRolling == true) { 
+				if (dirRightUpRolling == true) {
 					//for Right-Up
 					glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
 					glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
 					//glRotatef(angleRotation, 0.0, 1.0, 0.0);
 					glTranslatef(-0.5, 0.5, 0.5);//const
-
-					//draw 3D coords  --- 19/9/2019
-					glColor3f(1.0, 1.5, 1.0); 
-					Draw3DcoordArrow2(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, cb.getCoordZ()-0.5, 0.01);
-					//std::cout << "getCoordX" << cb.getCoordX() << " --  coordX" << cb.coordX << std::endl;
 				}
-				else {	
+				else {
 					//for Left-Up
 					glTranslatef(cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0);
 					glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
 					glTranslatef(0.5, 0.5, 0.5);//const
-					Draw3DcoordArrow2(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, cb.getCoordZ() - 0.5, 0.01);
 				}
 
-				//draw cube --- 5/2019
-				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
-				
-				
-
-
+				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
 				//display object from glPushMatrix();
 				glPopMatrix();
 
 				std::cout << "+++++++++++    right   ++++++++++++ " << std::endl;
-				
+
 			}
 			else {
 				//rolling up
+				
 				glPushMatrix();
-
 				//glTranslatef(cubeNew[a].getCoordX() - 1.5, cubeNew[a].getCoordY() - 0.5, 0.0);
 				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
 				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
@@ -489,18 +500,16 @@ void DrawCubeRolling()
 				glTranslatef(1.5, -0.5, 0.5); //const
 
 				//draw cube
-				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
-
-				//draw 3D Coords -- - 19 / 9 / 2019
+				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
+				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
 
 				glPopMatrix();
 				std::cout << "------------     up     -----------" << std::endl;
-				
-				
+
+
 			}
 		}
-		
+
 	}
 	if (angleRotation >= 90)
 	{
@@ -529,6 +538,63 @@ void DrawCubeRolling()
 	//	}
 	//}
 	///getchar();
+	
+}
+void DrawCoordRolling() {
+	OctVoxel cb = newCube[numberCube];
+	//only for cube rolling right-up or left-up
+
+	for (int a = 0; a < cubeNum; a++)
+	{
+		if (newCube[a].getSelected())
+		{
+			glLineWidth(1.9f);
+			if (newCube[a].getRightRolling()) {
+				glPushMatrix();
+
+				if (dirRightUpRolling == true) {
+					//for Right-Up
+					//draw 3D coords  --- 19/9/2019
+					glColor3f(1,1,1);
+					Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
+						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+
+				}
+				else {
+					//left-up
+					glColor3f(1,1,1);
+					Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
+						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				}
+
+				//display object from glPushMatrix();
+				glPopMatrix();
+			}
+			else {
+				//rolling up
+				glPushMatrix();
+
+				glColor3f(1,1,1);
+				Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0,
+					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+
+				glPopMatrix();
+			}
+
+		}
+
+	}
+
+	if (angleRotation >= 90)
+	{
+		newCube[numberCube].setSelected(false); //cb will stop
+		numberCube += 1;						//move to next cb
+
+		numberCube %= cubeNum;
+		newCube[numberCube].setSelected(true);
+		angleRotation = 0;
+
+	}
 }
 
 void DisplayAnimation(void) {
@@ -546,12 +612,12 @@ void DisplayAnimation(void) {
 	if (ShowStartPointFlag) {
 		DrawCube(cube.startPoint, 05);
 		//DrawSphere(cube.startPoint, 0.1);
-		
+
 	}
 
 	Draw3DcoordArrow2(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, 0.03);
 
-	
+
 	if (ShowGoalPointFlag) {
 		DrawCube(cube.goalPoint, 70);
 		DrawSphere(cube.goalPoint, 0.1);
@@ -570,13 +636,26 @@ void DisplayAnimation(void) {
 	}
 	//rolling cube
 	if (ShowAnimationFlag)
-		DrawCubeRolling();
+	{
+		
+		//DrawCubeRolling();
+
+		
+#pragma omp parallel sections
+		{
+#pragma omp section
+			DrawCubeRolling();
+#pragma omp section
+			DrawCoordRolling();
+		}
+
+	}
 
 	//AntTweakBar//
 	TwDraw();
 
 	DisplayPostprocessor();
-	
+
 }
 
 void OpenGLIdle_Cube(void) {
@@ -588,7 +667,7 @@ void time_callback_Cube(int) {
 	glutPostRedisplay();
 	glutTimerFunc(10, time_callback_Cube, 0);
 
-	angleRotation += 2;
+	angleRotation += 1;
 
 	std::cout << "cuberotation in timeCallback(): " << angleRotation << std::endl;
 }
@@ -612,7 +691,7 @@ void OpenGLCallBackAnimation(void) {
 	glutTimerFunc(0, time_callback_Cube, 0); //the same with SpecialKeyRolling but faster 
 
 	OpenGLPostprocessor(GLSettings0);
-	
+
 }
 
 

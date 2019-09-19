@@ -9,6 +9,7 @@ OctVoxel cube;
 OctVoxel *newCube;
 int cubeNum(0);
 
+
 //19/9/2019
 OctVoxel *newCoord;
 //all main function

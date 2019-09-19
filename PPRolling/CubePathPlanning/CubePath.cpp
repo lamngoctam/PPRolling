@@ -88,9 +88,8 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 		//
 		
 
-		/*std::cout	<< "cube.temp1[i].x " << cube.temp1[i].x
-					<< "- newCube[i].coordX " << newCube[i].coordX
-					<< "- cube.cubeCenter[i].x " << cube.cubeCenter[i].x << std::endl;*/
+		std::cout	<<"- newCube[i].coordZ " << newCube[i].coordZ
+					<< "- cube.cubeCenter[i].z " << cube.cubeCenter[i].z << std::endl;
 
 	}
 
