@@ -4,6 +4,8 @@ extern OctVoxel cube;
 //extern OctVoxel *label;
 extern OctVoxel *newCube;
 
+//extern OctVoxel *newCoord;
+
 void findingCubeCenter_rightUp(int &cubeNum) {
 
 	//cube.cubeCenter.push_back(cube.startPoint);
@@ -20,12 +22,13 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 	CVector3d tempPointContact1, tempPointContact2;
 
 	int count = 0;
-	//21/05
-	int tempUpCount(0);
-	int tempRightCount(0);
-
+	////21/05
+	//int tempUpCount(0);
+	//int tempRightCount(0);
+	//
 	//22/05
-	int  tempLableCount = 0;
+	//int  tempLableCount = 0;
+
 	int uppp = 0;
 	int righttt = 1;
 
@@ -69,7 +72,7 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 	
 			std::cout << "right " << i << std::endl;
 		}
-		else {
+		else {//up
 			newCube[i].setRightRolling(false);
 	
 			newCube[i].directionX = 1.0;
@@ -79,12 +82,23 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 			std::cout << "up " << i << std::endl;
 	
 		}
-
+	/*	cube.temp1[i].x = cube.cubeCenter[i].x;
+		cube.temp1[i].y = cube.cubeCenter[i].y;
+		cube.temp1[i].z = cube.cubeCenter[i].z;*/
+		//
 		
+
+		/*std::cout	<< "cube.temp1[i].x " << cube.temp1[i].x
+					<< "- newCube[i].coordX " << newCube[i].coordX
+					<< "- cube.cubeCenter[i].x " << cube.cubeCenter[i].x << std::endl;*/
+
 	}
 
 	std::cout << "cubeNum " << cubeNum << "- cube.cubeCenter.size()=" 
 		<< cube.cubeCenter.size() <<" -in findingCubeCenter"<< std::endl;
+
+
+	
 }
 
 

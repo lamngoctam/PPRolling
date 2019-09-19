@@ -8,6 +8,8 @@ extern OctVoxel cube;
 extern OctVoxel* label;
 extern int cubeNum;
 extern OctVoxel *newCube;
+//extern OctVoxel *newCoord; //19/9/2019
+
 extern bool dirRolling; //rightUp or leftUp
 //AntTweakBar
 float BackTopColor[] = { 0.941f, 1.0f, 1.0f };
@@ -360,7 +362,7 @@ void cubeRotation(CVector3d axisRotation);
 void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdouble z2, GLdouble D);
 void Draw3DcoordArrow(CVector3d currentCoord, GLdouble D);
 void drawAxes(GLdouble length);
-
+void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D);
 /***************************************************/
 //			OpenGLDisplay0
 /***************************************************/
@@ -433,36 +435,51 @@ int numberCube(0);
 void DrawCubeRolling()
 {
 	OctVoxel cb = newCube[numberCube];
-
+	//only for cube rolling right-up or left-up
 
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
 		{
 			glLineWidth(1.9f);
-			if (newCube[a].getRightRolling()) {//right
+			if (newCube[a].getRightRolling()) {
 				glPushMatrix();
 
-				if (dirRolling == true) { //for Right-Up
+				if (dirRolling == true) { 
+					//for Right-Up
 					glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
 					glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
 					//glRotatef(angleRotation, 0.0, 1.0, 0.0);
 					glTranslatef(-0.5, 0.5, 0.5);//const
+
+					//draw 3D coords  --- 19/9/2019
+					glColor3f(1.0, 1.5, 1.0); 
+					Draw3DcoordArrow2(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, cb.getCoordZ()-0.5, 0.01);
+					//std::cout << "getCoordX" << cb.getCoordX() << " --  coordX" << cb.coordX << std::endl;
 				}
-				else {	//for Left-Up
+				else {	
+					//for Left-Up
 					glTranslatef(cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0);
 					glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
 					glTranslatef(0.5, 0.5, 0.5);//const
+					Draw3DcoordArrow2(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, cb.getCoordZ() - 0.5, 0.01);
 				}
 
+				//draw cube --- 5/2019
 				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+				
+				
+
+
+				//display object from glPushMatrix();
 				glPopMatrix();
 
-				std::cout << "+++++++++++++++++++++++right " << std::endl;
+				std::cout << "+++++++++++    right   ++++++++++++ " << std::endl;
 				
 			}
-			else {//up
+			else {
+				//rolling up
 				glPushMatrix();
 
 				//glTranslatef(cubeNew[a].getCoordX() - 1.5, cubeNew[a].getCoordY() - 0.5, 0.0);
@@ -471,10 +488,14 @@ void DrawCubeRolling()
 				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
 				glTranslatef(1.5, -0.5, 0.5); //const
 
+				//draw cube
 				glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
 				glColor3f(1.5, 1.5, 1.5); glutWireCube(1);
+
+				//draw 3D Coords -- - 19 / 9 / 2019
+
 				glPopMatrix();
-				std::cout << "----------------------------------up " << std::endl;
+				std::cout << "------------     up     -----------" << std::endl;
 				
 				
 			}
@@ -528,7 +549,7 @@ void DisplayAnimation(void) {
 		
 	}
 
-	Draw3DcoordArrow(cube.startPoint, 0.03);
+	Draw3DcoordArrow2(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, 0.03);
 
 	
 	if (ShowGoalPointFlag) {

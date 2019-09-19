@@ -632,6 +632,22 @@ void Draw3DcoordArrow(CVector3d current3DCoord, GLdouble D)
 	DrawOYarrow(current3DCoord, D-0.02);
 	DrawOZarrow(current3DCoord, D+0.02);
 }
+
+
+void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D)
+{
+	CVector3d temp;
+	temp.x = Xcoord;
+	temp.y = Ycoord;
+	temp.z = Zcoord;
+
+	DrawOXarrow(temp, D);
+	DrawOYarrow(temp, D - 0.02);
+	DrawOZarrow(temp, D + 0.02);
+}
+
+
+
 /*=================================================*/
 /*            Tetrahedron		                   */
 /*=================================================*/
