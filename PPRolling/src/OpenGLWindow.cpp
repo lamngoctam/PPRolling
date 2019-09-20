@@ -436,7 +436,8 @@ void OpenGLCallBack0(void) {
 int angleRotation(0);
 int numberCube(0);
 
-void DrawSeparatedArrows2(CVector3d currentOrigin);
+//20/09/2019
+void DrawSeparatedArrows2(CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow);
 
 void DrawOXarrow(CVector3d currentCoord, GLdouble D);
 void DrawOYarrow(CVector3d currentCoord, GLdouble D);
@@ -671,11 +672,15 @@ void DisplayAnimation(void) {
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y + .5, cube.startPoint.z, 0.02);
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y, cube.startPoint.z + 0.5, 0.02);
 
-	//DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
+	DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
 	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
 
 
-	DrawSeparatedArrows2(cube.startPoint);
+	CVector3d OXArrow; OXArrow.Set(1.0, 0.5, 0.5);
+	CVector3d OYArrow; OYArrow.Set(0.5, 1.0, 0.5);
+	CVector3d OZArrow; OZArrow.Set(0.5, 0.5, 1.0);
+
+	DrawSeparatedArrows2(cube.startPoint, OXArrow, OYArrow, OZArrow); //from OpenGLDraw.cpp
 
 	   
 	//AntTweakBar//

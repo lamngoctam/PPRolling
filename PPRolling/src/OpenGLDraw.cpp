@@ -462,20 +462,19 @@ void DrawSeparatedArrows(GLdouble currentCenterX, GLdouble currentCenterY, GLdou
 
 }
 
-void RotationCoordSystem(
+void RotationCoordSystem(  
 	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+//from cubePath.cpp
 
-void DrawSeparatedArrows2(CVector3d currentOrigin ) {
+void DrawSeparatedArrows2(CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow) {
 
 	CVector3d OXpoint, OYpoint, OZpoint;
 	CVector3d neworigin, newOXpoint, newOYpoint, newOZpoint;
 
-	OXpoint.Set(1.0,0.5,0.5);
-	OYpoint.Set(0.5,1.0,0.5);
-	OZpoint.Set(0.5,0.5,1.0);
 
-	RotationCoordSystem(currentOrigin, OXpoint, OYpoint, OZpoint, neworigin, newOXpoint, newOYpoint, newOZpoint);
+
+	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initialOZarrow, neworigin, newOXpoint, newOYpoint, newOZpoint);
 
 	GLdouble xnew = neworigin.x;
 	GLdouble ynew = neworigin.y;
