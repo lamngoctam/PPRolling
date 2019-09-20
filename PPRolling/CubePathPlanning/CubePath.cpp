@@ -270,7 +270,7 @@ void cubeRotation(CVector3d axisRotation) {
 //---------------------------------------------------
 
 //using Rodriguess
-void RodriguesFunction(CVector3d oldPoint, CVector3d &newPoint) {
+void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
 	double Theta = (90 * M_PI / 180);
 
 	//rotation   	  
@@ -354,14 +354,107 @@ void RodriguesFunction(CVector3d oldPoint, CVector3d &newPoint) {
 	//getchar();
 }
 
+//using Rodriguess
+void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
+	double Theta = (90 * M_PI / 180);
+
+	//rotation   	  
+	CVector3d W_(0.0, 0.0, 0.0);
+	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	W_.Set(1.0, 0.0, 0.0);
+
+	CVector3d tempOldPoint(0.0, 0.0, 0.0);
+	tempOldPoint.Set(oldPoint.x - 0.5, oldPoint.y - 0.5, oldPoint.z - 0.5);
+
+	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+
+	CMatrix Rod1(3, 3);
+	Rod1.SetZero();
+
+	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
+	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+
+	//Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	//Rod1.At(1, 0) = -W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	//Rod1.At(2, 0) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	//
+	//Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) + W_.z*sin(Theta);
+	//Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	//Rod1.At(2, 1) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	//
+	//Rod1.At(0, 2) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	//Rod1.At(1, 2) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	//Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+	//--------------------------------------------------------------------
+
+	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
+	//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+	//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
+
+	CVector3d temp_(0.0, 0.0, 0.0);
+	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
+	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
+	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
+
+
+	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
+
+	newPoint.Set(temp_.x +0.5, temp_.y + 1.5, temp_.z + 0.5);
+
+	////std::cout << std::endl;
+	//
+	////move backward
+	//
+	//
+	//for (int i = 0; i < cube.cubeCenter.size(); i++) {
+	//	std::cout << "point[" << i << "] ";cube.cubeCenter[i].Print();
+	//	//cube.rotlabel.push_back(i);
+	//
+	//	//if (cube.rotRightFlag == true) {
+	//	//	std::cout << "RightFlag[" << i << "] " << std::endl;
+	//	//}
+	//	//else {
+	//	//	std::cout << "UpFlag[" << i << "] " << std::endl;
+	//	//}
+	//	std::cout << std::endl;
+	//}
+	////std::cout << "cube.origin";	cube.origin.Print(); std::cout << std::endl;
+	////std::cout << "cube.startPoint";	cube.startPoint.Print(); std::cout << std::endl;
+	////std::cout << "cube.goalPoint";	cube.goalPoint.Print();	 std::cout << std::endl;
+	////std::cout << "cube.newOrigin";	cube.newOrigin.Print();	 std::cout << std::endl;
+	////std::cout << "cube.rotUpCount" << cube.rotUpCount.size() << std::endl;
+	////std::cout << "cube.rotRightCount" << cube.rotRightCount.size() << std::endl;
+	//
+	//std::cout << std::endl;
+
+	//getchar();
+}
 void RotationCoordSystem(
 	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	bool rightRolling,
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint) {
 
-	RodriguesFunction(origin, neworigin);
-	RodriguesFunction(OXpoint, newOXpoint);
-	RodriguesFunction(OYpoint, newOYpoint);
-	RodriguesFunction(OZpoint, newOZpoint);
+	if (rightRolling == true) {
+		RodriguesFunction_rightRolling(origin, neworigin);
+		RodriguesFunction_rightRolling(OXpoint, newOXpoint);
+		RodriguesFunction_rightRolling(OYpoint, newOYpoint);
+		RodriguesFunction_rightRolling(OZpoint, newOZpoint);
+	}
+	else {
+		RodriguesFunction_leftRolling(origin, neworigin);
+		RodriguesFunction_leftRolling(OXpoint, newOXpoint);
+		RodriguesFunction_leftRolling(OYpoint, newOYpoint);
+		RodriguesFunction_leftRolling(OZpoint, newOZpoint);
+	}
 }
 
 
