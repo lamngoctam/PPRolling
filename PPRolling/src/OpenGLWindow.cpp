@@ -363,6 +363,10 @@ void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdo
 void Draw3DcoordArrow(CVector3d currentCoord, GLdouble D);
 void drawAxes(GLdouble length);
 void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D);
+
+//20/9/2019
+void DrawSeparatedArrows(GLdouble currentCenterX, GLdouble currentCenterY, GLdouble currentCenterZ);
+
 /***************************************************/
 //			OpenGLDisplay0
 /***************************************************/
@@ -432,10 +436,12 @@ void OpenGLCallBack0(void) {
 int angleRotation(0);
 int numberCube(0);
 
+void DrawSeparatedArrows2(CVector3d currentOrigin);
 
 void DrawOXarrow(CVector3d currentCoord, GLdouble D);
 void DrawOYarrow(CVector3d currentCoord, GLdouble D);
 void DrawOZarrow(CVector3d currentCoord, GLdouble D);
+
 void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoord, 
 	double Xdir, double Ydir, double Zdir, GLdouble D)
 {
@@ -446,6 +452,7 @@ void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoor
 
 	glTranslatef(Xcoord, Ycoord, Zcoord);
 	glRotatef(rotAngle, Xdir, Ydir, Zdir);
+
 	DrawOXarrow(temp, D);
 	DrawOYarrow(temp, D - 0.02);
 	DrawOZarrow(temp, D + 0.02);
@@ -482,7 +489,8 @@ void DrawCubeRolling()
 				}
 
 				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				//glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				glColor3f(1.5, 1.0, -1.0); glutSolidSphere(0.1,100,100); //center of cube
 				//display object from glPushMatrix();
 				glPopMatrix();
 
@@ -501,7 +509,8 @@ void DrawCubeRolling()
 
 				//draw cube
 				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				//glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				glColor3f(1.5, 1, -1); glutSolidSphere(0.1, 100, 100); //center of cube
 
 				glPopMatrix();
 				std::cout << "------------     up     -----------" << std::endl;
@@ -540,49 +549,55 @@ void DrawCubeRolling()
 	///getchar();
 	
 }
+
 void DrawCoordRolling() {
 	OctVoxel cb = newCube[numberCube];
 	//only for cube rolling right-up or left-up
+
+	//while (startPoint != goalPoint) {
+	//	//rotate the coordinates
+	//	glPushMatrix();
+	//	glLineWidth(1.9f);
+	//
+	//	glColor3f(1, 0.5, 1);
+	//	Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0,
+	//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+	//
+	//	glPopMatrix();
+	//}
 
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
 		{
+			glPushMatrix();
 			glLineWidth(1.9f);
-			if (newCube[a].getRightRolling()) {
-				glPushMatrix();
 
+			if (newCube[a].getRightRolling()) {
+				
 				if (dirRightUpRolling == true) {
 					//for Right-Up
 					//draw 3D coords  --- 19/9/2019
-					glColor3f(1,1,1);
+					glColor3f(1,0.5,1);
 					Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
 						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-
 				}
 				else {
 					//left-up
-					glColor3f(1,1,1);
+					glColor3f(1,0.5,1);
 					Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
 						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
 				}
-
-				//display object from glPushMatrix();
-				glPopMatrix();
 			}
 			else {
-				//rolling up
-				glPushMatrix();
-
-				glColor3f(1,1,1);
+				//rolling up				
+				glColor3f(1,0.5,1);
 				Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0,
-					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-
-				glPopMatrix();
+					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);			
 			}
 
+			glPopMatrix();
 		}
-
 	}
 
 	if (angleRotation >= 90)
@@ -597,6 +612,7 @@ void DrawCoordRolling() {
 	}
 }
 
+
 void DisplayAnimation(void) {
 	DisplayInit();GLSettings0.SetEyePosition();
 	GradientBackGround(BackTopColor, BackBotColor);
@@ -610,25 +626,23 @@ void DisplayAnimation(void) {
 	}
 
 	if (ShowStartPointFlag) {
-		DrawCube(cube.startPoint, 05);
-		//DrawSphere(cube.startPoint, 0.1);
+		//DrawCube(cube.startPoint, 05);
+		DrawSphere(cube.startPoint, 0.1);
 
 	}
 
-	Draw3DcoordArrow2(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, 0.03);
-
-
 	if (ShowGoalPointFlag) {
-		DrawCube(cube.goalPoint, 70);
+		//DrawCube(cube.goalPoint, 70);
 		DrawSphere(cube.goalPoint, 0.1);
 		//DrawArrow(cube.startPoint,cube.temp1, 2, 0.05);
 	}
 
 	if (ShowShortestLine)
-		DrawStartEndPoint(cube.startPoint, cube.goalPoint);
+		//DrawStartEndPoint(cube.startPoint, cube.goalPoint);
 
 	if (ShowCubeCenterFlag) {
 		for (int i = 0; i < cube.cubeCenter.size() - 1; i++) {
+			//🤷‍♂️🤷‍♀️
 			glColor3f(0.5, 1.0, 0.5);
 			DrawSphere(cube.cubeCenter[i], 0.1);
 			//Draw3DcoordArrow(cube.cubeCenter[i], 0.03);
@@ -636,21 +650,34 @@ void DisplayAnimation(void) {
 	}
 	//rolling cube
 	if (ShowAnimationFlag)
-	{
-		
+	{		
 		//DrawCubeRolling();
 
 		
 #pragma omp parallel sections
 		{
 #pragma omp section
-			DrawCubeRolling();
+			//DrawCubeRolling();
 #pragma omp section
-			DrawCoordRolling();
+			//DrawCoordRolling();
 		}
 
 	}
 
+	//20/9/2019
+
+	//Draw3DcoordArrow2(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, 0.03);
+	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x+0.5, cube.startPoint.y, cube.startPoint.z, 0.02);
+	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y + .5, cube.startPoint.z, 0.02);
+	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y, cube.startPoint.z + 0.5, 0.02);
+
+	//DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
+	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
+
+
+	DrawSeparatedArrows2(cube.startPoint);
+
+	   
 	//AntTweakBar//
 	TwDraw();
 
