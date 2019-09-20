@@ -377,10 +377,11 @@ void checkPoint(int colorID) {
 }
 
 //18-9-2019
+
 //link: https://stackoverflow.com/questions/19332668/drawing-the-axis-with-its-arrow-using-opengl-in-visual-studio-2010-and-c
 
 #define RADPERDEG 0.0174533
-
+//draw tw0 points
 void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdouble z2, GLdouble D)
 {
 	double x = x2 - x1;
@@ -452,6 +453,74 @@ void drawAxes(GLdouble length)
 	glPopMatrix();
 }
 
+//20/9/2019
+void DrawSeparatedArrows(GLdouble currentCenterX, GLdouble currentCenterY, GLdouble currentCenterZ) {
+	
+	glColor3f(1.0, 0.0, 0.0);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX + 0.5, currentCenterY,      currentCenterZ,       0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX,       currentCenterY + .5, currentCenterZ,       0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX,       currentCenterY,      currentCenterZ + 0.5, 0.02);
+
+}
+
+void RotationCoordSystem(  
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	bool rightRolling,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+//from cubePath.cpp
+
+void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow) {
+
+	CVector3d OXpoint, OYpoint, OZpoint;
+	CVector3d neworigin, newOXpoint, newOYpoint, newOZpoint;
+
+
+
+	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initialOZarrow,
+		rightRolling,
+		neworigin, newOXpoint, newOYpoint, newOZpoint);
+
+	GLdouble xnew = neworigin.x;
+	GLdouble ynew = neworigin.y;
+	GLdouble znew = neworigin.z;
+
+	GLdouble x1_new = newOXpoint.x;
+	GLdouble y1_new = newOXpoint.y;
+	GLdouble z1_new = newOXpoint.z;
+	
+	GLdouble x2_new = newOYpoint.x;
+	GLdouble y2_new = newOYpoint.y;
+	GLdouble z2_new = newOYpoint.z;
+	
+	GLdouble x3_new = newOZpoint.x;
+	GLdouble y3_new = newOZpoint.y;
+	GLdouble z3_new = newOZpoint.z;
+
+	glColor3f(1.0, 0.0, 0.0);Arrow(xnew, ynew, znew, x1_new, y1_new, z1_new, 0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(xnew, ynew, znew, x2_new, y2_new, z2_new, 0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(xnew, ynew, znew, x3_new, y3_new, z3_new, 0.02);
+
+	std::cout << "X-ricurrentOriginin " << currentOrigin.x << " Y-currentOrigin " << currentOrigin.y << " Z-currentOrigin " << currentOrigin.z << std::endl;
+	std::cout << "X-xnew " << xnew << " Y-ynew " << ynew << " Z-znew " << znew << std::endl;
+
+
+	std::cout << "X-old(" << OXpoint.x << "," << OXpoint.y << "," << OXpoint.z << ")" << std::endl;
+	std::cout << "Y-old(" << OYpoint.x << "," << OYpoint.y << "," << OYpoint.z << ")" << std::endl;
+	std::cout << "Z-old(" << OZpoint.x << "," << OZpoint.y << "," << OZpoint.z << ")" << std::endl;
+
+	std::cout << "X-new(" << x1_new << "," << y1_new << "," << z1_new << ")" << std::endl;
+	std::cout << "Y-new(" << x2_new << "," << y2_new << "," << z2_new << ")" << std::endl;
+	std::cout << "Z-new(" << x3_new << "," << y3_new << "," << z3_new << ")" << std::endl;
+
+
+
+	//getchar();
+}
+
+//=============================
+
+
+
+//19/9/2019
 void DrawOXarrow(CVector3d currentCoord, GLdouble D) {
 	GLdouble x1 = currentCoord.x;
 	GLdouble y1 = currentCoord.y;
@@ -632,6 +701,21 @@ void Draw3DcoordArrow(CVector3d current3DCoord, GLdouble D)
 	DrawOYarrow(current3DCoord, D-0.02);
 	DrawOZarrow(current3DCoord, D+0.02);
 }
+
+void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D)
+{
+	CVector3d temp;
+	temp.x = Xcoord;
+	temp.y = Ycoord;
+	temp.z = Zcoord;
+
+	DrawOXarrow(temp, D);
+	DrawOYarrow(temp, D - 0.02);
+	DrawOZarrow(temp, D + 0.02);
+}
+
+
+
 /*=================================================*/
 /*            Tetrahedron		                   */
 /*=================================================*/
