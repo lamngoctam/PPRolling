@@ -279,9 +279,9 @@ void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
 	W_.Set(0.0, 1.0, 0.0);
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
-	tempOldPoint.Set(oldPoint.x - 0.5, oldPoint.y - 0.5, oldPoint.z-0.5);
+	tempOldPoint.Set(oldPoint.x - 1.5, oldPoint.y - 1.5, oldPoint.z-0.5);
 
-	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+	std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
 
 	CMatrix Rod1(3, 3);
 	Rod1.SetZero();
@@ -323,7 +323,7 @@ void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
 
 	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 
-	newPoint.Set(temp_.x + 1.5, temp_.y + 0.5, temp_.z + 0.5);
+	newPoint.Set(temp_.x + 2.5, temp_.y + 1.5, temp_.z + 0.5);
 
 	////std::cout << std::endl;
 	//
@@ -361,7 +361,7 @@ void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
 	//rotation   	  
 	CVector3d W_(0.0, 0.0, 0.0);
 	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
-	W_.Set(1.0, 0.0, 0.0);
+	W_.Set(-1.0, 0.0, 0.0);
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
 	tempOldPoint.Set(oldPoint.x - 0.5, oldPoint.y - 0.5, oldPoint.z - 0.5);
@@ -438,6 +438,7 @@ void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
 
 	//getchar();
 }
+
 void RotationCoordSystem(
 	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
 	bool rightRolling,
@@ -455,6 +456,8 @@ void RotationCoordSystem(
 		RodriguesFunction_leftRolling(OYpoint, newOYpoint);
 		RodriguesFunction_leftRolling(OZpoint, newOZpoint);
 	}
+
+	neworigin.Print();
 }
 
 

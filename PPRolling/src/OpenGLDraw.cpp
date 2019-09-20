@@ -468,16 +468,14 @@ void RotationCoordSystem(
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
 //from cubePath.cpp
 
-void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow) {
+void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, 
+	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
+{
 
-	CVector3d OXpoint, OYpoint, OZpoint;
-	CVector3d neworigin, newOXpoint, newOYpoint, newOZpoint;
-
-
-
+	//Call Rodrigues Function to get the roated arrow coordinates
 	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initialOZarrow,
-		rightRolling,
-		neworigin, newOXpoint, newOYpoint, newOZpoint);
+		rightRolling, neworigin, newOXpoint, newOYpoint, newOZpoint);
 
 	GLdouble xnew = neworigin.x;
 	GLdouble ynew = neworigin.y;
@@ -499,13 +497,8 @@ void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, CVector3d 
 	glColor3f(0.0, 0.5, 0.5);Arrow(xnew, ynew, znew, x2_new, y2_new, z2_new, 0.02);
 	glColor3f(0.5, 0.0, 1.0);Arrow(xnew, ynew, znew, x3_new, y3_new, z3_new, 0.02);
 
-	std::cout << "X-ricurrentOriginin " << currentOrigin.x << " Y-currentOrigin " << currentOrigin.y << " Z-currentOrigin " << currentOrigin.z << std::endl;
-	std::cout << "X-xnew " << xnew << " Y-ynew " << ynew << " Z-znew " << znew << std::endl;
-
-
-	std::cout << "X-old(" << OXpoint.x << "," << OXpoint.y << "," << OXpoint.z << ")" << std::endl;
-	std::cout << "Y-old(" << OYpoint.x << "," << OYpoint.y << "," << OYpoint.z << ")" << std::endl;
-	std::cout << "Z-old(" << OZpoint.x << "," << OZpoint.y << "," << OZpoint.z << ")" << std::endl;
+	std::cout << "oldOrigin_X " << currentOrigin.x << " oldOrigin_Y " << currentOrigin.y << " oldOrigin__Z " << currentOrigin.z << std::endl;
+	std::cout << "newOrigin_X " << xnew << " newOrigin_Y " << ynew << " newOrigin_Z " << znew << std::endl;
 
 	std::cout << "X-new(" << x1_new << "," << y1_new << "," << z1_new << ")" << std::endl;
 	std::cout << "Y-new(" << x2_new << "," << y2_new << "," << z2_new << ")" << std::endl;

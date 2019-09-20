@@ -436,31 +436,6 @@ void OpenGLCallBack0(void) {
 int angleRotation(0);
 int numberCube(0);
 
-//20/09/2019
-void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow);
-
-void DrawOXarrow(CVector3d currentCoord, GLdouble D);
-void DrawOYarrow(CVector3d currentCoord, GLdouble D);
-void DrawOZarrow(CVector3d currentCoord, GLdouble D);
-
-void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoord, 
-	double Xdir, double Ydir, double Zdir, GLdouble D)
-{
-	CVector3d temp;
-	temp.x = Xcoord;
-	temp.y = Ycoord;
-	temp.z = Zcoord;
-
-	glTranslatef(Xcoord, Ycoord, Zcoord);
-	glRotatef(rotAngle, Xdir, Ydir, Zdir);
-
-	DrawOXarrow(temp, D);
-	DrawOYarrow(temp, D - 0.02);
-	DrawOZarrow(temp, D + 0.02);
-	
-	glTranslatef(-1.5, 0.5, 0.5);//const
-}
-
 void DrawCubeRolling()
 {
 	
@@ -552,6 +527,30 @@ void DrawCubeRolling()
 	
 }
 
+//19/09/2019
+void DrawOXarrow(CVector3d currentCoord, GLdouble D);
+void DrawOYarrow(CVector3d currentCoord, GLdouble D);
+void DrawOZarrow(CVector3d currentCoord, GLdouble D);
+
+void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoord,
+	double Xdir, double Ydir, double Zdir, GLdouble D)
+{
+	CVector3d temp;
+	temp.x = Xcoord;
+	temp.y = Ycoord;
+	temp.z = Zcoord;
+
+	glTranslatef(Xcoord, Ycoord, Zcoord);
+	glRotatef(rotAngle, Xdir, Ydir, Zdir);
+
+	DrawOXarrow(temp, D);
+	DrawOYarrow(temp, D - 0.02);
+	DrawOZarrow(temp, D + 0.02);
+
+	glTranslatef(-1.5, 0.5, 0.5);//const
+}
+
+
 void DrawCoordRolling() {
 	OctVoxel cb = newCube[numberCube];
 	//only for cube rolling right-up or left-up
@@ -615,6 +614,11 @@ void DrawCoordRolling() {
 }
 
 
+//20/09/2019
+void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin,
+	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+
 void DisplayAnimation(void) {
 	DisplayInit();GLSettings0.SetEyePosition();
 	GradientBackGround(BackTopColor, BackBotColor);
@@ -666,24 +670,88 @@ void DisplayAnimation(void) {
 
 	}
 
-	//20/9/2019
-
+	//19/9/2019
 	//Draw3DcoordArrow2(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, 0.03);
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x+0.5, cube.startPoint.y, cube.startPoint.z, 0.02);
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y + .5, cube.startPoint.z, 0.02);
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y, cube.startPoint.z + 0.5, 0.02);
 
+	//20/9/2019
 	DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
 	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
+	
+	bool rightRolling = true;
+	CVector3d OXArrow(1.0, 0.5, 0.5);
+	CVector3d OYArrow(0.5, 1.0, 0.5);
+	CVector3d OZArrow(0.5, 0.5, 1.0);
 
-	bool rightRolling = false;
-	CVector3d OXArrow; OXArrow.Set(1.0, 0.5, 0.5);
-	CVector3d OYArrow; OYArrow.Set(0.5, 1.0, 0.5);
-	CVector3d OZArrow; OZArrow.Set(0.5, 0.5, 1.0);
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
 
-	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow); //from OpenGLDraw.cpp
+	//DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
+	//						nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+	
 
-	   
+	CVector3d temp_1(1.5, 1.5, 0.5);
+
+	CVector3d OXArrow_1(1.5, 1.0, 0.5);
+	CVector3d OYArrow_1(1.5, 1.5, 0.0);
+	CVector3d OZArrow_1(2.0, 1.5, 0.5); 
+	DrawSeparatedArrows2(rightRolling, temp_1, OXArrow_1, OYArrow_1, OZArrow_1,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+
+	std::cout << "nextOrigin, nextOXArrow,nextOYArrow, nextOZArrow (" <<
+		    nextOrigin.x << " -" << nextOrigin.y << " --" << nextOrigin.z << ")--("
+		<< nextOXArrow.x << " -" << nextOXArrow.y << "-" << nextOXArrow.z << ")---("
+		<< nextOYArrow.x << " -" << nextOYArrow.y << "-" << nextOYArrow.z << ")--("
+		<< nextOZArrow.x << " -" << nextOZArrow.y << "-" << nextOZArrow.z << ")" << std::endl;
+
+	//getchar();
+	//
+
+
+//	CVector3d  nextOrigin2;
+//	CVector3d nextOXArrow2;
+//	CVector3d nextOYArrow2;
+//	CVector3d nextOZArrow2;
+//	rightRolling = false;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+//									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
+//
+//	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
+//		nextOrigin2.x << " " << nextOrigin2.y << " " << nextOrigin2.z << ")--(" 
+//		<< nextOXArrow2.x <<" "<< nextOXArrow2.y<<"-"<< nextOXArrow2.z <<")---("
+//		<< nextOYArrow2.x <<" "<< nextOYArrow2.y<<"-"<< nextOYArrow2.z << ")--("
+//		<< nextOZArrow2.x <<" "<< nextOZArrow2.y<<"-"<< nextOZArrow2.z << ")"<<std::endl;
+//
+//	
+//	CVector3d  nextOrigin3;
+//	CVector3d nextOXArrow3;
+//	CVector3d nextOYArrow3;
+//	CVector3d nextOZArrow3;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+//									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+//
+//	std::cout << "nextOrigin3, nextOXArrow3,nextOYArrow3, nextOZArrow3 (" <<
+//		    nextOrigin3.x << " " << nextOrigin3.y<<" " << nextOrigin3.z << ")--("
+//		<< nextOXArrow3.x <<" -"<< nextOXArrow3.y<<"-"<< nextOXArrow3.z <<")---("
+//		<< nextOYArrow3.x <<" -"<< nextOYArrow3.y<<"-"<< nextOYArrow3.z << ")--("
+//		<< nextOZArrow3.x <<" -"<< nextOZArrow3.y<<"-"<< nextOZArrow3.z << ")"<<std::endl;
+//
+//									   //getchar();
+//	/*CVector3d  nextOrigin4;
+//	CVector3d nextOXArrow4;
+//	CVector3d nextOYArrow4;
+//	CVector3d nextOZArrow4;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+//		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+//
+//*/
+
 	//AntTweakBar//
 	TwDraw();
 
