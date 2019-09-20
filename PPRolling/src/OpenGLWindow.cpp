@@ -434,7 +434,6 @@ void DrawCubeRolling()
 {
 	OctVoxel cb = newCube[numberCube];
 
-
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
