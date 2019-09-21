@@ -270,18 +270,20 @@ void cubeRotation(CVector3d axisRotation) {
 //---------------------------------------------------
 
 //using Rodriguess
-void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
+void RodriguesFunction_rightRolling(CVector3d originPoint,CVector3d tempPoint, CVector3d &newPoint) {
 	double Theta = (90 * M_PI / 180);
 
 	//rotation   	  
-	CVector3d W_(0.0, 0.0, 0.0);
+	CVector3d W_(0.0, 1.0, 0.0);
 	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
-	W_.Set(0.0, 1.0, 0.0);
+	//W_.Set(0.0, 1.0, 0.0);
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
-	tempOldPoint.Set(oldPoint.x - 1.5, oldPoint.y - 1.5, oldPoint.z-0.5);
+	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z- 0.5);
 
-	std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+	std::cout << "originPoint (" << originPoint.x << "," << originPoint.y << "," << originPoint.z <<")"<< std::endl;
+	std::cout << "tempPoint (" << tempPoint.x << "," << tempPoint.y << "," << tempPoint.z << ")" << std::endl;
+	std::cout << "tempOldPoint (" << tempOldPoint.x << "," << tempOldPoint.y << "," << tempOldPoint.z << ")" << std::endl;
 
 	CMatrix Rod1(3, 3);
 	Rod1.SetZero();
@@ -323,7 +325,10 @@ void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
 
 	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 
-	newPoint.Set(temp_.x + 2.5, temp_.y + 1.5, temp_.z + 0.5);
+	newPoint.Set(temp_.x + originPoint.x+1.0, temp_.y + originPoint.y, temp_.z + 0.5);
+
+	std::cout << "newPoint (" << newPoint.x << "," << newPoint.y << "," << newPoint.z << ")" << std::endl;
+
 
 	////std::cout << std::endl;
 	//
@@ -355,7 +360,7 @@ void RodriguesFunction_rightRolling(CVector3d oldPoint, CVector3d &newPoint) {
 }
 
 //using Rodriguess
-void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
+void RodriguesFunction_upRolling(CVector3d originPoint, CVector3d tempPoint, CVector3d &newPoint) {
 	double Theta = (90 * M_PI / 180);
 
 	//rotation   	  
@@ -364,7 +369,7 @@ void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
 	W_.Set(-1.0, 0.0, 0.0);
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
-	tempOldPoint.Set(oldPoint.x - 0.5, oldPoint.y - 0.5, oldPoint.z - 0.5);
+	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
 
 	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
 
@@ -408,7 +413,7 @@ void RodriguesFunction_leftRolling(CVector3d oldPoint, CVector3d &newPoint) {
 
 	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 
-	newPoint.Set(temp_.x +0.5, temp_.y + 1.5, temp_.z + 0.5);
+	newPoint.Set(temp_.x + originPoint.x, temp_.y + originPoint.y + 1.0, temp_.z + 0.5);
 
 	////std::cout << std::endl;
 	//
@@ -445,16 +450,16 @@ void RotationCoordSystem(
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint) {
 
 	if (rightRolling == true) {
-		RodriguesFunction_rightRolling(origin, neworigin);
-		RodriguesFunction_rightRolling(OXpoint, newOXpoint);
-		RodriguesFunction_rightRolling(OYpoint, newOYpoint);
-		RodriguesFunction_rightRolling(OZpoint, newOZpoint);
+		RodriguesFunction_rightRolling(origin, origin, neworigin);
+		RodriguesFunction_rightRolling(origin, OXpoint, newOXpoint);
+		RodriguesFunction_rightRolling(origin, OYpoint, newOYpoint);
+		RodriguesFunction_rightRolling(origin, OZpoint, newOZpoint);
 	}
 	else {
-		RodriguesFunction_leftRolling(origin, neworigin);
-		RodriguesFunction_leftRolling(OXpoint, newOXpoint);
-		RodriguesFunction_leftRolling(OYpoint, newOYpoint);
-		RodriguesFunction_leftRolling(OZpoint, newOZpoint);
+		RodriguesFunction_upRolling(origin, origin, neworigin);
+		RodriguesFunction_upRolling(origin, OXpoint, newOXpoint);
+		RodriguesFunction_upRolling(origin, OYpoint, newOYpoint);
+		RodriguesFunction_upRolling(origin, OZpoint, newOZpoint);
 	}
 
 	neworigin.Print();

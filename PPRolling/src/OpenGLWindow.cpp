@@ -690,67 +690,72 @@ void DisplayAnimation(void) {
 	CVector3d nextOYArrow;
 	CVector3d nextOZArrow;
 
-	//DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
-	//						nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
+	                     nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
 	
 
-	CVector3d temp_1(1.5, 1.5, 0.5);
+	CVector3d  nextOrigin2;
+	CVector3d nextOXArrow2;
+	CVector3d nextOYArrow2;
+	CVector3d nextOZArrow2;
+	rightRolling = false;
+	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
 
-	CVector3d OXArrow_1(1.5, 1.0, 0.5);
-	CVector3d OYArrow_1(1.5, 1.5, 0.0);
-	CVector3d OZArrow_1(2.0, 1.5, 0.5); 
-	DrawSeparatedArrows2(rightRolling, temp_1, OXArrow_1, OYArrow_1, OZArrow_1,
-		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
-
-	std::cout << "nextOrigin, nextOXArrow,nextOYArrow, nextOZArrow (" <<
-		    nextOrigin.x << " -" << nextOrigin.y << " --" << nextOrigin.z << ")--("
-		<< nextOXArrow.x << " -" << nextOXArrow.y << "-" << nextOXArrow.z << ")---("
-		<< nextOYArrow.x << " -" << nextOYArrow.y << "-" << nextOYArrow.z << ")--("
-		<< nextOZArrow.x << " -" << nextOZArrow.y << "-" << nextOZArrow.z << ")" << std::endl;
-
-	//getchar();
-	//
-
-
-//	CVector3d  nextOrigin2;
-//	CVector3d nextOXArrow2;
-//	CVector3d nextOYArrow2;
-//	CVector3d nextOZArrow2;
-//	rightRolling = false;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
-//									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
-//
 //	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
 //		nextOrigin2.x << " " << nextOrigin2.y << " " << nextOrigin2.z << ")--(" 
 //		<< nextOXArrow2.x <<" "<< nextOXArrow2.y<<"-"<< nextOXArrow2.z <<")---("
 //		<< nextOYArrow2.x <<" "<< nextOYArrow2.y<<"-"<< nextOYArrow2.z << ")--("
 //		<< nextOZArrow2.x <<" "<< nextOZArrow2.y<<"-"<< nextOZArrow2.z << ")"<<std::endl;
-//
-//	
-//	CVector3d  nextOrigin3;
-//	CVector3d nextOXArrow3;
-//	CVector3d nextOYArrow3;
-//	CVector3d nextOZArrow3;
-//	rightRolling = true;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
-//									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
-//
-//	std::cout << "nextOrigin3, nextOXArrow3,nextOYArrow3, nextOZArrow3 (" <<
-//		    nextOrigin3.x << " " << nextOrigin3.y<<" " << nextOrigin3.z << ")--("
-//		<< nextOXArrow3.x <<" -"<< nextOXArrow3.y<<"-"<< nextOXArrow3.z <<")---("
-//		<< nextOYArrow3.x <<" -"<< nextOYArrow3.y<<"-"<< nextOYArrow3.z << ")--("
-//		<< nextOZArrow3.x <<" -"<< nextOZArrow3.y<<"-"<< nextOZArrow3.z << ")"<<std::endl;
-//
-//									   //getchar();
-//	/*CVector3d  nextOrigin4;
-//	CVector3d nextOXArrow4;
-//	CVector3d nextOYArrow4;
-//	CVector3d nextOZArrow4;
-//	rightRolling = true;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
-//		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
-//
-//*/
+
+	
+	CVector3d  nextOrigin3;
+	CVector3d nextOXArrow3;
+	CVector3d nextOYArrow3;
+	CVector3d nextOZArrow3;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+
+	CVector3d  nextOrigin4;
+	CVector3d nextOXArrow4;
+	CVector3d nextOYArrow4;
+	CVector3d nextOZArrow4;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+
+
+	CVector3d  nextOrigin5;
+	CVector3d nextOXArrow5;
+	CVector3d nextOYArrow5;
+	CVector3d nextOZArrow5;
+	rightRolling = false;
+	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+									   nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+
+	CVector3d  nextOrigin6;
+	CVector3d nextOXArrow6;
+	CVector3d nextOYArrow6;
+	CVector3d nextOZArrow6;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+									   nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
+	CVector3d  nextOrigin7;
+	CVector3d nextOXArrow7;
+	CVector3d nextOYArrow7;
+	CVector3d nextOZArrow7;
+	rightRolling = false;
+	DrawSeparatedArrows2(rightRolling, nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
+
+	CVector3d  nextOrigin8;
+	CVector3d nextOXArrow8;
+	CVector3d nextOYArrow8;
+	CVector3d nextOZArrow8;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+		nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
 
 	//AntTweakBar//
 	TwDraw();
