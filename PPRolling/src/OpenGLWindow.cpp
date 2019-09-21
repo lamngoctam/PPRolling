@@ -466,7 +466,7 @@ void DrawCubeRolling()
 				}
 
 				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				//glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
 				glColor3f(1.5, 1.0, -1.0); glutSolidSphere(0.1,100,100); //center of cube
 				//display object from glPushMatrix();
 				glPopMatrix();
@@ -486,7 +486,7 @@ void DrawCubeRolling()
 
 				//draw cube
 				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
-				//glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
+				glColor3f(1.5, 1.5, -1.5); glutWireCube(1);
 				glColor3f(1.5, 1, -1); glutSolidSphere(0.1, 100, 100); //center of cube
 
 				glPopMatrix();
@@ -550,6 +550,10 @@ void Draw3DcoordArrowGL(int rotAngle, double Xcoord, double Ycoord, double Zcoor
 	glTranslatef(-1.5, 0.5, 0.5);//const
 }
 
+//20/09/2019
+void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin,
+	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
 
 void DrawCoordRolling() {
 	OctVoxel cb = newCube[numberCube];
@@ -567,6 +571,15 @@ void DrawCoordRolling() {
 	//	glPopMatrix();
 	//}
 
+	CVector3d OXArrow(1.0, 0.5, 0.5);
+	CVector3d OYArrow(0.5, 1.0, 0.5);
+	CVector3d OZArrow(0.5, 0.5, 1.0);
+
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
+
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
@@ -576,25 +589,31 @@ void DrawCoordRolling() {
 
 			if (newCube[a].getRightRolling()) {
 				
-				if (dirRightUpRolling == true) {
-					//for Right-Up
-					//draw 3D coords  --- 19/9/2019
-					glColor3f(1,0.5,1);
-					Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
-						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-				}
-				else {
-					//left-up
-					glColor3f(1,0.5,1);
-					Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
-						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-				}
+				//if (dirRightUpRolling == true) {
+				//	//for Right-Up
+				//	//draw 3D coords  --- 19/9/2019
+				//	glColor3f(1,0.5,1);
+				//	Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
+				//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				//}
+				//else {
+				//	//left-up
+				//	glColor3f(1,0.5,1);
+				//	Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
+				//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				//}
+
+				DrawSeparatedArrows2(newCube[a].getRightRolling(), nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
 			}
 			else {
 				//rolling up				
-				glColor3f(1,0.5,1);
+				/*glColor3f(1,0.5,1);
 				Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0,
-					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);			
+					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);*/
+				DrawSeparatedArrows2(newCube[a].getRightRolling(), nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
+
 			}
 
 			glPopMatrix();
@@ -614,10 +633,7 @@ void DrawCoordRolling() {
 }
 
 
-//20/09/2019
-void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin,
-	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
-	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+
 
 void DisplayAnimation(void) {
 	DisplayInit();GLSettings0.SetEyePosition();
@@ -663,9 +679,9 @@ void DisplayAnimation(void) {
 #pragma omp parallel sections
 		{
 #pragma omp section
-			//DrawCubeRolling();
+			DrawCubeRolling();
 #pragma omp section
-			//DrawCoordRolling();
+			DrawCoordRolling();
 		}
 
 	}
@@ -676,87 +692,87 @@ void DisplayAnimation(void) {
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y + .5, cube.startPoint.z, 0.02);
 	//Arrow(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z, cube.startPoint.x, cube.startPoint.y, cube.startPoint.z + 0.5, 0.02);
 
-	//20/9/2019
-	DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
-	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
-	
-	bool rightRolling = true;
-	CVector3d OXArrow(1.0, 0.5, 0.5);
-	CVector3d OYArrow(0.5, 1.0, 0.5);
-	CVector3d OZArrow(0.5, 0.5, 1.0);
-
-	CVector3d  nextOrigin;
-	CVector3d nextOXArrow;
-	CVector3d nextOYArrow;
-	CVector3d nextOZArrow;
-
-	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
-	                     nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
-	
-
-	CVector3d  nextOrigin2;
-	CVector3d nextOXArrow2;
-	CVector3d nextOYArrow2;
-	CVector3d nextOZArrow2;
-	rightRolling = false;
-	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
-									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
-
-//	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
+//	//20/9/2019
+//	DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
+//	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
+//	
+//	bool rightRolling = true;
+//	CVector3d OXArrow(1.0, 0.5, 0.5);
+//	CVector3d OYArrow(0.5, 1.0, 0.5);
+//	CVector3d OZArrow(0.5, 0.5, 1.0);
+//
+//	CVector3d  nextOrigin;
+//	CVector3d nextOXArrow;
+//	CVector3d nextOYArrow;
+//	CVector3d nextOZArrow;
+//
+//	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
+//	                     nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+//	
+//
+//	CVector3d  nextOrigin2;
+//	CVector3d nextOXArrow2;
+//	CVector3d nextOYArrow2;
+//	CVector3d nextOZArrow2;
+//	rightRolling = false;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+//									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
+//
+////	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
 //		nextOrigin2.x << " " << nextOrigin2.y << " " << nextOrigin2.z << ")--(" 
 //		<< nextOXArrow2.x <<" "<< nextOXArrow2.y<<"-"<< nextOXArrow2.z <<")---("
 //		<< nextOYArrow2.x <<" "<< nextOYArrow2.y<<"-"<< nextOYArrow2.z << ")--("
 //		<< nextOZArrow2.x <<" "<< nextOZArrow2.y<<"-"<< nextOZArrow2.z << ")"<<std::endl;
-
-	
-	CVector3d  nextOrigin3;
-	CVector3d nextOXArrow3;
-	CVector3d nextOYArrow3;
-	CVector3d nextOZArrow3;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
-									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
-
-	CVector3d  nextOrigin4;
-	CVector3d nextOXArrow4;
-	CVector3d nextOYArrow4;
-	CVector3d nextOZArrow4;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
-		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
-
-
-	CVector3d  nextOrigin5;
-	CVector3d nextOXArrow5;
-	CVector3d nextOYArrow5;
-	CVector3d nextOZArrow5;
-	rightRolling = false;
-	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
-									   nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
-
-	CVector3d  nextOrigin6;
-	CVector3d nextOXArrow6;
-	CVector3d nextOYArrow6;
-	CVector3d nextOZArrow6;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
-									   nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
-	CVector3d  nextOrigin7;
-	CVector3d nextOXArrow7;
-	CVector3d nextOYArrow7;
-	CVector3d nextOZArrow7;
-	rightRolling = false;
-	DrawSeparatedArrows2(rightRolling, nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
-		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
-
-	CVector3d  nextOrigin8;
-	CVector3d nextOXArrow8;
-	CVector3d nextOYArrow8;
-	CVector3d nextOZArrow8;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
-		nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
-
+//
+//	
+//	CVector3d  nextOrigin3;
+//	CVector3d nextOXArrow3;
+//	CVector3d nextOYArrow3;
+//	CVector3d nextOZArrow3;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+//									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+//
+//	CVector3d  nextOrigin4;
+//	CVector3d nextOXArrow4;
+//	CVector3d nextOYArrow4;
+//	CVector3d nextOZArrow4;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+//		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+//
+//
+//	CVector3d  nextOrigin5;
+//	CVector3d nextOXArrow5;
+//	CVector3d nextOYArrow5;
+//	CVector3d nextOZArrow5;
+//	rightRolling = false;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+//									   nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+//
+//	CVector3d  nextOrigin6;
+//	CVector3d nextOXArrow6;
+//	CVector3d nextOYArrow6;
+//	CVector3d nextOZArrow6;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+//									   nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
+//	CVector3d  nextOrigin7;
+//	CVector3d nextOXArrow7;
+//	CVector3d nextOYArrow7;
+//	CVector3d nextOZArrow7;
+//	rightRolling = false;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+//		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
+//
+//	CVector3d  nextOrigin8;
+//	CVector3d nextOXArrow8;
+//	CVector3d nextOYArrow8;
+//	CVector3d nextOZArrow8;
+//	rightRolling = true;
+//	DrawSeparatedArrows2(rightRolling, nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+//		nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
+//
 	//AntTweakBar//
 	TwDraw();
 
