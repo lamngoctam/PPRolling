@@ -570,16 +570,11 @@ void DrawCoordRolling() {
 	//
 	//	glPopMatrix();
 	//}
-
+	CVector3d oldOrigin;
 	CVector3d OXArrow(1.0, 0.5, 0.5);
 	CVector3d OYArrow(0.5, 1.0, 0.5);
 	CVector3d OZArrow(0.5, 0.5, 1.0);
-
-	CVector3d  nextOrigin;
-	CVector3d nextOXArrow;
-	CVector3d nextOYArrow;
-	CVector3d nextOZArrow;
-
+	
 	for (int a = 0; a < cubeNum; a++)
 	{
 		if (newCube[a].getSelected())
@@ -602,8 +597,18 @@ void DrawCoordRolling() {
 				//	Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
 				//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
 				//}
+				CVector3d  nextOrigin(0.0,0.0,0.0);
+				CVector3d nextOXArrow(0.0,0.0,0.0);
+				CVector3d nextOYArrow(0.0,0.0,0.0);
+				CVector3d nextOZArrow(0.0,0.0,0.0);
 
-				DrawSeparatedArrows2(newCube[a].getRightRolling(), nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				//glRotatef(angleRotation, 0.0, 1.0, 0.0);
+				glTranslatef(-0.5, 0.5, 0.5);//const
+
+				oldOrigin.Set(cb.getCoordX(), cb.getCoordY(), 0.0);
+				DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
 					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
 			}
 			else {
@@ -611,7 +616,17 @@ void DrawCoordRolling() {
 				/*glColor3f(1,0.5,1);
 				Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0,
 					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);*/
-				DrawSeparatedArrows2(newCube[a].getRightRolling(), nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+				CVector3d  nextOrigin;
+				CVector3d nextOXArrow;
+				CVector3d nextOYArrow;
+				CVector3d nextOZArrow;
+
+				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
+				glTranslatef(1.5, -0.5, 0.5); //const
+
+				DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
 					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
 
 			}

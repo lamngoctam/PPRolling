@@ -270,7 +270,7 @@ void cubeRotation(CVector3d axisRotation) {
 //---------------------------------------------------
 
 //using Rodriguess
-void RodriguesFunction_rightRolling(CVector3d originPoint,CVector3d tempPoint, CVector3d &newPoint) {
+void RodriguesFunction_rightRolling(CVector3d originPoint, CVector3d tempPoint, CVector3d &newPoint) {
 	double Theta = (90 * M_PI / 180);
 
 	//rotation   	  
@@ -279,9 +279,9 @@ void RodriguesFunction_rightRolling(CVector3d originPoint,CVector3d tempPoint, C
 	//W_.Set(0.0, 1.0, 0.0);
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
-	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z- 0.5);
+	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
 
-	std::cout << "originPoint (" << originPoint.x << "," << originPoint.y << "," << originPoint.z <<")"<< std::endl;
+	std::cout << "originPoint (" << originPoint.x << "," << originPoint.y << "," << originPoint.z << ")" << std::endl;
 	std::cout << "tempPoint (" << tempPoint.x << "," << tempPoint.y << "," << tempPoint.z << ")" << std::endl;
 	std::cout << "tempOldPoint (" << tempOldPoint.x << "," << tempOldPoint.y << "," << tempOldPoint.z << ")" << std::endl;
 
@@ -300,23 +300,6 @@ void RodriguesFunction_rightRolling(CVector3d originPoint,CVector3d tempPoint, C
 	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
 	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
 
-	//Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
-	//Rod1.At(1, 0) = -W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
-	//Rod1.At(2, 0) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-	//
-	//Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) + W_.z*sin(Theta);
-	//Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
-	//Rod1.At(2, 1) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-	//
-	//Rod1.At(0, 2) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-	//Rod1.At(1, 2) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-	//Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
-	//--------------------------------------------------------------------
-
-	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
-	//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
-	//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
-
 	CVector3d temp_(0.0, 0.0, 0.0);
 	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
 	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
@@ -325,7 +308,8 @@ void RodriguesFunction_rightRolling(CVector3d originPoint,CVector3d tempPoint, C
 
 	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 
-	newPoint.Set(temp_.x + originPoint.x+1.0, temp_.y + originPoint.y, temp_.z + 0.5);
+	newPoint.Set(temp_.x + originPoint.x + 1.0, temp_.y + originPoint.y, temp_.z + 0.5);
+	// +1 is a distance from old-new coordinates after translating to (0,0,0) then rolling then translating back to old
 
 	std::cout << "newPoint (" << newPoint.x << "," << newPoint.y << "," << newPoint.z << ")" << std::endl;
 
@@ -388,22 +372,9 @@ void RodriguesFunction_upRolling(CVector3d originPoint, CVector3d tempPoint, CVe
 	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
 	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
 
-	//Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
-	//Rod1.At(1, 0) = -W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
-	//Rod1.At(2, 0) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-	//
-	//Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) + W_.z*sin(Theta);
-	//Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
-	//Rod1.At(2, 1) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-	//
-	//Rod1.At(0, 2) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
-	//Rod1.At(1, 2) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
-	//Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
-	//--------------------------------------------------------------------
-
 	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
-	//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
-	//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
+		//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+		//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
 
 	CVector3d temp_(0.0, 0.0, 0.0);
 	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
@@ -414,6 +385,7 @@ void RodriguesFunction_upRolling(CVector3d originPoint, CVector3d tempPoint, CVe
 	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
 
 	newPoint.Set(temp_.x + originPoint.x, temp_.y + originPoint.y + 1.0, temp_.z + 0.5);
+	// +1 is a distance from old-new coordinates after translating to (0,0,0) then rolling then translating back to old
 
 	////std::cout << std::endl;
 	//

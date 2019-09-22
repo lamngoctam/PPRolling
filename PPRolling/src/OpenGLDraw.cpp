@@ -469,12 +469,12 @@ void RotationCoordSystem(
 //from cubePath.cpp
 
 void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin, 
-	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
+	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
 {
 
 	//Call Rodrigues Function to get the roated arrow coordinates
-	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initialOZarrow,
+	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow,
 		rightRolling, neworigin, newOXpoint, newOYpoint, newOZpoint);
 
 	GLdouble xnew = neworigin.x;
