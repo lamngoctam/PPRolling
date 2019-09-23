@@ -479,10 +479,10 @@ void DrawCubeRolling()
 				
 				glPushMatrix();
 				//glTranslatef(cubeNew[a].getCoordX() - 1.5, cubeNew[a].getCoordY() - 0.5, 0.0);
-				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
 				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
 				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
-				glTranslatef(1.5, -0.5, 0.5); //const
+				glTranslatef(0.5, -0.5, 0.5); //const
 
 				//draw cube
 				//glColor3f(0.5, 0.5, 1.0); glutSolidCube(1);
@@ -555,7 +555,7 @@ void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin,
 	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initialOZarrow,
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
 
-void DrawCoordRolling() {
+void DrawCoordRolling1() {
 	OctVoxel cb = newCube[numberCube];
 	//only for cube rolling right-up or left-up
 
@@ -570,10 +570,6 @@ void DrawCoordRolling() {
 	//
 	//	glPopMatrix();
 	//}
-	CVector3d oldOrigin;
-	CVector3d OXArrow(1.0, 0.5, 0.5);
-	CVector3d OYArrow(0.5, 1.0, 0.5);
-	CVector3d OZArrow(0.5, 0.5, 1.0);
 	
 	for (int a = 0; a < cubeNum; a++)
 	{
@@ -584,51 +580,27 @@ void DrawCoordRolling() {
 
 			if (newCube[a].getRightRolling()) {
 				
-				//if (dirRightUpRolling == true) {
-				//	//for Right-Up
-				//	//draw 3D coords  --- 19/9/2019
-				//	glColor3f(1,0.5,1);
-				//	Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
-				//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-				//}
-				//else {
-				//	//left-up
-				//	glColor3f(1,0.5,1);
-				//	Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
-				//		cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
-				//}
-				CVector3d  nextOrigin(0.0,0.0,0.0);
-				CVector3d nextOXArrow(0.0,0.0,0.0);
-				CVector3d nextOYArrow(0.0,0.0,0.0);
-				CVector3d nextOZArrow(0.0,0.0,0.0);
-
-				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
-				glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
-				//glRotatef(angleRotation, 0.0, 1.0, 0.0);
-				glTranslatef(-0.5, 0.5, 0.5);//const
-
-				oldOrigin.Set(cb.getCoordX(), cb.getCoordY(), 0.0);
-				DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
-					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
+				if (dirRightUpRolling == true) {
+					//for Right-Up
+					//draw 3D coords  --- 19/9/2019
+					glColor3f(1,0.5,1);
+					Draw3DcoordArrowGL(angleRotation, cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0, 
+						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				}
+				else {
+					//left-up
+					glColor3f(1,0.5,1);
+					Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() + 0.5, cb.getCoordY() - 0.5, 0.0,
+						cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				}
+				
 			}
 			else {
 				//rolling up				
-				/*glColor3f(1,0.5,1);
+				glColor3f(1,0.5,1);
 				Draw3DcoordArrowGL(-angleRotation, cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0,
-					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);*/
-				CVector3d  nextOrigin;
-				CVector3d nextOXArrow;
-				CVector3d nextOYArrow;
-				CVector3d nextOZArrow;
-
-				glTranslatef(cb.getCoordX() - 1.5, cb.getCoordY() - 0.5, 0.0);
-				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
-				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
-				glTranslatef(1.5, -0.5, 0.5); //const
-
-				DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
-					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
-
+					cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ(), 0.02);
+				
 			}
 
 			glPopMatrix();
@@ -647,6 +619,86 @@ void DrawCoordRolling() {
 	}
 }
 
+void DrawCoordRolling2() {
+	OctVoxel cb = newCube[numberCube];
+	//only for cube rolling right-up or left-up
+
+	CVector3d oldOrigin;
+	CVector3d OXArrow(1.0, 0.5, 0.5);
+	CVector3d OYArrow(0.5, 1.0, 0.5);
+	CVector3d OZArrow(0.5, 0.5, 1.0);
+
+	for (int a = 0; a < cubeNum; a++)
+	{
+		if (newCube[a].getSelected())
+		{
+			glPushMatrix();
+			glLineWidth(1.9f);
+
+			if (newCube[a].getRightRolling()) {
+				
+				CVector3d  nextOrigin(0.0, 0.0, 0.0);
+				CVector3d nextOXArrow(0.0, 0.0, 0.0);
+				CVector3d nextOYArrow(0.0, 0.0, 0.0);
+				CVector3d nextOZArrow(0.0, 0.0, 0.0);
+
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				glTranslatef(-0.5, 0.5, 0.5);//const
+
+				oldOrigin.Set(newCube[a].coordX, newCube[a].coordY, newCube[a].coordZ);
+				//DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
+				//	nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);
+
+				//glColor3f(0.5, 0.0, 1.0);Arrow(cb.getCoordX(), cb.getCoordY(), cb.getCoordZ(), cb.getCoordX()+0.5, cb.getCoordY(), cb.getCoordZ(), 0.02);
+				//glColor3f(1.0, 0.0, 0.0);Arrow(cb.getCoordX(), cb.getCoordY(), cb.getCoordZ(), cb.getCoordX(), cb.getCoordY()+0.5, cb.getCoordZ(), 0.02);
+				//glColor3f(0.0, 0.5, 0.5);Arrow(cb.getCoordX(), cb.getCoordY(), cb.getCoordZ(), cb.getCoordX(), cb.getCoordY(), cb.getCoordZ()+0.5, 0.02);
+
+				glColor3f(1.0, 0.0, 0.0);Arrow(0, 0, 0, 0.5, 0, 0, 0.02);
+				glColor3f(0.0, 0.5, 0.5);Arrow(0, 0, 0, 0, 0.5, 0, 0.02);
+				glColor3f(0.5, 0.0, 1.0);Arrow(0, 0, 0, 0, 0, 0.5, 0.02);
+			}
+			else {		//rolling up				
+		
+				CVector3d  nextOrigin;
+				CVector3d nextOXArrow;
+				CVector3d nextOYArrow;
+				CVector3d nextOZArrow;
+
+				glTranslatef(cb.getCoordX() - 0.5, cb.getCoordY() - 0.5, 0.0);
+				glRotatef(-angleRotation, cb.getDirectionX(), cb.getDirectionY(), cb.getDirectionZ());
+				//glRotatef(-angleRotation, 1.0, 0.0, 0.0);
+				glTranslatef(0.5, -0.5, 0.5); //const
+
+				/*oldOrigin.Set(cb.getCoordX(), cb.getCoordY(), 0.5);
+				DrawSeparatedArrows2(newCube[a].getRightRolling(), oldOrigin, OXArrow, OYArrow, OZArrow,
+					nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow);*/
+
+
+				glColor3f(1.0, 0.0, 0.0);Arrow(0, 0, 0, 0.5, 0, 0, 0.02);
+				glColor3f(0.0, 0.5, 0.5);Arrow(0, 0, 0, 0, 0.5, 0, 0.02);
+				glColor3f(0.5, 0.0, 1.0);Arrow(0, 0, 0, 0, 0, -0.5, 0.02);
+			}
+
+			glPopMatrix();
+
+			
+		}
+		std::cout << "coord X y z (" << newCube[a].coordX << "," << newCube[a].coordY << "," << newCube[a].coordZ << std::endl;
+		//getchar();
+	}
+
+	if (angleRotation >= 90)
+	{
+		newCube[numberCube].setSelected(false); //cb will stop
+		numberCube += 1;						//move to next cb
+
+		numberCube %= cubeNum;
+		newCube[numberCube].setSelected(true);
+		angleRotation = 0;
+
+	}
+}
 
 
 
@@ -696,7 +748,7 @@ void DisplayAnimation(void) {
 #pragma omp section
 			DrawCubeRolling();
 #pragma omp section
-			DrawCoordRolling();
+			DrawCoordRolling2();
 		}
 
 	}
@@ -711,60 +763,60 @@ void DisplayAnimation(void) {
 //	DrawSeparatedArrows(cube.startPoint.x, cube.startPoint.y, cube.startPoint.z);
 //	//DrawSeparatedArrows(cube.cubeCenter[0].x, cube.cubeCenter[0].y, cube.cubeCenter[0].z);
 //	
-//	bool rightRolling = true;
-//	CVector3d OXArrow(1.0, 0.5, 0.5);
-//	CVector3d OYArrow(0.5, 1.0, 0.5);
-//	CVector3d OZArrow(0.5, 0.5, 1.0);
-//
-//	CVector3d  nextOrigin;
-//	CVector3d nextOXArrow;
-//	CVector3d nextOYArrow;
-//	CVector3d nextOZArrow;
-//
-//	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
-//	                     nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
-//	
-//
-//	CVector3d  nextOrigin2;
-//	CVector3d nextOXArrow2;
-//	CVector3d nextOYArrow2;
-//	CVector3d nextOZArrow2;
-//	rightRolling = false;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
-//									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
-//
-////	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
+	bool rightRolling = true;
+	CVector3d OXArrow(1.0, 0.5, 0.5);
+	CVector3d OYArrow(0.5, 1.0, 0.5);
+	CVector3d OZArrow(0.5, 0.5, 1.0);
+
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
+
+	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
+	                     nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+	
+
+	CVector3d  nextOrigin2;
+	CVector3d nextOXArrow2;
+	CVector3d nextOYArrow2;
+	CVector3d nextOZArrow2;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+									   nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2);
+
+//	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
 //		nextOrigin2.x << " " << nextOrigin2.y << " " << nextOrigin2.z << ")--(" 
 //		<< nextOXArrow2.x <<" "<< nextOXArrow2.y<<"-"<< nextOXArrow2.z <<")---("
 //		<< nextOYArrow2.x <<" "<< nextOYArrow2.y<<"-"<< nextOYArrow2.z << ")--("
 //		<< nextOZArrow2.x <<" "<< nextOZArrow2.y<<"-"<< nextOZArrow2.z << ")"<<std::endl;
-//
-//	
-//	CVector3d  nextOrigin3;
-//	CVector3d nextOXArrow3;
-//	CVector3d nextOYArrow3;
-//	CVector3d nextOZArrow3;
-//	rightRolling = true;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
-//									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
-//
-//	CVector3d  nextOrigin4;
-//	CVector3d nextOXArrow4;
-//	CVector3d nextOYArrow4;
-//	CVector3d nextOZArrow4;
-//	rightRolling = true;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
-//		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
-//
-//
-//	CVector3d  nextOrigin5;
-//	CVector3d nextOXArrow5;
-//	CVector3d nextOYArrow5;
-//	CVector3d nextOZArrow5;
-//	rightRolling = false;
-//	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
-//									   nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
-//
+
+	
+	CVector3d  nextOrigin3;
+	CVector3d nextOXArrow3;
+	CVector3d nextOYArrow3;
+	CVector3d nextOZArrow3;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+									   nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+
+	CVector3d  nextOrigin4;
+	CVector3d nextOXArrow4;
+	CVector3d nextOYArrow4;
+	CVector3d nextOZArrow4;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+		                               nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+
+
+	CVector3d  nextOrigin5;
+	CVector3d nextOXArrow5;
+	CVector3d nextOYArrow5;
+	CVector3d nextOZArrow5;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+									   nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+
 //	CVector3d  nextOrigin6;
 //	CVector3d nextOXArrow6;
 //	CVector3d nextOYArrow6;
@@ -802,7 +854,7 @@ void OpenGLIdle_Cube(void) {
 
 void time_callback_Cube(int) {
 	glutPostRedisplay();
-	glutTimerFunc(10, time_callback_Cube, 0);
+	glutTimerFunc(70, time_callback_Cube, 0);
 
 	angleRotation += 1;
 

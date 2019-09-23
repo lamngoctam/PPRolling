@@ -25,7 +25,8 @@ int CubePathPlanning(int argc, char* argv[]) {
 
 	//initialize the Start and Goal point on grid
 	cube.startPoint.Set(0.5, 0.5, 0.5);
-	cube.goalPoint.Set(5.5, 3.5, 0.5);
+	//cube.goalPoint.Set(5.5, 3.5, 0.5);
+	cube.goalPoint.Set(4.5, 0.5, 0.5);
 	double s_x = cube.startPoint.x;	double s_y = cube.startPoint.y;
 	double g_x = cube.goalPoint.x;	double g_y = cube.goalPoint.y;
 

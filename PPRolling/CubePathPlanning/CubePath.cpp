@@ -44,12 +44,15 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 			cube.cubeCenter.push_back(nextUp); // saving cubeCenter			
 
 			cube.rotlabel.push_back(uppp);
+
+			std::cout << "upppp" << std::endl;
 		}
 		else { //choose Right
 			tempPoint = nextRight;
 			cube.cubeCenter.push_back(nextRight); // saving cubeCenter
 
 			cube.rotlabel.push_back(righttt);
+			std::cout << "rigth" << std::endl;
 		}
 		count++;
 	}
@@ -97,7 +100,7 @@ void findingCubeCenter_rightUp(int &cubeNum) {
 		<< cube.cubeCenter.size() << " -in findingCubeCenter" << std::endl;
 
 
-
+	getchar();
 }
 
 
@@ -280,6 +283,7 @@ void RodriguesFunction_rightRolling(CVector3d originPoint, CVector3d tempPoint, 
 
 	CVector3d tempOldPoint(0.0, 0.0, 0.0);
 	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+	//tempOldPoint.Set(tempPoint.x -.5, tempPoint.y -.5, tempPoint.z );
 
 	std::cout << "originPoint (" << originPoint.x << "," << originPoint.y << "," << originPoint.z << ")" << std::endl;
 	std::cout << "tempPoint (" << tempPoint.x << "," << tempPoint.y << "," << tempPoint.z << ")" << std::endl;
