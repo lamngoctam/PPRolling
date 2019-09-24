@@ -420,9 +420,102 @@ void RodriguesFunction_upRolling(CVector3d originPoint, CVector3d tempPoint, CVe
 	//getchar();
 }
 
+void RodriguesFunction_leftRolling(CVector3d originPoint, CVector3d tempPoint, CVector3d &newPoint) {
+	double Theta = (90 * M_PI / 180);
+
+	//rotation   	  
+	CVector3d W_(0.0, 0.0, 0.0);
+	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	W_.Set(0.0, -1.0, 0.0);
+
+	CVector3d tempOldPoint(0.0, 0.0, 0.0);
+	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+
+	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+
+	CMatrix Rod1(3, 3);
+	Rod1.SetZero();
+
+	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
+	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+
+	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
+		//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+		//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
+
+	CVector3d temp_(0.0, 0.0, 0.0);
+	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
+	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
+	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
+
+
+	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
+
+	newPoint.Set(temp_.x - originPoint.x, temp_.y + originPoint.y, temp_.z + 0.5);
+	// +1 is a distance from old-new coordinates after translating to (0,0,0) then rolling then translating back to old
+
+	//getchar();
+}
+
+void RodriguesFunction_downRolling(CVector3d originPoint, CVector3d tempPoint, CVector3d &newPoint) {
+	double Theta = (90 * M_PI / 180);
+
+	//rotation   	  
+	CVector3d W_(0.0, 0.0, 0.0);
+	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	W_.Set(1.0, 0.0, 0.0);
+
+	CVector3d tempOldPoint(0.0, 0.0, 0.0);
+	tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+
+	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+
+	CMatrix Rod1(3, 3);
+	Rod1.SetZero();
+
+	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
+	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+
+	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
+		//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+		//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
+
+	CVector3d temp_(0.0, 0.0, 0.0);
+	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
+	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
+	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
+
+
+	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
+
+	newPoint.Set(temp_.x + originPoint.x, temp_.y - originPoint.y, temp_.z + 0.5);
+	// +1 is a distance from old-new coordinates after translating to (0,0,0) then rolling then translating back to old
+
+	//getchar();
+}
+
+
 void RotationCoordSystem(
-	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
-	bool rightRolling,
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,	
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint) {
 
 	if (rightRolling == true) {
@@ -431,14 +524,110 @@ void RotationCoordSystem(
 		RodriguesFunction_rightRolling(origin, OYpoint, newOYpoint);
 		RodriguesFunction_rightRolling(origin, OZpoint, newOZpoint);
 	}
-	else {
+	else if(leftRolling == true) {
+		RodriguesFunction_leftRolling(origin, origin, neworigin);
+		RodriguesFunction_leftRolling(origin, OXpoint, newOXpoint);
+		RodriguesFunction_leftRolling(origin, OYpoint, newOYpoint);
+		RodriguesFunction_leftRolling(origin, OZpoint, newOZpoint);
+	}
+	else if (upRolling == true) {
 		RodriguesFunction_upRolling(origin, origin, neworigin);
 		RodriguesFunction_upRolling(origin, OXpoint, newOXpoint);
 		RodriguesFunction_upRolling(origin, OYpoint, newOYpoint);
 		RodriguesFunction_upRolling(origin, OZpoint, newOZpoint);
 	}
+	else if(downRolling == true){
+		RodriguesFunction_downRolling(origin, origin, neworigin);
+		RodriguesFunction_downRolling(origin, OXpoint, newOXpoint);
+		RodriguesFunction_downRolling(origin, OYpoint, newOYpoint);
+		RodriguesFunction_downRolling(origin, OZpoint, newOZpoint);
+	}
 
 	neworigin.Print();
 }
 
+// 24/09/2019
+void Rodrigues_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d originPoint, CVector3d tempPoint, CVector3d &newPoint) {
+	double Theta = (90 * M_PI / 180);
+
+	//rotation   	  
+	CVector3d W_(0.0, 0.0, 0.0);
+	//W_.Set(axisRotation.x, axisRotation.y, axisRotation.z);
+	CVector3d tempOldPoint(0.0, 0.0, 0.0);
+
+	if (rightRolling == true) {
+		W_.Set(0.0, 1.0, 0.0);
+		tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+	}
+	else if (leftRolling == true) {
+		W_.Set(0.0, -1.0, 0.0);
+		tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+	}
+	else if (upRolling == true) {
+		W_.Set(-1.0, 0.0, 0.0);
+		tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+	}
+	else if (downRolling == true) {
+		W_.Set(1.0, 0.0, 0.0);
+		tempOldPoint.Set(tempPoint.x - originPoint.x, tempPoint.y - originPoint.y, tempPoint.z - 0.5);
+	}
+	//std::cout << "tempOldPoint" << tempOldPoint.x << " " << tempOldPoint.y << "  " << tempOldPoint.z << std::endl;
+
+	CMatrix Rod1(3, 3);
+	Rod1.SetZero();
+
+	Rod1.At(0, 0) = cos(Theta) + W_.x*W_.x*(1 - cos(Theta));
+	Rod1.At(1, 0) = W_.z*sin(Theta) + W_.x*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 0) = -W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 1) = W_.x*W_.y*(1 - cos(Theta)) - W_.z*sin(Theta);
+	Rod1.At(1, 1) = cos(Theta) + W_.y*W_.y*(1 - cos(Theta));
+	Rod1.At(2, 1) = W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+
+	Rod1.At(0, 2) = W_.y*sin(Theta) + W_.x*W_.z*(1 - cos(Theta));
+	Rod1.At(1, 2) = -W_.x*sin(Theta) + W_.y*W_.z*(1 - cos(Theta));
+	Rod1.At(2, 2) = cos(Theta) + W_.z*W_.z*(1 - cos(Theta));
+
+	//std::cout << Rod1.At(0, 0) << "-" << Rod1.At(1, 0) << "-" << Rod1.At(2, 0) << std::endl;
+		//std::cout << Rod1.At(0, 1) << "-" << Rod1.At(1, 1) << "-" << Rod1.At(2, 1) << std::endl;
+		//std::cout << Rod1.At(0, 2) << "-" << Rod1.At(1, 2) << "-" << Rod1.At(2, 2) << std::endl;
+
+	CVector3d temp_(0.0, 0.0, 0.0);
+	temp_.x = Rod1.At(0, 0)*tempOldPoint.x + Rod1.At(0, 1)*tempOldPoint.y + Rod1.At(0, 2)*tempOldPoint.z;
+	temp_.y = Rod1.At(1, 0)*tempOldPoint.x + Rod1.At(1, 1)*tempOldPoint.y + Rod1.At(1, 2)*tempOldPoint.z;
+	temp_.z = Rod1.At(2, 0)*tempOldPoint.x + Rod1.At(2, 1)*tempOldPoint.y + Rod1.At(2, 2)*tempOldPoint.z;
+
+
+	//std::cout << "temp" << temp_.x << " " << temp_.y << "  " << temp_.z << std::endl;
+	if (rightRolling == true) {
+		newPoint.Set(temp_.x + originPoint.x + 1.0, temp_.y + originPoint.y, temp_.z + 0.5);
+	}
+	else if (leftRolling == true) {
+		newPoint.Set(temp_.x + originPoint.x - 1.0, temp_.y + originPoint.y, temp_.z + 0.5);
+	}
+	else if (upRolling == true) {
+		newPoint.Set(temp_.x + originPoint.x, temp_.y + originPoint.y + 1.0, temp_.z + 0.5);
+	}
+	else if (downRolling == true) {
+		newPoint.Set(temp_.x + originPoint.x, temp_.y + originPoint.y - 1.0, temp_.z + 0.5);
+	}
+
+	//getchar();
+}
+
+// 24/09/2019
+void RotationCoordSystem_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint) {
+
+	Rodrigues_FourDirRolling(rightRolling,leftRolling,upRolling,downRolling, origin, origin, neworigin);
+	Rodrigues_FourDirRolling(rightRolling,leftRolling,upRolling,downRolling, origin, OXpoint, newOXpoint);
+	Rodrigues_FourDirRolling(rightRolling,leftRolling,upRolling,downRolling, origin, OYpoint, newOYpoint);
+	Rodrigues_FourDirRolling(rightRolling,leftRolling,upRolling,downRolling, origin, OZpoint, newOZpoint);
+
+	neworigin.Print();
+}
 

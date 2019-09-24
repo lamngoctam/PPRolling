@@ -462,20 +462,23 @@ void DrawSeparatedArrows(GLdouble currentCenterX, GLdouble currentCenterY, GLdou
 
 }
 
-void RotationCoordSystem(
-	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
-	bool rightRolling,
-	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
 //from cubePath.cpp
-
-void DrawSeparatedArrows2(bool rightRolling, CVector3d currentOrigin,
-	CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
+void RotationCoordSystem(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+	
+void DrawSeparatedArrows2(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling, 
+	CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
 	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
 {
 
 	//Call Rodrigues Function to get the roated arrow coordinates
-	RotationCoordSystem(currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow,
-		rightRolling, neworigin, newOXpoint, newOYpoint, newOZpoint);
+	RotationCoordSystem(
+		rightRolling, leftRolling, upRolling, downRolling,
+		currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow, 
+		neworigin, newOXpoint, newOYpoint, newOZpoint);
 
 	GLdouble xnew = neworigin.x;
 	GLdouble ynew = neworigin.y;
@@ -688,11 +691,11 @@ void DrawOZarrow(CVector3d currentCoord, GLdouble D) {
 
 	glPopMatrix();
 }
-void Draw3DcoordArrow(CVector3d current3DCoord, GLdouble D)
+void Draw3DcoordArrow1(CVector3d current3DCoord, GLdouble D)
 {
-	DrawOXarrow(current3DCoord, D);
-	DrawOYarrow(current3DCoord, D - 0.02);
-	DrawOZarrow(current3DCoord, D + 0.02);
+	glColor3f(1.0, 0.0, 0.0);DrawOXarrow(current3DCoord, D);
+	glColor3f(0.0, 0.5, 0.5);DrawOYarrow(current3DCoord, D);
+	glColor3f(0.5, 0.0, 1.0);DrawOZarrow(current3DCoord, D);
 }
 
 void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D)
@@ -702,24 +705,29 @@ void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D)
 	temp.y = Ycoord;
 	temp.z = Zcoord;
 
-	DrawOXarrow(temp, D);
-	DrawOYarrow(temp, D - 0.02);
-	DrawOZarrow(temp, D + 0.02);
+	glColor3f(1.0, 0.0, 0.0);DrawOXarrow(temp, D);
+	glColor3f(0.0, 0.5, 0.5);DrawOYarrow(temp, D - 0.02);
+	glColor3f(0.5, 0.0, 1.0);DrawOZarrow(temp, D + 0.02);
 }
 
 //23/9/2019
 void DrawRollingOXYZ() {
 	bool rightRolling = true;
-	CVector3d OXArrow(1.0, 0.5, 0.5);
-	CVector3d OYArrow(0.5, 1.0, 0.5);
-	CVector3d OZArrow(0.5, 0.5, 1.0);
+	bool leftRolling  = false;
+	bool upRolling	  = false;
+	bool downRolling  = false;
+
+	CVector3d initial_OXArrow(1.0, 0.5, 0.5);
+	CVector3d initial_OYArrow(0.5, 1.0, 0.5);
+	CVector3d initial_OZArrow(0.5, 0.5, 1.0);
 
 	CVector3d  nextOrigin;
 	CVector3d nextOXArrow;
 	CVector3d nextOYArrow;
 	CVector3d nextOZArrow;
 
-	DrawSeparatedArrows2(rightRolling, cube.startPoint, OXArrow, OYArrow, OZArrow,
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		cube.startPoint, initial_OXArrow, initial_OYArrow, initial_OZArrow,
 		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
 
 
@@ -728,22 +736,17 @@ void DrawRollingOXYZ() {
 	CVector3d nextOYArrow2;
 	CVector3d nextOZArrow2;
 	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
 		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2);
-
-	//	std::cout << "nextOrigin2, nextOXArrow2,nextOYArrow2, nextOZArrow2" <<
-	//		nextOrigin2.x << " " << nextOrigin2.y << " " << nextOrigin2.z << ")--(" 
-	//		<< nextOXArrow2.x <<" "<< nextOXArrow2.y<<"-"<< nextOXArrow2.z <<")---("
-	//		<< nextOYArrow2.x <<" "<< nextOYArrow2.y<<"-"<< nextOYArrow2.z << ")--("
-	//		<< nextOZArrow2.x <<" "<< nextOZArrow2.y<<"-"<< nextOZArrow2.z << ")"<<std::endl;
-
 
 	CVector3d  nextOrigin3;
 	CVector3d nextOXArrow3;
 	CVector3d nextOYArrow3;
 	CVector3d nextOZArrow3;
 	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
 		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
 
 	CVector3d  nextOrigin4;
@@ -751,7 +754,8 @@ void DrawRollingOXYZ() {
 	CVector3d nextOYArrow4;
 	CVector3d nextOZArrow4;
 	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
 		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
 
 
@@ -760,31 +764,188 @@ void DrawRollingOXYZ() {
 	CVector3d nextOYArrow5;
 	CVector3d nextOZArrow5;
 	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+
+	//CVector3d  nextOrigin6;
+	//CVector3d nextOXArrow6;
+	//CVector3d nextOYArrow6;
+	//CVector3d nextOZArrow6;
+	//rightRolling = true;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling, 
+	//	nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+	//	nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
+	//CVector3d  nextOrigin7;
+	//CVector3d nextOXArrow7;
+	//CVector3d nextOYArrow7;
+	//CVector3d nextOZArrow7;
+	//rightRolling = false;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+	//	nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+	//	nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
+
+	//CVector3d  nextOrigin8;
+	//CVector3d nextOXArrow8;
+	//CVector3d nextOYArrow8;
+	//CVector3d nextOZArrow8;
+	//rightRolling = true;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling, 
+	//	nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+	//	nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
+}
+
+//-----------------------------------------------------
+//
+//------------------------------------------------------
+
+// 24/09/2019
+void RotationCoordSystem_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+
+
+void DrawCoordSystem_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
+{
+
+	//Call Rodrigues Function to get the roated arrow coordinates
+	RotationCoordSystem_FourDirRolling(
+		rightRolling, leftRolling, upRolling, downRolling,
+		currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow,
+		neworigin, newOXpoint, newOYpoint, newOZpoint);
+
+	GLdouble xnew = neworigin.x;
+	GLdouble ynew = neworigin.y;
+	GLdouble znew = neworigin.z;
+
+	GLdouble x1_new = newOXpoint.x;
+	GLdouble y1_new = newOXpoint.y;
+	GLdouble z1_new = newOXpoint.z;
+
+	GLdouble x2_new = newOYpoint.x;
+	GLdouble y2_new = newOYpoint.y;
+	GLdouble z2_new = newOYpoint.z;
+
+	GLdouble x3_new = newOZpoint.x;
+	GLdouble y3_new = newOZpoint.y;
+	GLdouble z3_new = newOZpoint.z;
+
+	glColor3f(1.0, 0.0, 0.0);Arrow(xnew, ynew, znew, x1_new, y1_new, z1_new, 0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(xnew, ynew, znew, x2_new, y2_new, z2_new, 0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(xnew, ynew, znew, x3_new, y3_new, z3_new, 0.02);
+
+	//getchar();
+}
+//24/9/2019
+void DrawFourDirRollingOXYZ() {
+	bool rightRolling = false;
+	bool leftRolling = false;
+	bool upRolling = false;
+	bool downRolling = false;
+
+
+	CVector3d initial_OXArrow(1.0, 0.5, 0.5);
+	CVector3d initial_OYArrow(0.5, 1.0, 0.5);
+	CVector3d initial_OZArrow(0.5, 0.5, 1.0);
+
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
+	rightRolling = true;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		cube.startPoint, initial_OXArrow, initial_OYArrow, initial_OZArrow,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+
+
+	CVector3d  nextOrigin2;
+	CVector3d nextOXArrow2;
+	CVector3d nextOYArrow2;
+	CVector3d nextOZArrow2;
+	rightRolling = true;
+	leftRolling = false;
+	upRolling = false;
+	downRolling = false;
+	
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2);
+
+	CVector3d  nextOrigin3;
+	CVector3d nextOXArrow3;
+	CVector3d nextOYArrow3;
+	CVector3d nextOZArrow3;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+
+	CVector3d  nextOrigin4;
+	CVector3d nextOXArrow4;
+	CVector3d nextOYArrow4;
+	CVector3d nextOZArrow4;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+
+
+	CVector3d  nextOrigin5;
+	CVector3d nextOXArrow5;
+	CVector3d nextOYArrow5;
+	CVector3d nextOZArrow5;
+	rightRolling = false;
+	leftRolling = true;//
+	upRolling = false;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
 		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
 
 	CVector3d  nextOrigin6;
 	CVector3d nextOXArrow6;
 	CVector3d nextOYArrow6;
 	CVector3d nextOZArrow6;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;//
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
 		nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
 	CVector3d  nextOrigin7;
 	CVector3d nextOXArrow7;
 	CVector3d nextOYArrow7;
 	CVector3d nextOZArrow7;
 	rightRolling = false;
-	DrawSeparatedArrows2(rightRolling, nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+	leftRolling = true;//
+	upRolling = false;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
 		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
-
+	
 	CVector3d  nextOrigin8;
 	CVector3d nextOXArrow8;
 	CVector3d nextOYArrow8;
 	CVector3d nextOZArrow8;
-	rightRolling = true;
-	DrawSeparatedArrows2(rightRolling, nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
-		nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = false;
+	downRolling = true;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+		nextOrigin8, nextOXArrow8, nextOYArrow8, nextOZArrow8);
 }
 
 /*=================================================*/
