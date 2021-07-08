@@ -235,14 +235,15 @@ void DrawStartEndPoint(CVector3d startPoint, CVector3d endPoint) {
 	glVertex3d(startPoint.x, startPoint.y, startPoint.z);//1
 	glVertex3d(endPoint.x, endPoint.y, endPoint.z);//2
 	glEnd();
+
 }
 
 void DrawCube_originPoint(CVector3d originPoint, int colorID) {
 	CVector3d MinPt, MaxPt;
 
 	MinPt.Set(originPoint.x, originPoint.y, originPoint.z);
-	MaxPt.Set(originPoint.x + 1.0, originPoint.y + 1.0, originPoint.z+1.0);
-		
+	MaxPt.Set(originPoint.x + 1.0, originPoint.y + 1.0, originPoint.z + 1.0);
+
 	DrawBoundingbox(MaxPt, MinPt, colorID);
 }
 
@@ -250,8 +251,8 @@ void DrawCube(CVector3d centerPoint, int colorID) {
 	CVector3d MinPt, MaxPt;
 
 	MinPt.Set(centerPoint.x - 0.5, centerPoint.y - 0.5, centerPoint.z - 0.49);
-	MaxPt.Set(centerPoint.x + 0.5, centerPoint.y + 0.5, centerPoint.z +  0.5);
-	
+	MaxPt.Set(centerPoint.x + 0.5, centerPoint.y + 0.5, centerPoint.z + 0.5);
+
 	DrawBoundingbox(MaxPt, MinPt, colorID);
 }
 
@@ -375,21 +376,593 @@ void checkPoint(int colorID) {
 	glDisable(GL_LIGHTING);
 }
 
+//18-9-2019
+
+//link: https://stackoverflow.com/questions/19332668/drawing-the-axis-with-its-arrow-using-opengl-in-visual-studio-2010-and-c
+
+#define RADPERDEG 0.0174533
+//draw tw0 points
+void Arrow(GLdouble x1, GLdouble y1, GLdouble z1, GLdouble x2, GLdouble y2, GLdouble z2, GLdouble D)
+{
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+
+}
+
+void drawAxes(GLdouble length)
+{
+	glPushMatrix();
+	glTranslatef(-length, 0, 0);
+	Arrow(0, 0, 0, 2 * length, 0, 0, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -length, 0);
+	Arrow(0, 0, 0, 0, 2 * length, 0, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -length);
+	Arrow(0, 0, 0, 0, 0, 2 * length, 0.2);
+	glPopMatrix();
+}
+
+//20/9/2019
+void DrawSeparatedArrows(GLdouble currentCenterX, GLdouble currentCenterY, GLdouble currentCenterZ) {
+
+	glColor3f(1.0, 0.0, 0.0);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX + 0.5, currentCenterY, currentCenterZ, 0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX, currentCenterY + .5, currentCenterZ, 0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(currentCenterX, currentCenterY, currentCenterZ, currentCenterX, currentCenterY, currentCenterZ + 0.5, 0.02);
+
+}
+
+//from cubePath.cpp
+void RotationCoordSystem(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+	
+void DrawSeparatedArrows2(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling, 
+	CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
+{
+
+	//Call Rodrigues Function to get the roated arrow coordinates
+	RotationCoordSystem(
+		rightRolling, leftRolling, upRolling, downRolling,
+		currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow, 
+		neworigin, newOXpoint, newOYpoint, newOZpoint);
+
+	GLdouble xnew = neworigin.x;
+	GLdouble ynew = neworigin.y;
+	GLdouble znew = neworigin.z;
+
+	GLdouble x1_new = newOXpoint.x;
+	GLdouble y1_new = newOXpoint.y;
+	GLdouble z1_new = newOXpoint.z;
+
+	GLdouble x2_new = newOYpoint.x;
+	GLdouble y2_new = newOYpoint.y;
+	GLdouble z2_new = newOYpoint.z;
+
+	GLdouble x3_new = newOZpoint.x;
+	GLdouble y3_new = newOZpoint.y;
+	GLdouble z3_new = newOZpoint.z;
+
+	glColor3f(1.0, 0.0, 0.0);Arrow(xnew, ynew, znew, x1_new, y1_new, z1_new, 0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(xnew, ynew, znew, x2_new, y2_new, z2_new, 0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(xnew, ynew, znew, x3_new, y3_new, z3_new, 0.02);
+
+	std::cout << "oldOrigin_X " << currentOrigin.x << " oldOrigin_Y " << currentOrigin.y << " oldOrigin__Z " << currentOrigin.z << std::endl;
+	std::cout << "newOrigin_X " << xnew << " newOrigin_Y " << ynew << " newOrigin_Z " << znew << std::endl;
+
+	std::cout << "X-new(" << x1_new << "," << y1_new << "," << z1_new << ")" << std::endl;
+	std::cout << "Y-new(" << x2_new << "," << y2_new << "," << z2_new << ")" << std::endl;
+	std::cout << "Z-new(" << x3_new << "," << y3_new << "," << z3_new << ")" << std::endl;
+
+
+
+	//getchar();
+}
+
+//=============================
+
+
+
+//19/9/2019
+void DrawOXarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x + 0.5;
+	GLdouble y2 = currentCoord.y;
+	GLdouble z2 = currentCoord.z;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void DrawOYarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x;
+	GLdouble y2 = currentCoord.y + 0.5;
+	GLdouble z2 = currentCoord.z;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void DrawOZarrow(CVector3d currentCoord, GLdouble D) {
+	GLdouble x1 = currentCoord.x;
+	GLdouble y1 = currentCoord.y;
+	GLdouble z1 = currentCoord.z;
+
+	GLdouble x2 = currentCoord.x;
+	GLdouble y2 = currentCoord.y;
+	GLdouble z2 = currentCoord.z + 0.5;
+
+	double x = x2 - x1;
+	double y = y2 - y1;
+	double z = z2 - z1;
+	double L = sqrt(x*x + y * y + z * z);
+
+	GLUquadricObj *quadObj;
+
+	glPushMatrix();
+
+	glTranslated(x1, y1, z1);
+
+	if ((x != 0.) || (y != 0.)) {
+		glRotated(atan2(y, x) / RADPERDEG, 0., 0., 1.);
+		glRotated(atan2(sqrt(x*x + y * y), z) / RADPERDEG, 0., 1., 0.);
+	}
+	else if (z < 0) {
+		glRotated(180, 1., 0., 0.);
+	}
+
+	glTranslatef(0, 0, L - 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, 2 * D, 0.0, 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, 2 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glTranslatef(0, 0, -L + 4 * D);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluCylinder(quadObj, D, D, L - 4 * D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	quadObj = gluNewQuadric();
+	gluQuadricDrawStyle(quadObj, GLU_FILL);
+	gluQuadricNormals(quadObj, GLU_SMOOTH);
+	gluDisk(quadObj, 0.0, D, 32, 1);
+	gluDeleteQuadric(quadObj);
+
+	glPopMatrix();
+}
+void Draw3DcoordArrow1(CVector3d current3DCoord, GLdouble D)
+{
+	glColor3f(1.0, 0.0, 0.0);DrawOXarrow(current3DCoord, D);
+	glColor3f(0.0, 0.5, 0.5);DrawOYarrow(current3DCoord, D);
+	glColor3f(0.5, 0.0, 1.0);DrawOZarrow(current3DCoord, D);
+}
+
+void Draw3DcoordArrow2(double Xcoord, double Ycoord, double Zcoord, GLdouble D)
+{
+	CVector3d temp;
+	temp.x = Xcoord;
+	temp.y = Ycoord;
+	temp.z = Zcoord;
+
+	glColor3f(1.0, 0.0, 0.0);DrawOXarrow(temp, D);
+	glColor3f(0.0, 0.5, 0.5);DrawOYarrow(temp, D - 0.02);
+	glColor3f(0.5, 0.0, 1.0);DrawOZarrow(temp, D + 0.02);
+}
+
+//23/9/2019
+void DrawRollingOXYZ() {
+	bool rightRolling = true;
+	bool leftRolling  = false;
+	bool upRolling	  = false;
+	bool downRolling  = false;
+
+	CVector3d initial_OXArrow(1.0, 0.5, 0.5);
+	CVector3d initial_OYArrow(0.5, 1.0, 0.5);
+	CVector3d initial_OZArrow(0.5, 0.5, 1.0);
+
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
+
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		cube.startPoint, initial_OXArrow, initial_OYArrow, initial_OZArrow,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+
+
+	CVector3d  nextOrigin2;
+	CVector3d nextOXArrow2;
+	CVector3d nextOYArrow2;
+	CVector3d nextOZArrow2;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2);
+
+	CVector3d  nextOrigin3;
+	CVector3d nextOXArrow3;
+	CVector3d nextOYArrow3;
+	CVector3d nextOZArrow3;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+
+	CVector3d  nextOrigin4;
+	CVector3d nextOXArrow4;
+	CVector3d nextOYArrow4;
+	CVector3d nextOZArrow4;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+
+
+	CVector3d  nextOrigin5;
+	CVector3d nextOXArrow5;
+	CVector3d nextOYArrow5;
+	CVector3d nextOZArrow5;
+	rightRolling = true;
+	DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+
+	//CVector3d  nextOrigin6;
+	//CVector3d nextOXArrow6;
+	//CVector3d nextOYArrow6;
+	//CVector3d nextOZArrow6;
+	//rightRolling = true;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling, 
+	//	nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+	//	nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
+	//CVector3d  nextOrigin7;
+	//CVector3d nextOXArrow7;
+	//CVector3d nextOYArrow7;
+	//CVector3d nextOZArrow7;
+	//rightRolling = false;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling,
+	//	nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+	//	nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
+
+	//CVector3d  nextOrigin8;
+	//CVector3d nextOXArrow8;
+	//CVector3d nextOYArrow8;
+	//CVector3d nextOZArrow8;
+	//rightRolling = true;
+	//DrawSeparatedArrows2(rightRolling, leftRolling, upRolling, downRolling, 
+	//	nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+	//	nextOrigin6, nextOXArrow8, nextOYArrow8, nextOZArrow8);
+}
+
+//-----------------------------------------------------
+//
+//------------------------------------------------------
+
+// 24/09/2019
+void RotationCoordSystem_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d origin, CVector3d OXpoint, CVector3d OYpoint, CVector3d OZpoint,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint);
+
+
+void DrawCoordSystem_FourDirRolling(
+	bool rightRolling, bool leftRolling, bool upRolling, bool downRolling,
+	CVector3d currentOrigin, CVector3d initial_OXarrow, CVector3d initial_OYarrow, CVector3d initial_OZarrow,
+	CVector3d &neworigin, CVector3d &newOXpoint, CVector3d &newOYpoint, CVector3d &newOZpoint)
+{
+
+	//Call Rodrigues Function to get the roated arrow coordinates
+	RotationCoordSystem_FourDirRolling(
+		rightRolling, leftRolling, upRolling, downRolling,
+		currentOrigin, initial_OXarrow, initial_OYarrow, initial_OZarrow,
+		neworigin, newOXpoint, newOYpoint, newOZpoint);
+
+	GLdouble xnew = neworigin.x;
+	GLdouble ynew = neworigin.y;
+	GLdouble znew = neworigin.z;
+
+	GLdouble x1_new = newOXpoint.x;
+	GLdouble y1_new = newOXpoint.y;
+	GLdouble z1_new = newOXpoint.z;
+
+	GLdouble x2_new = newOYpoint.x;
+	GLdouble y2_new = newOYpoint.y;
+	GLdouble z2_new = newOYpoint.z;
+
+	GLdouble x3_new = newOZpoint.x;
+	GLdouble y3_new = newOZpoint.y;
+	GLdouble z3_new = newOZpoint.z;
+
+	glColor3f(1.0, 0.0, 0.0);Arrow(xnew, ynew, znew, x1_new, y1_new, z1_new, 0.02);
+	glColor3f(0.0, 0.5, 0.5);Arrow(xnew, ynew, znew, x2_new, y2_new, z2_new, 0.02);
+	glColor3f(0.5, 0.0, 1.0);Arrow(xnew, ynew, znew, x3_new, y3_new, z3_new, 0.02);
+
+	//getchar();
+}
+//24/9/2019
+void DrawFourDirRollingOXYZ() {
+	bool rightRolling = false;
+	bool leftRolling = false;
+	bool upRolling = false;
+	bool downRolling = false;
+
+
+	CVector3d initial_OXArrow(1.0, 0.5, 0.5);
+	CVector3d initial_OYArrow(0.5, 1.0, 0.5);
+	CVector3d initial_OZArrow(0.5, 0.5, 1.0);
+
+	CVector3d  nextOrigin;
+	CVector3d nextOXArrow;
+	CVector3d nextOYArrow;
+	CVector3d nextOZArrow;
+	rightRolling = true;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		cube.startPoint, initial_OXArrow, initial_OYArrow, initial_OZArrow,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow); //from OpenGLDraw.cpp
+
+
+	CVector3d  nextOrigin2;
+	CVector3d nextOXArrow2;
+	CVector3d nextOYArrow2;
+	CVector3d nextOZArrow2;
+	rightRolling = true;
+	leftRolling = false;
+	upRolling = false;
+	downRolling = false;
+	
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin, nextOXArrow, nextOYArrow, nextOZArrow,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2);
+
+	CVector3d  nextOrigin3;
+	CVector3d nextOXArrow3;
+	CVector3d nextOYArrow3;
+	CVector3d nextOZArrow3;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin2, nextOXArrow2, nextOYArrow2, nextOZArrow2,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3);
+
+	CVector3d  nextOrigin4;
+	CVector3d nextOXArrow4;
+	CVector3d nextOYArrow4;
+	CVector3d nextOZArrow4;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin3, nextOXArrow3, nextOYArrow3, nextOZArrow3,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4);
+
+
+	CVector3d  nextOrigin5;
+	CVector3d nextOXArrow5;
+	CVector3d nextOYArrow5;
+	CVector3d nextOZArrow5;
+	rightRolling = false;
+	leftRolling = true;//
+	upRolling = false;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin4, nextOXArrow4, nextOYArrow4, nextOZArrow4,
+		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5);
+
+	CVector3d  nextOrigin6;
+	CVector3d nextOXArrow6;
+	CVector3d nextOYArrow6;
+	CVector3d nextOZArrow6;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = true;//
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin5, nextOXArrow5, nextOYArrow5, nextOZArrow5,
+		nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6);
+	CVector3d  nextOrigin7;
+	CVector3d nextOXArrow7;
+	CVector3d nextOYArrow7;
+	CVector3d nextOZArrow7;
+	rightRolling = false;
+	leftRolling = true;//
+	upRolling = false;
+	downRolling = false;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin6, nextOXArrow6, nextOYArrow6, nextOZArrow6,
+		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7);
+	
+	CVector3d  nextOrigin8;
+	CVector3d nextOXArrow8;
+	CVector3d nextOYArrow8;
+	CVector3d nextOZArrow8;
+	rightRolling = false;
+	leftRolling = false;
+	upRolling = false;
+	downRolling = true;
+	DrawCoordSystem_FourDirRolling(rightRolling, leftRolling, upRolling, downRolling,
+		nextOrigin7, nextOXArrow7, nextOYArrow7, nextOZArrow7,
+		nextOrigin8, nextOXArrow8, nextOYArrow8, nextOZArrow8);
+}
+
 /*=================================================*/
 /*            Tetrahedron		                   */
 /*=================================================*/
 
 void drawTriangleGrid() {
-	int i; 
+	int i;
 
 	for (int i(0); i < 40; i++) {
 		glPushMatrix();
 
 		if (i < 20) { glTranslatef(0, i, 0); }
-		if (i >= 20) { glTranslatef(i-20, 0, 0); glRotatef(-30, 0,0,-1); }
+		if (i >= 20) { glTranslatef(i - 20, 0, 0); glRotatef(-30, 0, 0, -1); }
 
 		glBegin(GL_LINES);
-		glColor3f(0,0,0);
+		glColor3f(0, 0, 0);
 		glLineWidth(1);
 		glVertex3f(0, -0.1, 0);
 		glVertex3f(19, -0.1, 0);
